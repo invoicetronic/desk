@@ -58,3 +58,8 @@ nunit-*.xml
 .playwright-mcp/
 .idea/
 *.DotSettings.user
+
+# SQLite database
+*.db
+*.db-shm
+*.db-wal
