@@ -48,4 +48,10 @@ public class SessionManager(IHttpContextAccessor httpContextAccessor, DeskConfig
     {
         HttpContext?.Session.SetString(CompaniesKey, JsonSerializer.Serialize(companies));
     }
+
+    public void ClearCompanies()
+    {
+        HttpContext?.Session.Remove(CompaniesKey);
+        HttpContext?.Session.Remove(SelectedCompanyIdKey);
+    }
 }

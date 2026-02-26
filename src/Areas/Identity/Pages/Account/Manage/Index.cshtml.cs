@@ -93,8 +93,7 @@ public class IndexModel(
 
         if (result.Succeeded)
         {
-            // Session already has the key from validation above
-            // Clear cached companies so they reload with new key
+            sessionManager.ClearCompanies();
             SuccessMessage = "Profile_ApiKeySaved";
         }
         else
