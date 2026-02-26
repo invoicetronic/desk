@@ -1,0 +1,297 @@
+/* ============================================================
+   Invoicetronic Desk — Page Layout
+   ============================================================ */
+
+/* ── Main structure ── */
+.desk-app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.desk-content {
+    flex: 1;
+    width: 100%;
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-6);
+}
+
+/* ── Page header ── */
+.desk-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    flex-wrap: wrap;
+    gap: var(--space-4);
+}
+
+.desk-page-title {
+    margin: 0;
+}
+
+.desk-page-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+/* ── Grid dashboard ── */
+.desk-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
+}
+
+/* ── Data grid wrapper ── */
+.desk-grid-wrapper {
+    background: var(--brand-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.desk-grid-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.desk-grid-filters {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+/* ── Auth layout (Login / Register) ── */
+.desk-auth-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: var(--brand-bg);
+    padding: var(--space-6);
+}
+
+.desk-auth-card {
+    width: 100%;
+    max-width: 400px;
+    padding: var(--space-8);
+}
+
+.desk-auth-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-8);
+}
+
+.desk-auth-logo img {
+    height: 36px;
+}
+
+.desk-auth-title {
+    text-align: center;
+    margin-bottom: var(--space-6);
+}
+
+/* ── Timeline (SDI updates) ── */
+.desk-timeline {
+    position: relative;
+    padding-left: var(--space-8);
+}
+
+.desk-timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: var(--color-border);
+}
+
+.desk-timeline-item {
+    position: relative;
+    padding-bottom: var(--space-6);
+}
+
+.desk-timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.desk-timeline-dot {
+    position: absolute;
+    left: calc(-1 * var(--space-8) + 4px);
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--brand-white);
+    box-shadow: var(--shadow-sm);
+}
+
+.desk-timeline-dot-success { background: var(--color-success); }
+.desk-timeline-dot-danger  { background: var(--color-danger);  }
+.desk-timeline-dot-info    { background: var(--color-info);    }
+.desk-timeline-dot-warning { background: var(--color-warning); }
+.desk-timeline-dot-neutral { background: var(--color-text-muted); }
+
+.desk-timeline-content {
+    padding-left: var(--space-3);
+}
+
+.desk-timeline-time {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-1);
+}
+
+.desk-timeline-title {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semi);
+    color: var(--color-text);
+    margin: 0;
+}
+
+.desk-timeline-desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--space-1);
+}
+
+/* ── Upload zone ── */
+.desk-upload-zone {
+    border: 2px dashed var(--color-border-strong);
+    border-radius: var(--radius-lg);
+    padding: var(--space-12) var(--space-8);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-out);
+    background: var(--brand-white);
+}
+
+.desk-upload-zone:hover,
+.desk-upload-zone.drag-over {
+    border-color: var(--brand-accent);
+    background: var(--brand-accent-light);
+}
+
+.desk-upload-zone-icon {
+    font-size: 2.5rem;
+    color: var(--brand-accent);
+    margin-bottom: var(--space-4);
+}
+
+.desk-upload-zone-text {
+    font-size: var(--text-md);
+    font-weight: var(--weight-medium);
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+}
+
+.desk-upload-zone-hint {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+/* ── Upload file list ── */
+.desk-upload-list {
+    margin-top: var(--space-6);
+}
+
+.desk-upload-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--brand-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-2);
+    font-size: var(--text-sm);
+}
+
+.desk-upload-item-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ── Empty state ── */
+.desk-empty {
+    text-align: center;
+    padding: var(--space-12) var(--space-8);
+    color: var(--color-text-muted);
+}
+
+.desk-empty-icon {
+    font-size: 3rem;
+    opacity: 0.4;
+    margin-bottom: var(--space-4);
+}
+
+.desk-empty-title {
+    font-size: var(--text-md);
+    font-weight: var(--weight-medium);
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .desk-content {
+        padding: var(--space-4) var(--space-4);
+    }
+
+    .desk-navbar {
+        padding: 0 var(--space-4);
+    }
+
+    .desk-subnav {
+        padding: 0 var(--space-4);
+    }
+
+    .desk-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .desk-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .desk-modal {
+        margin: var(--space-4);
+        max-width: calc(100% - var(--space-8));
+        padding: var(--space-6);
+    }
+
+    .desk-grid-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .desk-company-btn {
+        max-width: 140px;
+    }
+}
+
+@media (max-width: 480px) {
+    .desk-navbar-brand span {
+        display: none;
+    }
+
+    .desk-subnav a {
+        padding: var(--space-2) var(--space-3);
+        font-size: var(--text-xs);
+    }
+}

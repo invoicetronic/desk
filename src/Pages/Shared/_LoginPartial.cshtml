@@ -1,0 +1,23 @@
+@using Microsoft.AspNetCore.Identity
+@inject IHtmlLocalizer<SharedResource> L
+@inject SignInManager<Desk.Data.DeskUser> SignInManager
+@inject UserManager<Desk.Data.DeskUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    var user = await UserManager.GetUserAsync(User);
+    var initials = (user?.DisplayName ?? user?.Email ?? "U")[..1].ToUpperInvariant();
+    <div class="desk-user-menu" id="userMenu">
+        <button class="desk-user-btn" onclick="toggleUserDropdown()" type="button">@initials</button>
+        <div class="desk-user-dropdown" id="userDropdown">
+            <a href="/Identity/Account/Manage">@L["Profile_Title"]</a>
+            <form method="post" asp-area="Identity" asp-page="/Account/Logout">
+                <button type="submit">@L["Auth_Logout"]</button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <a href="/Identity/Account/Login" class="btn-brand btn-brand-sm btn-brand-primary">@L["Auth_Login"]</a>
+}

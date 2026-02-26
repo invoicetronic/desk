@@ -1,0 +1,86 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = L["Dashboard_Title"].Value;
+    ViewData["ActiveNav"] = "Home";
+}
+
+<div class="desk-page-header">
+    <h1 class="desk-page-title">@L["Dashboard_Title"]</h1>
+</div>
+
+<!-- Summary Cards -->
+<div class="desk-dashboard-grid">
+    @if (Model.AccountStatus is not null)
+    {
+        <div class="desk-card">
+            <div class="desk-card-header">
+                <h3 class="desk-card-title">@L["Profile_OperationsLeft"]</h3>
+            </div>
+            <div class="desk-card-value">@Model.AccountStatus.OperationLeft</div>
+        </div>
+        <div class="desk-card">
+            <div class="desk-card-header">
+                <h3 class="desk-card-title">@L["Profile_SignaturesLeft"]</h3>
+            </div>
+            <div class="desk-card-value">@Model.AccountStatus.SignatureLeft</div>
+        </div>
+    }
+    <a href="/Invoices/Sent" class="desk-card desk-card-hover" style="text-decoration:none">
+        <div class="desk-card-header">
+            <h3 class="desk-card-title">@L["Dashboard_SentInvoices"]</h3>
+        </div>
+        <div class="desk-card-value">@Model.SentCount</div>
+    </a>
+    <a href="/Invoices/Received" class="desk-card desk-card-hover" style="text-decoration:none">
+        <div class="desk-card-header">
+            <h3 class="desk-card-title">@L["Dashboard_ReceivedInvoices"]</h3>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:var(--space-4)">
+            <div class="desk-card-value">@Model.ReceivedCount</div>
+            @if (Model.UnreadCount > 0)
+            {
+                <span class="desk-badge desk-badge-info">@Model.UnreadCount @L["Dashboard_UnreadInvoices"]</span>
+            }
+        </div>
+    </a>
+</div>
+
+<!-- Recent SDI Updates -->
+@if (Model.RecentUpdates.Count > 0)
+{
+    <div class="desk-card" style="margin-bottom:var(--space-6)">
+        <div class="desk-card-header">
+            <h3 class="desk-card-title">@L["Dashboard_RecentUpdates"]</h3>
+        </div>
+        <div class="desk-timeline">
+            @foreach (var update in Model.RecentUpdates)
+            {
+                var dotClass = update.State switch
+                {
+                    State.Consegnato or State.AccettatoDalDestinatario => "desk-timeline-dot-success",
+                    State.Scartato or State.RifiutatoDalDestinatario => "desk-timeline-dot-danger",
+                    State.NonConsegnato or State.ImpossibilitaDiRecapito => "desk-timeline-dot-warning",
+                    State.Inviato or State.AttestazioneTrasmissioneFattura => "desk-timeline-dot-info",
+                    _ => "desk-timeline-dot-neutral"
+                };
+                var stateKey = $"State_{update.State}";
+                <div class="desk-timeline-item">
+                    <div class="desk-timeline-dot @dotClass"></div>
+                    <div class="desk-timeline-content">
+                        <div class="desk-timeline-time">@update.LastUpdate.ToLocalTime().ToString("g")</div>
+                        <h4 class="desk-timeline-title">
+                            <a href="/Invoices/Detail?type=send&id=@update.SendId" style="color:inherit">
+                                @L[stateKey]
+                            </a>
+                        </h4>
+                        @if (!string.IsNullOrEmpty(update.Description))
+                        {
+                            <div class="desk-timeline-desc">@update.Description</div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

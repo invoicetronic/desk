@@ -1,0 +1,149 @@
+@page
+@model Desk.Pages.Upload.IndexModel
+@{
+    ViewData["Title"] = L["Upload_Title"].Value;
+    ViewData["ActiveNav"] = "Upload";
+}
+
+<div class="desk-page-header">
+    <h1 class="desk-page-title">@L["Upload_Title"]</h1>
+</div>
+
+<div class="desk-upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+    <div class="desk-upload-zone-icon">📄</div>
+    <div class="desk-upload-zone-text">@L["Upload_DropText"]</div>
+    <div class="desk-upload-zone-hint">@L["Upload_DropHint"]</div>
+</div>
+
+<input type="file" id="fileInput" accept=".xml,.p7m" multiple style="display:none" />
+
+<div id="uploadList" class="desk-upload-list"></div>
+
+@section Scripts {
+    <script>
+        const pendingLabel = '@L["Upload_Pending"].Value';
+        const uploadingLabel = '@L["Upload_Uploading"].Value';
+        const successLabel = '@L["Upload_Success"].Value';
+        const errorLabel = '@L["Upload_Error"].Value';
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadList = document.getElementById('uploadList');
+
+        // Drag and drop
+        ['dragenter', 'dragover'].forEach(e => {
+            dropZone.addEventListener(e, function(ev) {
+                ev.preventDefault();
+                dropZone.classList.add('drag-over');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(e => {
+            dropZone.addEventListener(e, function(ev) {
+                ev.preventDefault();
+                dropZone.classList.remove('drag-over');
+            });
+        });
+
+        dropZone.addEventListener('drop', function(e) {
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', function() {
+            handleFiles(fileInput.files);
+            fileInput.value = '';
+        });
+
+        function handleFiles(files) {
+            for (const file of files) {
+                addFileItem(file);
+            }
+            processQueue();
+        }
+
+        const queue = [];
+        let uploading = false;
+
+        function addFileItem(file) {
+            const id = 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+
+            const item = document.createElement('div');
+            item.className = 'desk-upload-item';
+            item.id = id;
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'desk-upload-item-name';
+            nameSpan.textContent = file.name;
+
+            const sizeSpan = document.createElement('span');
+            sizeSpan.className = 'text-muted text-xs';
+            sizeSpan.textContent = formatSize(file.size);
+
+            const statusSpan = document.createElement('span');
+            statusSpan.className = 'desk-badge desk-badge-neutral';
+            statusSpan.id = id + '_status';
+            statusSpan.textContent = pendingLabel;
+
+            item.appendChild(nameSpan);
+            item.appendChild(sizeSpan);
+            item.appendChild(statusSpan);
+            uploadList.appendChild(item);
+
+            queue.push({ file, id });
+        }
+
+        async function processQueue() {
+            if (uploading) return;
+            uploading = true;
+
+            while (queue.length > 0) {
+                const { file, id } = queue.shift();
+                const statusEl = document.getElementById(id + '_status');
+
+                statusEl.className = 'desk-badge desk-badge-info';
+                statusEl.textContent = uploadingLabel;
+
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('/Upload?handler=Upload', {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': getAntiforgeryToken()
+                        },
+                        body: formData
+                    });
+
+                    const result = await response.json();
+                    if (result.error) {
+                        statusEl.className = 'desk-badge desk-badge-danger';
+                        statusEl.textContent = errorLabel;
+                        statusEl.title = result.error;
+                    } else {
+                        statusEl.className = 'desk-badge desk-badge-success';
+                        statusEl.textContent = successLabel;
+                    }
+                } catch (e) {
+                    statusEl.className = 'desk-badge desk-badge-danger';
+                    statusEl.textContent = errorLabel;
+                    statusEl.title = e.message;
+                }
+            }
+
+            uploading = false;
+        }
+
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function getAntiforgeryToken() {
+            const field = document.querySelector('input[name="__RequestVerificationToken"]');
+            return field ? field.value : '';
+        }
+    </script>
+    @Html.AntiForgeryToken()
+}

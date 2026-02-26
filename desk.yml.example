@@ -1,0 +1,25 @@
+# desk.yml - Configurazione Invoicetronic Desk
+
+app:
+  # API Invoicetronic
+  api_url: https://api.invoicetronic.com
+
+  # API key (opzionale) — se presente, Desk gira SENZA registrazione/login
+  # Tutte le chiamate API usano questa key. Niente Identity, niente DB locale.
+  # Utile per ISV che self-hostano in rete interna sicura.
+  # Se assente, Desk richiede registrazione e ogni utente inserisce la propria key.
+  # api_key: itk_live_xxxxxxxxxx
+
+  # Database (ignorato se api_key è presente — non serve DB locale)
+  database:
+    provider: sqlite           # sqlite | pgsql
+    # sqlite: path default desk.db (nella directory dell'app)
+    # pgsql: connection string da env var App__Database__ConnectionString
+
+  # Branding (testi, non aspetto visuale)
+  branding:
+    app_name: Invoicetronic Desk
+    footer_text: Powered by Invoicetronic
+
+  # Localizzazione
+  locale: it                   # it | en

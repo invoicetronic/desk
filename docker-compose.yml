@@ -1,0 +1,15 @@
+services:
+  desk:
+    image: invoicetronic/desk
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./desk.yml:/app/desk.yml
+      - ./data:/app/data
+      - ./custom:/app/custom
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

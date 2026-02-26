@@ -1,0 +1,254 @@
+@page
+@model Desk.Pages.Companies.IndexModel
+@{
+    ViewData["Title"] = L["Companies_Title"].Value;
+    ViewData["ActiveNav"] = "Companies";
+}
+
+<div class="desk-page-header">
+    <h1 class="desk-page-title">@L["Companies_Title"]</h1>
+    <div class="desk-page-actions">
+        <button class="btn-brand btn-brand-primary" onclick="openAddModal()">
+            + @L["Companies_AddNew"]
+        </button>
+    </div>
+</div>
+
+<div class="desk-grid-wrapper">
+    <div class="desk-grid-toolbar">
+        <div class="desk-grid-filters">
+            <input type="search" id="filterSearch" class="desk-input" style="width:260px"
+                   placeholder="@L["Companies_SearchPlaceholder"].Value" />
+            <button class="btn-brand btn-brand-primary btn-brand-sm" onclick="applyFilters()">
+                @L["Common_Search"]
+            </button>
+        </div>
+    </div>
+    <div id="companiesGrid" style="width: 100%;"></div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div class="desk-modal-backdrop" id="companyModal">
+    <div class="desk-modal">
+        <h2 class="desk-modal-title" id="modalTitle">@L["Companies_AddTitle"]</h2>
+        <form id="companyForm" onsubmit="return false;">
+            <div id="companyError" class="desk-alert desk-alert-danger" style="display:none; margin-bottom: var(--space-4);"></div>
+            <input type="hidden" id="companyId" value="0" />
+            <input type="hidden" id="companyVersion" value="0" />
+            <div class="desk-form-group">
+                <label class="desk-label" for="companyName">@L["Companies_Name"]</label>
+                <input type="text" id="companyName" class="desk-input" required />
+            </div>
+            <div class="desk-form-group">
+                <label class="desk-label" for="companyVat">@L["Companies_Vat"]</label>
+                <input type="text" id="companyVat" class="desk-input" required placeholder="IT01234567891" />
+            </div>
+            <div class="desk-form-group">
+                <label class="desk-label" for="companyFiscalCode">@L["Companies_FiscalCode"]</label>
+                <input type="text" id="companyFiscalCode" class="desk-input" required />
+            </div>
+            <div class="desk-modal-actions">
+                <button type="button" class="btn-brand btn-brand-secondary" onclick="closeModal()">@L["Common_Cancel"]</button>
+                <button type="button" class="btn-brand btn-brand-primary" onclick="saveCompany()">@L["Common_Save"]</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="desk-modal-backdrop" id="deleteModal">
+    <div class="desk-modal">
+        <h2 class="desk-modal-title">@L["Common_Confirm"]</h2>
+        <p id="deleteMessage">@L["Companies_DeleteConfirm"]</p>
+        <div id="deleteError" class="desk-alert desk-alert-danger" style="display:none; margin-bottom: var(--space-4);"></div>
+        <input type="hidden" id="deleteCompanyId" />
+        <input type="hidden" id="deleteForce" value="false" />
+        <div class="desk-modal-actions">
+            <button type="button" class="btn-brand btn-brand-secondary" onclick="closeDeleteModal()">@L["Common_Cancel"]</button>
+            <button type="button" class="btn-brand btn-brand-danger" onclick="confirmDelete()">@L["Common_Delete"]</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/ag-grid-init.js"></script>
+    <script>
+        const listUrl = '/Companies?handler=List';
+        const addTitle = '@L["Companies_AddTitle"].Value';
+        const editTitle = '@L["Companies_EditTitle"].Value';
+        const editLabel = '@L["Common_Edit"].Value';
+        const deleteLabel = '@L["Common_Delete"].Value';
+        const deleteConfirmMsg = '@L["Companies_DeleteConfirm"].Value';
+        const deleteForceConfirmMsg = '@L["Companies_DeleteForceConfirm"].Value';
+        let gridApi = null;
+
+        function getFilterParams() {
+            const params = {};
+            const q = document.getElementById('filterSearch').value.trim();
+            if (q) params.q = q;
+            return params;
+        }
+
+        function applyFilters() {
+            gridApi.setGridOption('datasource', createDatasource(listUrl, getFilterParams));
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            gridApi = initGrid('companiesGrid', {
+                columnDefs: [
+                    { field: 'name', headerName: '@L["Companies_Name"].Value', flex: 2 },
+                    { field: 'vat', headerName: '@L["Companies_Vat"].Value', flex: 1 },
+                    { field: 'fiscalCode', headerName: '@L["Companies_FiscalCode"].Value', flex: 1 },
+                    { field: 'created', headerName: '@L["Companies_Created"].Value', flex: 1,
+                      valueGetter: function(p) {
+                          if (!p.data) return '';
+                          return new Date(p.data.created).toLocaleDateString();
+                      }
+                    },
+                    {
+                        headerName: '@L["Companies_Actions"].Value',
+                        sortable: false,
+                        resizable: false,
+                        width: 100,
+                        cellRenderer: function(params) {
+                            if (!params.data) return '';
+                            return '<button class="btn-icon" onclick="openEditModal(' + JSON.stringify(params.data).replace(/"/g, '&quot;') + ')" title="' + editLabel + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></button>' +
+                                   '<button class="btn-icon btn-icon-danger" onclick="openDeleteModal(' + params.data.id + ')" title="' + deleteLabel + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>';
+                        }
+                    }
+                ],
+                datasource: createDatasource(listUrl),
+                cacheBlockSize: 50,
+                paginationPageSize: 50,
+                onRowDoubleClicked: function(e) {
+                    if (e.data) openEditModal(e.data);
+                },
+            });
+
+            const searchField = document.getElementById('filterSearch');
+            searchField.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') applyFilters();
+            });
+            searchField.addEventListener('search', applyFilters);
+        });
+
+        function openAddModal() {
+            hideFormError();
+            document.getElementById('modalTitle').textContent = addTitle;
+            document.getElementById('companyId').value = '0';
+            document.getElementById('companyVersion').value = '0';
+            document.getElementById('companyName').value = '';
+            document.getElementById('companyVat').value = '';
+            document.getElementById('companyFiscalCode').value = '';
+            document.getElementById('companyModal').classList.add('open');
+        }
+
+        function openEditModal(data) {
+            hideFormError();
+            document.getElementById('modalTitle').textContent = editTitle;
+            document.getElementById('companyId').value = data.id;
+            document.getElementById('companyVersion').value = data.version || 0;
+            document.getElementById('companyName').value = data.name || '';
+            document.getElementById('companyVat').value = data.vat || '';
+            document.getElementById('companyFiscalCode').value = data.fiscalCode || '';
+            document.getElementById('companyModal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('companyModal').classList.remove('open');
+        }
+
+        function openDeleteModal(id) {
+            document.getElementById('deleteCompanyId').value = id;
+            document.getElementById('deleteForce').value = 'false';
+            document.getElementById('deleteMessage').textContent = deleteConfirmMsg;
+            document.getElementById('deleteError').style.display = 'none';
+            document.getElementById('deleteModal').classList.add('open');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('open');
+        }
+
+        async function saveCompany() {
+            const id = parseInt(document.getElementById('companyId').value);
+            const isEdit = id > 0;
+            const handler = isEdit ? 'Update' : 'Add';
+            const body = {
+                'CompanyInput.Id': id,
+                'CompanyInput.Version': parseInt(document.getElementById('companyVersion').value),
+                'CompanyInput.Name': document.getElementById('companyName').value,
+                'CompanyInput.Vat': document.getElementById('companyVat').value,
+                'CompanyInput.FiscalCode': document.getElementById('companyFiscalCode').value
+            };
+
+            try {
+                const formData = new URLSearchParams(body);
+                const response = await fetch('/Companies?handler=' + handler, {
+                    method: 'POST',
+                    headers: { 'RequestVerificationToken': getAntiforgeryToken() },
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.error) {
+                    showFormError(result.error);
+                } else {
+                    closeModal();
+                    gridApi.setGridOption('datasource', createDatasource(listUrl, getFilterParams));
+                }
+            } catch (e) {
+                showFormError(e.message);
+            }
+        }
+
+        function showFormError(msg) {
+            const el = document.getElementById('companyError');
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+
+        function hideFormError() {
+            const el = document.getElementById('companyError');
+            el.textContent = '';
+            el.style.display = 'none';
+        }
+
+        async function confirmDelete() {
+            const id = document.getElementById('deleteCompanyId').value;
+            const force = document.getElementById('deleteForce').value === 'true';
+            try {
+                const url = '/Companies?handler=Delete&id=' + id + (force ? '&force=true' : '');
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'RequestVerificationToken': getAntiforgeryToken() },
+                    body: new URLSearchParams({ 'id': id })
+                });
+                const result = await response.json();
+                if (result.hasLinkedInvoices && !force) {
+                    // First attempt failed — show counts and ask for force confirmation
+                    document.getElementById('deleteForce').value = 'true';
+                    document.getElementById('deleteMessage').textContent =
+                        deleteForceConfirmMsg.replace('{0}', result.sentCount).replace('{1}', result.receivedCount);
+                } else if (result.error) {
+                    // Force also failed — show error
+                    const errEl = document.getElementById('deleteError');
+                    errEl.textContent = result.error;
+                    errEl.style.display = 'block';
+                } else {
+                    closeDeleteModal();
+                    gridApi.setGridOption('datasource', createDatasource(listUrl, getFilterParams));
+                }
+            } catch (e) {
+                const errEl = document.getElementById('deleteError');
+                errEl.textContent = e.message;
+                errEl.style.display = 'block';
+            }
+        }
+
+        function getAntiforgeryToken() {
+            const field = document.querySelector('input[name="__RequestVerificationToken"]');
+            return field ? field.value : '';
+        }
+    </script>
+    @Html.AntiForgeryToken()
+}

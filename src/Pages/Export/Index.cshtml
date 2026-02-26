@@ -1,0 +1,177 @@
+@page
+@model Desk.Pages.Export.IndexModel
+@{
+    ViewData["Title"] = L["Export_Title"].Value;
+    ViewData["ActiveNav"] = "Export";
+}
+
+<div class="desk-page-header">
+    <h1 class="desk-page-title">@L["Export_Title"]</h1>
+</div>
+
+<div class="desk-card" style="max-width:520px">
+    <form id="exportForm" onsubmit="return false;">
+        <div class="desk-form-group">
+            <label class="desk-label" for="exportType">@L["Export_Type"]</label>
+            <select id="exportType" class="desk-input">
+                <option value="send">@L["Export_TypeSend"]</option>
+                <option value="receive">@L["Export_TypeReceive"]</option>
+                <option value="both" selected>@L["Export_TypeBoth"]</option>
+            </select>
+        </div>
+        <div class="desk-form-group">
+            <label class="desk-label" for="exportPeriod">@L["Export_Period"]</label>
+            <select id="exportPeriod" class="desk-input" onchange="togglePeriod()">
+                <option value="month">@L["Export_PeriodMonth"]</option>
+                <option value="quarter">@L["Export_PeriodQuarter"]</option>
+                <option value="range">@L["Export_PeriodDateRange"]</option>
+            </select>
+        </div>
+        <div id="monthFields">
+            <div class="desk-form-row">
+                <div class="desk-form-group" style="flex:1">
+                    <label class="desk-label" for="exportMonth">@L["Export_Month"]</label>
+                    <select id="exportMonth" class="desk-input"></select>
+                </div>
+                <div class="desk-form-group" style="flex:1">
+                    <label class="desk-label" for="exportMonthYear">@L["Export_Year"]</label>
+                    <select id="exportMonthYear" class="desk-input"></select>
+                </div>
+            </div>
+        </div>
+        <div id="quarterFields" style="display:none">
+            <div class="desk-form-row">
+                <div class="desk-form-group" style="flex:1">
+                    <label class="desk-label" for="exportQuarter">@L["Export_Quarter"]</label>
+                    <select id="exportQuarter" class="desk-input">
+                        <option value="1">@L["Export_Q1"]</option>
+                        <option value="2">@L["Export_Q2"]</option>
+                        <option value="3">@L["Export_Q3"]</option>
+                        <option value="4">@L["Export_Q4"]</option>
+                    </select>
+                </div>
+                <div class="desk-form-group" style="flex:1">
+                    <label class="desk-label" for="exportQuarterYear">@L["Export_Year"]</label>
+                    <select id="exportQuarterYear" class="desk-input"></select>
+                </div>
+            </div>
+        </div>
+        <div id="rangeFields" style="display:none">
+            <div class="desk-form-group">
+                <label class="desk-label" for="exportDateFrom">@L["Export_DateFrom"]</label>
+                <input type="date" id="exportDateFrom" class="desk-input" />
+            </div>
+            <div class="desk-form-group">
+                <label class="desk-label" for="exportDateTo">@L["Export_DateTo"]</label>
+                <input type="date" id="exportDateTo" class="desk-input" />
+            </div>
+        </div>
+        <button type="button" id="downloadBtn" class="btn-brand btn-brand-primary" onclick="downloadExport()">
+            @L["Export_Download"]
+        </button>
+        <span id="exportStatus" class="desk-text-muted" style="margin-left:0.5rem;display:none"></span>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const monthNames = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            Enumerable.Range(1, 12).Select(m => new System.Globalization.CultureInfo(
+                Model.Config.Locale ?? System.Globalization.CultureInfo.CurrentUICulture.Name).DateTimeFormat.GetMonthName(m)).ToArray()));
+
+        function initSelectors() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth() + 1;
+            const currentQuarter = Math.ceil(currentMonth / 3);
+
+            // Populate month dropdown
+            const monthSelect = document.getElementById('exportMonth');
+            monthNames.forEach((name, i) => {
+                const opt = document.createElement('option');
+                opt.value = i + 1;
+                opt.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+                monthSelect.appendChild(opt);
+            });
+            monthSelect.value = currentMonth;
+
+            // Populate year dropdowns (current year down to 5 years ago)
+            ['exportMonthYear', 'exportQuarterYear'].forEach(id => {
+                const sel = document.getElementById(id);
+                for (let y = currentYear; y >= currentYear - 5; y--) {
+                    const opt = document.createElement('option');
+                    opt.value = y;
+                    opt.textContent = y;
+                    sel.appendChild(opt);
+                }
+            });
+
+            // Set current quarter
+            document.getElementById('exportQuarter').value = currentQuarter;
+        }
+
+        function togglePeriod() {
+            const mode = document.getElementById('exportPeriod').value;
+            document.getElementById('monthFields').style.display = mode === 'month' ? '' : 'none';
+            document.getElementById('quarterFields').style.display = mode === 'quarter' ? '' : 'none';
+            document.getElementById('rangeFields').style.display = mode === 'range' ? '' : 'none';
+        }
+
+        async function downloadExport() {
+            const type = document.getElementById('exportType').value;
+            const mode = document.getElementById('exportPeriod').value;
+            const btn = document.getElementById('downloadBtn');
+            const status = document.getElementById('exportStatus');
+
+            const params = new URLSearchParams();
+            params.set('handler', 'Download');
+            params.set('type', type);
+
+            if (mode === 'month') {
+                params.set('year', document.getElementById('exportMonthYear').value);
+                params.set('month', document.getElementById('exportMonth').value);
+            } else if (mode === 'quarter') {
+                params.set('year', document.getElementById('exportQuarterYear').value);
+                params.set('quarter', document.getElementById('exportQuarter').value);
+            } else {
+                const dateFrom = document.getElementById('exportDateFrom').value;
+                const dateTo = document.getElementById('exportDateTo').value;
+                if (dateFrom) params.set('dateFrom', dateFrom);
+                if (dateTo) params.set('dateTo', dateTo);
+            }
+
+            btn.disabled = true;
+            status.style.display = '';
+            status.textContent = '@L["Export_Downloading"].Value';
+
+            try {
+                const resp = await fetch('/Export?' + params.toString(), { credentials: 'same-origin' });
+                if (!resp.ok) {
+                    const err = await resp.json().catch(() => null);
+                    status.textContent = err?.error || `Error ${resp.status}`;
+                    return;
+                }
+
+                const blob = await resp.blob();
+                const cd = resp.headers.get('content-disposition') || '';
+                const m = cd.match(/filename\*?=(?:UTF-8''|")?([^";]+)"?/i);
+                const fileName = m ? decodeURIComponent(m[1]) : 'export.zip';
+
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+                status.style.display = 'none';
+            } catch (e) {
+                status.textContent = e.message || 'Download error';
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        initSelectors();
+    </script>
+}

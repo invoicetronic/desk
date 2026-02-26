@@ -1,0 +1,65 @@
+@page
+@model Desk.Areas.Identity.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = L["Auth_Register"].Value;
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="@(((DeskConfig)ViewContext.HttpContext.RequestServices.GetService(typeof(DeskConfig))!).Locale)">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="icon" type="image/png" href="~/images/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Zain:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/theme-default.css" />
+    <link rel="stylesheet" href="~/css/components.css" />
+    <link rel="stylesheet" href="~/css/layout.css" />
+    <link rel="stylesheet" href="~/custom/theme.css" onerror="this.remove()" />
+</head>
+<body>
+    <div class="desk-auth-layout">
+        <div class="desk-card desk-auth-card">
+            <div class="desk-auth-logo">
+                <img src="~/images/logo-green.svg" alt="Logo" />
+            </div>
+            <h1 class="desk-auth-title" style="font-size: var(--text-xl);">@L["Auth_RegisterTitle"]</h1>
+
+            <div asp-validation-summary="ModelOnly" class="desk-alert desk-alert-danger" style="margin-bottom: var(--space-5);"></div>
+
+            <form method="post" novalidate>
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="Input.DisplayName">@L["Auth_DisplayName"]</label>
+                    <input asp-for="Input.DisplayName" class="desk-input" autocomplete="name" autofocus />
+                    <span asp-validation-for="Input.DisplayName" class="text-danger text-xs"></span>
+                </div>
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="Input.Email">@L["Auth_Email"]</label>
+                    <input asp-for="Input.Email" class="desk-input" type="email" autocomplete="email" />
+                    <span asp-validation-for="Input.Email" class="text-danger text-xs"></span>
+                </div>
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="Input.Password">@L["Auth_Password"]</label>
+                    <input asp-for="Input.Password" class="desk-input" type="password" autocomplete="new-password" />
+                    <span asp-validation-for="Input.Password" class="text-danger text-xs"></span>
+                </div>
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="Input.ConfirmPassword">@L["Auth_ConfirmPassword"]</label>
+                    <input asp-for="Input.ConfirmPassword" class="desk-input" type="password" autocomplete="new-password" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger text-xs"></span>
+                </div>
+                <button type="submit" class="btn-brand btn-brand-primary" style="width: 100%; justify-content: center;">
+                    @L["Auth_Register"]
+                </button>
+            </form>
+
+            <p class="text-sm text-muted" style="text-align: center; margin-top: var(--space-6);">
+                @L["Auth_HaveAccount"] <a href="/Identity/Account/Login">@L["Auth_Login"]</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+@page
+@model Desk.Pages.Invoices.DetailModel
+@{
+    ViewData["Title"] = L["Invoices_DetailTitle"].Value;
+    ViewData["ActiveNav"] = Model.InvoiceType == "send" ? "Sent" : "Received";
+
+    var invoice = Model.SendInvoice ?? (Invoice?)Model.ReceiveInvoice;
+    var backUrl = Model.InvoiceType == "send" ? "/Invoices/Sent" : "/Invoices/Received";
+    var backLabel = Model.InvoiceType == "send" ? L["Invoices_SentTitle"].Value : L["Invoices_ReceivedTitle"].Value;
+}
+
+<div class="desk-page-header">
+    <h1 class="desk-page-title">@L["Invoices_DetailTitle"]</h1>
+    <div class="desk-page-actions">
+        <a href="@backUrl" class="btn-brand btn-brand-secondary">← @L["Invoices_BackToList"]</a>
+        @if (invoice is not null)
+        {
+            <a href="/Invoices/Detail?handler=Download&type=@Model.InvoiceType&id=@(invoice.Id)" class="btn-brand btn-brand-primary">@L["Invoices_DownloadXml"]</a>
+        }
+    </div>
+</div>
+
+@if (Model.ErrorMessage is not null)
+{
+    <div class="desk-alert desk-alert-danger">@Model.ErrorMessage</div>
+}
+else if (invoice is not null)
+{
+    <!-- Metadata Card -->
+    <div class="desk-card" style="margin-bottom:var(--space-6)">
+        <div class="desk-detail-grid">
+            <div class="desk-detail-row">
+                <span class="desk-detail-label">@L["Invoices_Identifier"]</span>
+                <span class="desk-detail-value">@(invoice.Identifier ?? "—")</span>
+            </div>
+            <div class="desk-detail-row">
+                <span class="desk-detail-label">@L["Invoices_FileName"]</span>
+                <span class="desk-detail-value">@invoice.FileName</span>
+            </div>
+            <div class="desk-detail-row">
+                <span class="desk-detail-label">@L["Invoices_Committente"]</span>
+                <span class="desk-detail-value">@invoice.Committente</span>
+            </div>
+            <div class="desk-detail-row">
+                <span class="desk-detail-label">@L["Invoices_Prestatore"]</span>
+                <span class="desk-detail-value">@invoice.Prestatore</span>
+            </div>
+            <div class="desk-detail-row">
+                <span class="desk-detail-label">@L["Invoices_Format"]</span>
+                <span class="desk-detail-value">@invoice.Format</span>
+            </div>
+            @if (invoice.DateSent is not null)
+            {
+                <div class="desk-detail-row">
+                    <span class="desk-detail-label">@L["Invoices_DateSent"]</span>
+                    <span class="desk-detail-value">@invoice.DateSent.Value.ToLocalTime().ToString("g")</span>
+                </div>
+            }
+            @if (invoice.LastUpdate is not null)
+            {
+                <div class="desk-detail-row">
+                    <span class="desk-detail-label">@L["Invoices_LastUpdate"]</span>
+                    <span class="desk-detail-value">@invoice.LastUpdate.Value.ToLocalTime().ToString("g")</span>
+                </div>
+            }
+            @if (Model.ReceiveInvoice is not null)
+            {
+                <div class="desk-detail-row">
+                    <span class="desk-detail-label">@L["Invoices_MessageId"]</span>
+                    <span class="desk-detail-value">@Model.ReceiveInvoice.MessageId</span>
+                </div>
+                <div class="desk-detail-row">
+                    <span class="desk-detail-label">@L["Invoices_IsRead"]</span>
+                    <span class="desk-detail-value">
+                        @if (Model.ReceiveInvoice.IsRead)
+                        {
+                            <span class="desk-badge desk-badge-success">@L["Invoices_Read"]</span>
+                        }
+                        else
+                        {
+                            <span class="desk-badge desk-badge-info">@L["Invoices_Unread"]</span>
+                        }
+                    </span>
+                </div>
+            }
+        </div>
+
+        @if (invoice.Documents is { Count: > 0 })
+        {
+            <h3 style="margin-top:var(--space-6)">@L["Invoices_Documents"]</h3>
+            <div class="desk-documents-list">
+                @foreach (var doc in invoice.Documents)
+                {
+                    <div class="desk-document-item">
+                        <span class="fw-semi">@doc.Number</span>
+                        <span class="text-muted text-sm">@doc.Date.ToLocalTime().ToString("d")</span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <!-- SDI Timeline (sent invoices only) -->
+    @if (Model.InvoiceType == "send" && Model.Updates is { Count: > 0 })
+    {
+        <div class="desk-card">
+            <h2>@L["Invoices_SdiTimeline"]</h2>
+            <div class="desk-timeline">
+                @foreach (var update in Model.Updates)
+                {
+                    var dotClass = update.State switch
+                    {
+                        State.Consegnato or State.AccettatoDalDestinatario => "desk-timeline-dot-success",
+                        State.Scartato or State.RifiutatoDalDestinatario => "desk-timeline-dot-danger",
+                        State.NonConsegnato or State.ImpossibilitaDiRecapito => "desk-timeline-dot-warning",
+                        State.Inviato or State.AttestazioneTrasmissioneFattura => "desk-timeline-dot-info",
+                        _ => "desk-timeline-dot-neutral"
+                    };
+                    var stateKey = $"State_{update.State}";
+                    <div class="desk-timeline-item">
+                        <div class="desk-timeline-dot @dotClass"></div>
+                        <div class="desk-timeline-content">
+                            <div class="desk-timeline-time">@update.LastUpdate.ToLocalTime().ToString("g")</div>
+                            <h4 class="desk-timeline-title">@L[stateKey]</h4>
+                            @if (!string.IsNullOrEmpty(update.Description))
+                            {
+                                <div class="desk-timeline-desc">@update.Description</div>
+                            }
+                            @if (update.Errors is { Count: > 0 })
+                            {
+                                <div style="margin-top:var(--space-2)">
+                                    @foreach (var err in update.Errors)
+                                    {
+                                        <div class="desk-alert desk-alert-danger" style="margin-top:var(--space-1);padding:var(--space-2) var(--space-3);font-size:var(--text-xs)">
+                                            <strong>@err.Code</strong>: @err.Description
+                                            @if (!string.IsNullOrEmpty(err.Hint))
+                                            {
+                                                <br/><em>@err.Hint</em>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    @if (Model.InvoiceType == "send" && Model.Updates is { Count: 0 })
+    {
+        <div class="desk-card">
+            <h2>@L["Invoices_SdiTimeline"]</h2>
+            <div class="desk-empty">
+                <div class="desk-empty-title">@L["Common_NoData"]</div>
+            </div>
+        </div>
+    }
+}
+
+@section Scripts {
+    <style>
+        .desk-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-4);
+        }
+        .desk-detail-row {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+        .desk-detail-label {
+            font-size: var(--text-xs);
+            font-weight: var(--weight-semi);
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .desk-detail-value {
+            font-size: var(--text-sm);
+            color: var(--color-text);
+            word-break: break-all;
+        }
+        .desk-documents-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+        .desk-document-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-2) var(--space-3);
+            background: var(--brand-bg);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+        }
+    </style>
+}

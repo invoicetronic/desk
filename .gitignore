@@ -51,4 +51,10 @@ CodeCoverage/
 # NUnit
 *.VisualState.xml
 TestResult.xml
-nunit-*.xml.claude/
+nunit-*.xml
+
+# Tool/IDE directories
+.claude/
+.playwright-mcp/
+.idea/
+*.DotSettings.user

@@ -1,0 +1,12 @@
+@inject IHtmlLocalizer<SharedResource> L
+@{
+    var activeNav = ViewData["ActiveNav"]?.ToString() ?? "";
+}
+<nav class="desk-subnav">
+    <a href="/" class="@(activeNav == "Home" ? "active" : "")">@L["Nav_Home"]</a>
+    <a href="/Invoices/Sent" class="@(activeNav == "Sent" ? "active" : "")">@L["Nav_SentInvoices"]</a>
+    <a href="/Invoices/Received" class="@(activeNav == "Received" ? "active" : "")">@L["Nav_ReceivedInvoices"]</a>
+    <a href="/Upload" class="@(activeNav == "Upload" ? "active" : "")">@L["Nav_Upload"]</a>
+    <a href="/Export" class="@(activeNav == "Export" ? "active" : "")">@L["Nav_Export"]</a>
+    <a href="/Companies" class="@(activeNav == "Companies" ? "active" : "")">@L["Nav_Companies"]</a>
+</nav>
