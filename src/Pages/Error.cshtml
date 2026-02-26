@@ -1,0 +1,17 @@
+@page
+@model ErrorModel
+@{
+    ViewData["Title"] = L["Error_Title"].Value;
+}
+
+<div style="text-align: center; padding: var(--space-12) 0;">
+    <h1>@L["Error_Title"]</h1>
+    <p class="text-muted">@L["Error_Generic"]</p>
+
+    @if (Model.ShowRequestId)
+    {
+        <p class="text-sm text-muted" style="margin-top: var(--space-4);">
+            <strong>Request ID:</strong> <code>@Model.RequestId</code>
+        </p>
+    }
+</div>

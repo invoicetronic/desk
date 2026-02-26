@@ -1,0 +1,25 @@
+@inject SessionManager SessionManager
+@inject IHtmlLocalizer<SharedResource> L
+@{
+    var companies = SessionManager.GetCompanies();
+    var selectedId = SessionManager.GetSelectedCompanyId();
+    var allLabel = L["Company_All"].Value;
+    var selectedName = companies?.FirstOrDefault(c => c.Id == selectedId)?.Name ?? allLabel;
+}
+
+@if (companies is { Count: > 0 })
+{
+    <div class="desk-company-selector" id="companySelector">
+        <button class="desk-company-btn" onclick="toggleCompanyDropdown()" type="button">
+            <span>@selectedName</span>
+            <span class="caret">&#9662;</span>
+        </button>
+        <div class="desk-company-dropdown" id="companyDropdown">
+            <a href="?companyId=" class="@(selectedId == null ? "selected" : "")">@allLabel</a>
+            @foreach (var company in companies)
+            {
+                <a href="?companyId=@company.Id" class="@(company.Id == selectedId ? "selected" : "")">@company.Name</a>
+            }
+        </div>
+    </div>
+}

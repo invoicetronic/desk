@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+
+  <!-- Navigation -->
+  <data name="Nav_Home"><value>Home</value></data>
+  <data name="Nav_SentInvoices"><value>Sent invoices</value></data>
+  <data name="Nav_ReceivedInvoices"><value>Received invoices</value></data>
+  <data name="Nav_Upload"><value>Send</value></data>
+  <data name="Nav_Export"><value>Export</value></data>
+  <data name="Nav_Companies"><value>Companies</value></data>
+
+  <!-- Auth -->
+  <data name="Auth_Login"><value>Sign in</value></data>
+  <data name="Auth_Register"><value>Sign up</value></data>
+  <data name="Auth_Logout"><value>Sign out</value></data>
+  <data name="Auth_Email"><value>Email</value></data>
+  <data name="Auth_Password"><value>Password</value></data>
+  <data name="Auth_ConfirmPassword"><value>Confirm password</value></data>
+  <data name="Auth_DisplayName"><value>Display name</value></data>
+  <data name="Auth_RememberMe"><value>Remember me</value></data>
+  <data name="Auth_ForgotPassword"><value>Forgot password?</value></data>
+  <data name="Auth_NoAccount"><value>Don't have an account?</value></data>
+  <data name="Auth_HaveAccount"><value>Already have an account?</value></data>
+  <data name="Auth_LoginTitle"><value>Sign in to your account</value></data>
+  <data name="Auth_RegisterTitle"><value>Create a new account</value></data>
+  <data name="Auth_InvalidLogin"><value>Invalid email or password.</value></data>
+
+  <!-- Profile -->
+  <data name="Profile_Title"><value>Profile</value></data>
+  <data name="Profile_ApiKey"><value>API Key</value></data>
+  <data name="Profile_ApiKeyHint"><value>Enter your Invoicetronic API key. You can get it from the developer dashboard.</value></data>
+  <data name="Profile_SaveApiKey"><value>Save API Key</value></data>
+  <data name="Profile_ApiKeyValid"><value>Valid API key. Operations left: {0}, Signatures left: {1}.</value></data>
+  <data name="Profile_ApiKeyInvalid"><value>Invalid API key or API unreachable.</value></data>
+  <data name="Profile_ApiKeySaved"><value>API key saved successfully.</value></data>
+  <data name="Profile_ApiKeyRequired"><value>To use the application, please configure your API key first.</value></data>
+  <data name="Profile_PersonalInfo"><value>Personal information</value></data>
+  <data name="Profile_SaveProfile"><value>Save profile</value></data>
+  <data name="Profile_ProfileSaved"><value>Profile updated successfully.</value></data>
+  <data name="Profile_AccountStatus"><value>Account status</value></data>
+  <data name="Profile_OperationsLeft"><value>Operations left</value></data>
+  <data name="Profile_SignaturesLeft"><value>Signatures left</value></data>
+
+  <!-- Invoices -->
+  <data name="Invoices_SentTitle"><value>Sent invoices</value></data>
+  <data name="Invoices_ReceivedTitle"><value>Received invoices</value></data>
+  <data name="Invoices_DetailTitle"><value>Invoice detail</value></data>
+  <data name="Invoices_Identifier"><value>Identifier</value></data>
+  <data name="Invoices_FileName"><value>File name</value></data>
+  <data name="Invoices_Committente"><value>Buyer</value></data>
+  <data name="Invoices_Prestatore"><value>Seller</value></data>
+  <data name="Invoices_DocumentNumber"><value>Document number</value></data>
+  <data name="Invoices_DocumentDate"><value>Document date</value></data>
+  <data name="Invoices_DateSent"><value>Date sent</value></data>
+  <data name="Invoices_LastUpdate"><value>Last update</value></data>
+  <data name="Invoices_Status"><value>Status</value></data>
+  <data name="Invoices_Format"><value>Format</value></data>
+  <data name="Invoices_MessageId"><value>Message ID</value></data>
+  <data name="Invoices_IsRead"><value>Read</value></data>
+  <data name="Invoices_Unread"><value>Unread</value></data>
+  <data name="Invoices_Read"><value>Read</value></data>
+  <data name="Invoices_UnreadOnly"><value>Unread only</value></data>
+  <data name="Invoices_DateFrom"><value>Date from</value></data>
+  <data name="Invoices_DateTo"><value>Date to</value></data>
+  <data name="Invoices_SearchPlaceholder"><value>Search by buyer, seller, identifier...</value></data>
+  <data name="Invoices_DownloadXml"><value>Download XML</value></data>
+  <data name="Invoices_BackToList"><value>Back to list</value></data>
+  <data name="Invoices_SdiTimeline"><value>SDI Timeline</value></data>
+  <data name="Invoices_Documents"><value>Documents</value></data>
+  <data name="Invoices_Created"><value>Date received</value></data>
+
+  <!-- SDI States -->
+  <data name="State_Inviato"><value>Sent</value></data>
+  <data name="State_Consegnato"><value>Delivered</value></data>
+  <data name="State_NonConsegnato"><value>Not delivered</value></data>
+  <data name="State_Scartato"><value>Rejected</value></data>
+  <data name="State_AccettatoDalDestinatario"><value>Accepted</value></data>
+  <data name="State_RifiutatoDalDestinatario"><value>Refused</value></data>
+  <data name="State_ImpossibilitaDiRecapito"><value>Undeliverable</value></data>
+  <data name="State_DecorrenzaTermini"><value>Term expiry</value></data>
+  <data name="State_AttestazioneTrasmissioneFattura"><value>Transmission attestation</value></data>
+
+  <!-- Company selector -->
+  <data name="Company_All"><value>All companies</value></data>
+
+  <!-- Companies page -->
+  <data name="Companies_Title"><value>Companies</value></data>
+  <data name="Companies_AddNew"><value>New company</value></data>
+  <data name="Companies_Name"><value>Name</value></data>
+  <data name="Companies_Vat"><value>VAT number</value></data>
+  <data name="Companies_FiscalCode"><value>Fiscal code</value></data>
+  <data name="Companies_Created"><value>Created</value></data>
+  <data name="Companies_Actions"><value>Actions</value></data>
+  <data name="Companies_SearchPlaceholder"><value>Search by name, VAT, fiscal code...</value></data>
+  <data name="Companies_EditTitle"><value>Edit company</value></data>
+  <data name="Companies_AddTitle"><value>New company</value></data>
+  <data name="Companies_DeleteConfirm"><value>Are you sure you want to delete this company?</value></data>
+  <data name="Companies_DeleteForceConfirm"><value>This company has {0} sent and {1} received linked invoices. Deleting it will remove all associated invoices. Do you want to proceed anyway?</value></data>
+  <data name="Companies_Saved"><value>Company saved successfully.</value></data>
+  <data name="Companies_Deleted"><value>Company deleted successfully.</value></data>
+
+  <!-- Validation -->
+  <data name="Validation_Required"><value>This field is required.</value></data>
+  <data name="Validation_EmailInvalid"><value>Please enter a valid email address.</value></data>
+  <data name="Validation_StringLength"><value>Must be between {2} and {1} characters.</value></data>
+  <data name="Validation_PasswordMismatch"><value>Passwords do not match.</value></data>
+
+  <!-- Identity errors -->
+  <data name="Identity_DuplicateEmail"><value>The email '{0}' is already registered.</value></data>
+  <data name="Identity_DuplicateUserName"><value>The username '{0}' is already taken.</value></data>
+  <data name="Identity_InvalidEmail"><value>The email '{0}' is not valid.</value></data>
+  <data name="Identity_PasswordTooShort"><value>Password must be at least {0} characters long.</value></data>
+  <data name="Identity_PasswordRequiresDigit"><value>Password must contain at least one digit (0-9).</value></data>
+  <data name="Identity_PasswordRequiresLower"><value>Password must contain at least one lowercase letter (a-z).</value></data>
+  <data name="Identity_PasswordRequiresUpper"><value>Password must contain at least one uppercase letter (A-Z).</value></data>
+  <data name="Identity_PasswordRequiresNonAlphanumeric"><value>Password must contain at least one special character.</value></data>
+  <data name="Identity_PasswordRequiresUniqueChars"><value>Password must contain at least {0} unique characters.</value></data>
+  <data name="Identity_DefaultError"><value>An error occurred.</value></data>
+
+  <!-- Upload -->
+  <data name="Upload_Title"><value>Send outbound invoices</value></data>
+  <data name="Upload_DropText"><value>Drag and drop XML or P7M files here</value></data>
+  <data name="Upload_DropHint"><value>or click to browse. Outbound invoices only. Max 5 MB per file.</value></data>
+  <data name="Upload_SelectFiles"><value>Select files</value></data>
+  <data name="Upload_Pending"><value>Pending</value></data>
+  <data name="Upload_Uploading"><value>Sending...</value></data>
+  <data name="Upload_Success"><value>Sent</value></data>
+  <data name="Upload_Error"><value>Error</value></data>
+
+  <!-- Export -->
+  <data name="Export_Title"><value>Export invoices</value></data>
+  <data name="Export_Type"><value>Type</value></data>
+  <data name="Export_TypeSend"><value>Sent</value></data>
+  <data name="Export_TypeReceive"><value>Received</value></data>
+  <data name="Export_TypeBoth"><value>Both</value></data>
+  <data name="Export_Period"><value>Period</value></data>
+  <data name="Export_PeriodDateRange"><value>Date range</value></data>
+  <data name="Export_PeriodMonth"><value>Month</value></data>
+  <data name="Export_PeriodQuarter"><value>Quarter</value></data>
+  <data name="Export_Year"><value>Year</value></data>
+  <data name="Export_Month"><value>Month</value></data>
+  <data name="Export_Quarter"><value>Quarter</value></data>
+  <data name="Export_Q1"><value>Q1 (Jan-Mar)</value></data>
+  <data name="Export_Q2"><value>Q2 (Apr-Jun)</value></data>
+  <data name="Export_Q3"><value>Q3 (Jul-Sep)</value></data>
+  <data name="Export_Q4"><value>Q4 (Oct-Dec)</value></data>
+  <data name="Export_DateFrom"><value>Date from</value></data>
+  <data name="Export_DateTo"><value>Date to</value></data>
+  <data name="Export_Download"><value>Download ZIP</value></data>
+  <data name="Export_Downloading"><value>Downloading...</value></data>
+
+  <!-- Common -->
+  <data name="Common_Save"><value>Save</value></data>
+  <data name="Common_Cancel"><value>Cancel</value></data>
+  <data name="Common_Delete"><value>Delete</value></data>
+  <data name="Common_Edit"><value>Edit</value></data>
+  <data name="Common_Add"><value>Add</value></data>
+  <data name="Common_Search"><value>Search</value></data>  <data name="Common_Loading"><value>Loading...</value></data>
+  <data name="Common_Error"><value>Error</value></data>
+  <data name="Common_Success"><value>Operation completed</value></data>
+  <data name="Common_Confirm"><value>Confirm</value></data>
+  <data name="Common_Back"><value>Back</value></data>
+  <data name="Common_Download"><value>Download</value></data>
+  <data name="Common_NoData"><value>No data available</value></data>
+
+  <!-- Dashboard -->
+  <data name="Dashboard_Title"><value>Dashboard</value></data>
+  <data name="Dashboard_SentInvoices"><value>Sent invoices</value></data>
+  <data name="Dashboard_ReceivedInvoices"><value>Received invoices</value></data>
+  <data name="Dashboard_UnreadInvoices"><value>Unread</value></data>
+  <data name="Dashboard_AccountStatus"><value>Account status</value></data>
+  <data name="Dashboard_RecentUpdates"><value>Recent SDI updates</value></data>
+  <data name="Dashboard_ViewAll"><value>View all</value></data>
+
+  <!-- Footer -->
+  <data name="Footer_PoweredBy"><value>Powered by Invoicetronic</value></data>
+
+  <!-- Error -->
+  <data name="Error_Title"><value>Error</value></data>
+  <data name="Error_Generic"><value>An error occurred while processing your request.</value></data>
+  <data name="Error_ApiUnreachable"><value>API unreachable. Please try again later.</value></data>
+  <data name="Error_Forbidden"><value>You don't have permission for this operation.</value></data>
+</root>

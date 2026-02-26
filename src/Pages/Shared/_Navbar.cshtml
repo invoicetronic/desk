@@ -1,0 +1,15 @@
+@inject DeskConfig Config
+<nav class="desk-navbar">
+    <a class="desk-navbar-brand" href="/">
+        <img src="~/images/logo-white.svg" alt="Logo" />
+        <span>@Config.Branding.AppName</span>
+    </a>
+
+    <div class="desk-navbar-right">
+        <partial name="_CompanySelector" />
+        @if (!Config.IsStandalone)
+        {
+            <partial name="_LoginPartial" />
+        }
+    </div>
+</nav>

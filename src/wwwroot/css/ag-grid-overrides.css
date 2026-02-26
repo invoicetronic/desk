@@ -1,0 +1,39 @@
+/* ============================================================
+   Invoicetronic Desk — AG Grid CSS overrides
+   Minimal styling not covered by the JS Theming API
+   ============================================================ */
+
+.ag-header-cell-label {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.ag-paging-panel {
+    justify-content: center;
+}
+
+.ag-cell {
+    display: flex;
+    align-items: center;
+}
+
+/* ── Icon buttons (grid actions) ── */
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-1);
+    border: none;
+    background: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-out);
+}
+
+.btn-icon:hover {
+    color: var(--brand-accent);
+}
+
+.btn-icon-danger:hover {
+    color: var(--color-danger);
+}

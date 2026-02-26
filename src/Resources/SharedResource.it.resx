@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+
+  <!-- Navigation -->
+  <data name="Nav_Home"><value>Home</value></data>
+  <data name="Nav_SentInvoices"><value>Fatture inviate</value></data>
+  <data name="Nav_ReceivedInvoices"><value>Fatture ricevute</value></data>
+  <data name="Nav_Upload"><value>Invio</value></data>
+  <data name="Nav_Export"><value>Esporta</value></data>
+  <data name="Nav_Companies"><value>Aziende</value></data>
+
+  <!-- Auth -->
+  <data name="Auth_Login"><value>Accedi</value></data>
+  <data name="Auth_Register"><value>Registrati</value></data>
+  <data name="Auth_Logout"><value>Esci</value></data>
+  <data name="Auth_Email"><value>Email</value></data>
+  <data name="Auth_Password"><value>Password</value></data>
+  <data name="Auth_ConfirmPassword"><value>Conferma password</value></data>
+  <data name="Auth_DisplayName"><value>Nome visualizzato</value></data>
+  <data name="Auth_RememberMe"><value>Ricordami</value></data>
+  <data name="Auth_ForgotPassword"><value>Password dimenticata?</value></data>
+  <data name="Auth_NoAccount"><value>Non hai un account?</value></data>
+  <data name="Auth_HaveAccount"><value>Hai già un account?</value></data>
+  <data name="Auth_LoginTitle"><value>Accedi al tuo account</value></data>
+  <data name="Auth_RegisterTitle"><value>Crea un nuovo account</value></data>
+  <data name="Auth_InvalidLogin"><value>Email o password non validi.</value></data>
+
+  <!-- Profile -->
+  <data name="Profile_Title"><value>Profilo</value></data>
+  <data name="Profile_ApiKey"><value>API Key</value></data>
+  <data name="Profile_ApiKeyHint"><value>Inserisci la tua API key Invoicetronic. Puoi ottenerla dal pannello sviluppatore.</value></data>
+  <data name="Profile_SaveApiKey"><value>Salva API Key</value></data>
+  <data name="Profile_ApiKeyValid"><value>API key valida. Operazioni rimaste: {0}, Firme rimaste: {1}.</value></data>
+  <data name="Profile_ApiKeyInvalid"><value>API key non valida o API non raggiungibile.</value></data>
+  <data name="Profile_ApiKeySaved"><value>API key salvata con successo.</value></data>
+  <data name="Profile_ApiKeyRequired"><value>Per utilizzare l'applicazione, configura prima la tua API key.</value></data>
+  <data name="Profile_PersonalInfo"><value>Informazioni personali</value></data>
+  <data name="Profile_SaveProfile"><value>Salva profilo</value></data>
+  <data name="Profile_ProfileSaved"><value>Profilo aggiornato con successo.</value></data>
+  <data name="Profile_AccountStatus"><value>Stato account</value></data>
+  <data name="Profile_OperationsLeft"><value>Operazioni rimaste</value></data>
+  <data name="Profile_SignaturesLeft"><value>Firme rimaste</value></data>
+
+  <!-- Invoices -->
+  <data name="Invoices_SentTitle"><value>Fatture inviate</value></data>
+  <data name="Invoices_ReceivedTitle"><value>Fatture ricevute</value></data>
+  <data name="Invoices_DetailTitle"><value>Dettaglio fattura</value></data>
+  <data name="Invoices_Identifier"><value>Identificativo</value></data>
+  <data name="Invoices_FileName"><value>Nome file</value></data>
+  <data name="Invoices_Committente"><value>Committente</value></data>
+  <data name="Invoices_Prestatore"><value>Prestatore</value></data>
+  <data name="Invoices_DocumentNumber"><value>Numero documento</value></data>
+  <data name="Invoices_DocumentDate"><value>Data documento</value></data>
+  <data name="Invoices_DateSent"><value>Data invio</value></data>
+  <data name="Invoices_LastUpdate"><value>Ultimo aggiornamento</value></data>
+  <data name="Invoices_Status"><value>Stato</value></data>
+  <data name="Invoices_Format"><value>Formato</value></data>
+  <data name="Invoices_MessageId"><value>ID messaggio</value></data>
+  <data name="Invoices_IsRead"><value>Letta</value></data>
+  <data name="Invoices_Unread"><value>Non letta</value></data>
+  <data name="Invoices_Read"><value>Letta</value></data>
+  <data name="Invoices_UnreadOnly"><value>Solo non lette</value></data>
+  <data name="Invoices_DateFrom"><value>Data da</value></data>
+  <data name="Invoices_DateTo"><value>Data a</value></data>
+  <data name="Invoices_SearchPlaceholder"><value>Cerca per committente, prestatore, identificativo...</value></data>
+  <data name="Invoices_DownloadXml"><value>Scarica XML</value></data>
+  <data name="Invoices_BackToList"><value>Torna alla lista</value></data>
+  <data name="Invoices_SdiTimeline"><value>Cronologia SDI</value></data>
+  <data name="Invoices_Documents"><value>Documenti</value></data>
+  <data name="Invoices_Created"><value>Data ricezione</value></data>
+
+  <!-- SDI States -->
+  <data name="State_Inviato"><value>Inviato</value></data>
+  <data name="State_Consegnato"><value>Consegnato</value></data>
+  <data name="State_NonConsegnato"><value>Non consegnato</value></data>
+  <data name="State_Scartato"><value>Scartato</value></data>
+  <data name="State_AccettatoDalDestinatario"><value>Accettato</value></data>
+  <data name="State_RifiutatoDalDestinatario"><value>Rifiutato</value></data>
+  <data name="State_ImpossibilitaDiRecapito"><value>Impossibilità di recapito</value></data>
+  <data name="State_DecorrenzaTermini"><value>Decorrenza termini</value></data>
+  <data name="State_AttestazioneTrasmissioneFattura"><value>Attestazione trasmissione</value></data>
+
+  <!-- Company selector -->
+  <data name="Company_All"><value>Tutte le aziende</value></data>
+
+  <!-- Companies page -->
+  <data name="Companies_Title"><value>Aziende</value></data>
+  <data name="Companies_AddNew"><value>Nuova azienda</value></data>
+  <data name="Companies_Name"><value>Nome</value></data>
+  <data name="Companies_Vat"><value>Partita IVA</value></data>
+  <data name="Companies_FiscalCode"><value>Codice fiscale</value></data>
+  <data name="Companies_Created"><value>Data creazione</value></data>
+  <data name="Companies_Actions"><value>Azioni</value></data>
+  <data name="Companies_SearchPlaceholder"><value>Cerca per nome, P.IVA, codice fiscale...</value></data>
+  <data name="Companies_EditTitle"><value>Modifica azienda</value></data>
+  <data name="Companies_AddTitle"><value>Nuova azienda</value></data>
+  <data name="Companies_DeleteConfirm"><value>Sei sicuro di voler eliminare questa azienda?</value></data>
+  <data name="Companies_DeleteForceConfirm"><value>Questa azienda ha {0} fatture inviate e {1} ricevute collegate. Eliminandola perderai tutte le fatture associate. Vuoi procedere comunque?</value></data>
+  <data name="Companies_Saved"><value>Azienda salvata con successo.</value></data>
+  <data name="Companies_Deleted"><value>Azienda eliminata con successo.</value></data>
+
+  <!-- Validation -->
+  <data name="Validation_Required"><value>Questo campo è obbligatorio.</value></data>
+  <data name="Validation_EmailInvalid"><value>Inserisci un indirizzo email valido.</value></data>
+  <data name="Validation_StringLength"><value>Deve essere tra {2} e {1} caratteri.</value></data>
+  <data name="Validation_PasswordMismatch"><value>Le password non corrispondono.</value></data>
+
+  <!-- Identity errors -->
+  <data name="Identity_DuplicateEmail"><value>L'indirizzo email '{0}' è già registrato.</value></data>
+  <data name="Identity_DuplicateUserName"><value>Il nome utente '{0}' è già in uso.</value></data>
+  <data name="Identity_InvalidEmail"><value>L'indirizzo email '{0}' non è valido.</value></data>
+  <data name="Identity_PasswordTooShort"><value>La password deve contenere almeno {0} caratteri.</value></data>
+  <data name="Identity_PasswordRequiresDigit"><value>La password deve contenere almeno una cifra (0-9).</value></data>
+  <data name="Identity_PasswordRequiresLower"><value>La password deve contenere almeno una lettera minuscola (a-z).</value></data>
+  <data name="Identity_PasswordRequiresUpper"><value>La password deve contenere almeno una lettera maiuscola (A-Z).</value></data>
+  <data name="Identity_PasswordRequiresNonAlphanumeric"><value>La password deve contenere almeno un carattere speciale.</value></data>
+  <data name="Identity_PasswordRequiresUniqueChars"><value>La password deve contenere almeno {0} caratteri diversi.</value></data>
+  <data name="Identity_DefaultError"><value>Si è verificato un errore.</value></data>
+
+  <!-- Upload -->
+  <data name="Upload_Title"><value>Invio fatture attive</value></data>
+  <data name="Upload_DropText"><value>Trascina qui i file XML o P7M</value></data>
+  <data name="Upload_DropHint"><value>oppure clicca per selezionare. Solo fatture attive. Max 5 MB per file.</value></data>
+  <data name="Upload_SelectFiles"><value>Seleziona file</value></data>
+  <data name="Upload_Pending"><value>In attesa</value></data>
+  <data name="Upload_Uploading"><value>Invio...</value></data>
+  <data name="Upload_Success"><value>Inviata</value></data>
+  <data name="Upload_Error"><value>Errore</value></data>
+
+  <!-- Export -->
+  <data name="Export_Title"><value>Esporta fatture</value></data>
+  <data name="Export_Type"><value>Tipo</value></data>
+  <data name="Export_TypeSend"><value>Inviate</value></data>
+  <data name="Export_TypeReceive"><value>Ricevute</value></data>
+  <data name="Export_TypeBoth"><value>Entrambe</value></data>
+  <data name="Export_Period"><value>Periodo</value></data>
+  <data name="Export_PeriodDateRange"><value>Intervallo date</value></data>
+  <data name="Export_PeriodMonth"><value>Mese</value></data>
+  <data name="Export_PeriodQuarter"><value>Trimestre</value></data>
+  <data name="Export_Year"><value>Anno</value></data>
+  <data name="Export_Month"><value>Mese</value></data>
+  <data name="Export_Quarter"><value>Trimestre</value></data>
+  <data name="Export_Q1"><value>Q1 (Gen-Mar)</value></data>
+  <data name="Export_Q2"><value>Q2 (Apr-Giu)</value></data>
+  <data name="Export_Q3"><value>Q3 (Lug-Set)</value></data>
+  <data name="Export_Q4"><value>Q4 (Ott-Dic)</value></data>
+  <data name="Export_DateFrom"><value>Data da</value></data>
+  <data name="Export_DateTo"><value>Data a</value></data>
+  <data name="Export_Download"><value>Scarica ZIP</value></data>
+  <data name="Export_Downloading"><value>Download in corso...</value></data>
+
+  <!-- Common -->
+  <data name="Common_Save"><value>Salva</value></data>
+  <data name="Common_Cancel"><value>Annulla</value></data>
+  <data name="Common_Delete"><value>Elimina</value></data>
+  <data name="Common_Edit"><value>Modifica</value></data>
+  <data name="Common_Add"><value>Aggiungi</value></data>
+  <data name="Common_Search"><value>Cerca</value></data>  <data name="Common_Loading"><value>Caricamento...</value></data>
+  <data name="Common_Error"><value>Errore</value></data>
+  <data name="Common_Success"><value>Operazione completata</value></data>
+  <data name="Common_Confirm"><value>Conferma</value></data>
+  <data name="Common_Back"><value>Indietro</value></data>
+  <data name="Common_Download"><value>Scarica</value></data>
+  <data name="Common_NoData"><value>Nessun dato disponibile</value></data>
+
+  <!-- Dashboard -->
+  <data name="Dashboard_Title"><value>Dashboard</value></data>
+  <data name="Dashboard_SentInvoices"><value>Fatture inviate</value></data>
+  <data name="Dashboard_ReceivedInvoices"><value>Fatture ricevute</value></data>
+  <data name="Dashboard_UnreadInvoices"><value>Non lette</value></data>
+  <data name="Dashboard_AccountStatus"><value>Stato account</value></data>
+  <data name="Dashboard_RecentUpdates"><value>Ultimi aggiornamenti SDI</value></data>
+  <data name="Dashboard_ViewAll"><value>Vedi tutte</value></data>
+
+  <!-- Footer -->
+  <data name="Footer_PoweredBy"><value>Powered by Invoicetronic</value></data>
+
+  <!-- Error -->
+  <data name="Error_Title"><value>Errore</value></data>
+  <data name="Error_Generic"><value>Si è verificato un errore durante l'elaborazione della richiesta.</value></data>
+  <data name="Error_ApiUnreachable"><value>API non raggiungibile. Riprova più tardi.</value></data>
+  <data name="Error_Forbidden"><value>Non hai i permessi per questa operazione.</value></data>
+</root>

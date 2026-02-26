@@ -1,0 +1,90 @@
+@page
+@model Desk.Areas.Identity.Pages.Account.Manage.IndexModel
+@{
+    ViewData["Title"] = L["Profile_Title"].Value;
+}
+
+<div class="desk-page-header">
+    <h1 class="desk-page-title">@L["Profile_Title"]</h1>
+</div>
+
+@if (Model.SuccessMessage is not null)
+{
+    <div class="desk-alert desk-alert-success" style="margin-bottom: var(--space-6);">
+        @L[Model.SuccessMessage]
+    </div>
+}
+@if (Model.ErrorMessage is not null)
+{
+    <div class="desk-alert desk-alert-danger" style="margin-bottom: var(--space-6);">
+        @L[Model.ErrorMessage]
+    </div>
+}
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); align-items: start;">
+    <!-- API Key Section -->
+    <div class="desk-card">
+        <h2 style="font-size: var(--text-lg); margin-bottom: var(--space-5);">@L["Profile_ApiKey"]</h2>
+        <p class="text-muted text-sm" style="margin-bottom: var(--space-5);">@L["Profile_ApiKeyHint"]</p>
+
+        <form method="post" asp-page-handler="SaveApiKey">
+            <div class="desk-form-group">
+                <label class="desk-label" for="apiKey">@L["Profile_ApiKey"]</label>
+                <div style="position: relative;">
+                    <input type="password" id="apiKey" name="ApiKeyInput" value="@Model.ApiKeyInput"
+                           class="desk-input" autocomplete="off" style="padding-right: 3rem;" />
+                    <button type="button" onclick="toggleApiKeyVisibility()"
+                            style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--color-text-muted); font-size: var(--text-sm);"
+                            id="toggleApiKey">
+                        &#128065;
+                    </button>
+                </div>
+            </div>
+            <button type="submit" class="btn-brand btn-brand-primary">@L["Profile_SaveApiKey"]</button>
+        </form>
+
+        @if (Model.AccountStatus is not null)
+        {
+            <div style="margin-top: var(--space-6); padding-top: var(--space-5); border-top: 1px solid var(--color-border);">
+                <h3 style="font-size: var(--text-sm); margin-bottom: var(--space-4);">@L["Profile_AccountStatus"]</h3>
+                <div style="display: flex; gap: var(--space-8);">
+                    <div>
+                        <div class="text-xs text-muted">@L["Profile_OperationsLeft"]</div>
+                        <div class="desk-card-value" style="font-size: var(--text-xl);">@Model.AccountStatus.OperationLeft</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-muted">@L["Profile_SignaturesLeft"]</div>
+                        <div class="desk-card-value" style="font-size: var(--text-xl);">@Model.AccountStatus.SignatureLeft</div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Personal Info Section -->
+    <div class="desk-card">
+        <h2 style="font-size: var(--text-lg); margin-bottom: var(--space-5);">@L["Profile_PersonalInfo"]</h2>
+
+        <form method="post" asp-page-handler="SaveProfile">
+            <div class="desk-form-group">
+                <label class="desk-label">@L["Auth_Email"]</label>
+                <input type="email" value="@Model.CurrentEmail" class="desk-input" disabled />
+            </div>
+            <div class="desk-form-group">
+                <label class="desk-label" for="displayName">@L["Auth_DisplayName"]</label>
+                <input type="text" id="displayName" name="DisplayNameInput" value="@Model.DisplayNameInput"
+                       class="desk-input" />
+            </div>
+            <button type="submit" class="btn-brand btn-brand-primary">@L["Profile_SaveProfile"]</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleApiKeyVisibility() {
+            const input = document.getElementById('apiKey');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+    </script>
+}

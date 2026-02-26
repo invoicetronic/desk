@@ -1,0 +1,208 @@
+@page
+@model Desk.Pages.Invoices.SentModel
+@{
+    ViewData["Title"] = L["Invoices_SentTitle"].Value;
+    ViewData["ActiveNav"] = "Sent";
+}
+
+<div class="desk-page-header">
+    <h1 class="desk-page-title">@L["Invoices_SentTitle"]</h1>
+</div>
+
+<div class="desk-grid-wrapper">
+    <div class="desk-grid-toolbar">
+        <div class="desk-grid-filters">
+            <input type="search" id="filterSearch" class="desk-input" style="width:260px"
+                   placeholder="@L["Invoices_SearchPlaceholder"].Value" />
+            <span class="desk-date-wrap">
+                <input type="date" id="filterDateFrom" class="desk-input" style="width:150px"
+                       title="@L["Invoices_DateFrom"].Value" onchange="updateDateClear('filterDateFrom')" />
+                <button type="button" class="desk-date-clear" onclick="clearDate('filterDateFrom')" title="Clear" style="display:none">×</button>
+            </span>
+            <span class="desk-date-wrap">
+                <input type="date" id="filterDateTo" class="desk-input" style="width:150px"
+                       title="@L["Invoices_DateTo"].Value" onchange="updateDateClear('filterDateTo')" />
+                <button type="button" class="desk-date-clear" onclick="clearDate('filterDateTo')" title="Clear" style="display:none">×</button>
+            </span>
+            <button class="btn-brand btn-brand-primary btn-brand-sm" onclick="applyFilters()">
+                @L["Common_Search"]
+            </button>
+        </div>
+    </div>
+    <div id="sentGrid" style="width: 100%;"></div>
+</div>
+
+@section Scripts {
+    <script src="~/js/ag-grid-init.js"></script>
+    <script>
+        const listUrl = '/Invoices/Sent?handler=List';
+        const detailLabel = '@L["Invoices_DetailTitle"].Value';
+        const downloadLabel = '@L["Invoices_DownloadXml"].Value';
+        let gridApi = null;
+
+        const stateLabels = {
+            'Inviato': '@L["State_Inviato"].Value',
+            'Consegnato': '@L["State_Consegnato"].Value',
+            'NonConsegnato': '@L["State_NonConsegnato"].Value',
+            'Scartato': '@L["State_Scartato"].Value',
+            'AccettatoDalDestinatario': '@L["State_AccettatoDalDestinatario"].Value',
+            'RifiutatoDalDestinatario': '@L["State_RifiutatoDalDestinatario"].Value',
+            'ImpossibilitaDiRecapito': '@L["State_ImpossibilitaDiRecapito"].Value',
+            'DecorrenzaTermini': '@L["State_DecorrenzaTermini"].Value',
+            'AttestazioneTrasmissioneFattura': '@L["State_AttestazioneTrasmissioneFattura"].Value'
+        };
+
+        const stateBadgeClass = {
+            'Inviato': 'desk-badge-info',
+            'Consegnato': 'desk-badge-success',
+            'NonConsegnato': 'desk-badge-warning',
+            'Scartato': 'desk-badge-danger',
+            'AccettatoDalDestinatario': 'desk-badge-success',
+            'RifiutatoDalDestinatario': 'desk-badge-danger',
+            'ImpossibilitaDiRecapito': 'desk-badge-warning',
+            'DecorrenzaTermini': 'desk-badge-neutral',
+            'AttestazioneTrasmissioneFattura': 'desk-badge-info'
+        };
+
+        function getFilterParams() {
+            const params = {};
+            const q = document.getElementById('filterSearch').value.trim();
+            const dateFrom = document.getElementById('filterDateFrom').value;
+            const dateTo = document.getElementById('filterDateTo').value;
+            if (q) params.q = q;
+            if (dateFrom) params.dateFrom = dateFrom;
+            if (dateTo) params.dateTo = dateTo;
+            return params;
+        }
+
+        function applyFilters() {
+            gridApi.setGridOption('datasource', createDatasource(listUrl, getFilterParams));
+        }
+
+        function clearDate(id) {
+            document.getElementById(id).value = '';
+            updateDateClear(id);
+            applyFilters();
+        }
+
+        function updateDateClear(id) {
+            const input = document.getElementById(id);
+            const btn = input.nextElementSibling;
+            btn.style.display = input.value ? '' : 'none';
+        }
+
+        function formatDate(val) {
+            if (!val) return '';
+            return new Date(val).toLocaleDateString();
+        }
+
+        function formatDocuments(data) {
+            if (!data || !data.documents || data.documents.length === 0) return '';
+            const doc = data.documents[0];
+            return doc.number || '';
+        }
+
+        function formatDocDate(data) {
+            if (!data || !data.documents || data.documents.length === 0) return '';
+            const doc = data.documents[0];
+            return doc.date ? new Date(doc.date).toLocaleDateString() : '';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            gridApi = initGrid('sentGrid', {
+                columnDefs: [
+                    {
+                        field: 'identifier',
+                        headerName: '@L["Invoices_Identifier"].Value',
+                        flex: 1.2,
+                        cellRenderer: function(p) {
+                            if (!p.data) return '';
+                            return '<a href="/Invoices/Detail?type=send&id=' + p.data.id + '" style="color:var(--brand-accent);font-weight:500">' +
+                                   (p.data.identifier || '—') + '</a>';
+                        }
+                    },
+                    { field: 'committente', headerName: '@L["Invoices_Committente"].Value', flex: 1.5 },
+                    {
+                        headerName: '@L["Invoices_DocumentNumber"].Value',
+                        flex: 0.8,
+                        sortable: false,
+                        valueGetter: function(p) { return p.data ? formatDocuments(p.data) : ''; }
+                    },
+                    {
+                        field: 'dateSent',
+                        headerName: '@L["Invoices_DateSent"].Value',
+                        flex: 0.9,
+                        valueGetter: function(p) { return p.data ? formatDate(p.data.dateSent) : ''; }
+                    },
+                    {
+                        field: 'lastUpdate',
+                        headerName: '@L["Invoices_LastUpdate"].Value',
+                        flex: 0.9,
+                        valueGetter: function(p) { return p.data ? formatDate(p.data.lastUpdate) : ''; }
+                    },
+                    {
+                        field: 'state',
+                        headerName: '@L["Invoices_Status"].Value',
+                        flex: 1,
+                        sortable: false,
+                        cellRenderer: function(p) {
+                            if (!p.data || !p.data.state) return '';
+                            const state = p.data.state;
+                            const label = stateLabels[state] || state;
+                            const cls = stateBadgeClass[state] || 'desk-badge-neutral';
+                            return '<span class="desk-badge ' + cls + '">' + label + '</span>';
+                        }
+                    },
+                    {
+                        headerName: '',
+                        sortable: false,
+                        resizable: false,
+                        width: 90,
+                        cellRenderer: function(p) {
+                            if (!p.data) return '';
+                            return '<a class="btn-icon" href="/Invoices/Detail?type=send&id=' + p.data.id + '" title="' + detailLabel + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></a>' +
+                                   '<a class="btn-icon" href="/Invoices/Detail?handler=Download&type=send&id=' + p.data.id + '" title="' + downloadLabel + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>';
+                        }
+                    }
+                ],
+                datasource: createDatasource(listUrl, getFilterParams),
+                cacheBlockSize: 50,
+                paginationPageSize: 50,
+                onRowDoubleClicked: function(e) {
+                    if (e.data) window.location.href = '/Invoices/Detail?type=send&id=' + e.data.id;
+                },
+            });
+
+            const searchField = document.getElementById('filterSearch');
+            searchField.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') applyFilters();
+            });
+            searchField.addEventListener('search', applyFilters);
+        });
+    </script>
+    <style>
+        .desk-date-wrap {
+            position: relative;
+            display: inline-block;
+        }
+        .desk-date-clear {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--color-text-muted);
+            padding: 0 4px;
+            line-height: 1;
+        }
+        .desk-date-clear:hover {
+            color: var(--color-text);
+        }
+        .desk-date-wrap input[type="date"] {
+            padding-right: 24px;
+        }
+    </style>
+}
