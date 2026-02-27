@@ -98,6 +98,7 @@
 
   <!-- Company selector -->
   <data name="Company_All"><value>Tutte le aziende</value></data>
+  <data name="Company_Search"><value>Cerca azienda…</value></data>
 
   <!-- Companies page -->
   <data name="Companies_Title"><value>Aziende</value></data>
