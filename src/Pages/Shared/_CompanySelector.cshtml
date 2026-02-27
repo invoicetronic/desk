@@ -15,11 +15,16 @@
             <span class="caret">&#9662;</span>
         </button>
         <div class="desk-company-dropdown" id="companyDropdown">
-            <a href="?companyId=" class="@(selectedId == null ? "selected" : "")">@allLabel</a>
-            @foreach (var company in companies)
-            {
-                <a href="?companyId=@company.Id" class="@(company.Id == selectedId ? "selected" : "")">@company.Name</a>
-            }
+            <div class="desk-company-search">
+                <input type="text" id="companySearch" placeholder="@L["Company_Search"].Value" autocomplete="off" />
+            </div>
+            <div class="desk-company-list" id="companyList">
+                <a href="?companyId=" class="@(selectedId == null ? "selected" : "")" data-all>@allLabel</a>
+                @foreach (var company in companies)
+                {
+                    <a href="?companyId=@company.Id" class="@(company.Id == selectedId ? "selected" : "")">@company.Name</a>
+                }
+            </div>
         </div>
     </div>
 }

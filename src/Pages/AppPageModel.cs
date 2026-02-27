@@ -42,8 +42,19 @@ public abstract class AppPageModel(
             {
                 try
                 {
-                    var (companies, _) = await ApiManager.List<Company>(pageSize: 200);
-                    Companies = companies ?? [];
+                    const int batchSize = 200;
+                    var all = new List<Company>();
+                    int page = 1;
+                    int total;
+                    do
+                    {
+                        var (batch, count) = await ApiManager.List<Company>(page: page, pageSize: batchSize, sort: "name");
+                        total = count;
+                        if (batch is not null) all.AddRange(batch);
+                        page++;
+                    } while (all.Count < total);
+
+                    Companies = all;
                     SessionManager.SetCompanies(Companies);
                 }
                 catch
