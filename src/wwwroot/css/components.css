@@ -301,18 +301,44 @@ a:hover { color: var(--brand-primary); }
     position: absolute;
     top: calc(100% + var(--space-2));
     right: 0;
-    min-width: 220px;
+    min-width: 260px;
     background: var(--brand-white);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     z-index: 1100;
     display: none;
-    overflow: hidden;
 }
 
 .desk-company-dropdown.open {
     display: block;
+}
+
+.desk-company-search {
+    padding: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.desk-company-search input {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    font-family: var(--font-ui);
+    font-size: var(--text-sm);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background: var(--brand-white);
+    color: var(--color-text);
+    outline: none;
+}
+
+.desk-company-search input:focus {
+    border-color: var(--brand-accent);
+    box-shadow: 0 0 0 3px rgba(91, 186, 145, 0.15);
+}
+
+.desk-company-list {
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .desk-company-dropdown a {
@@ -324,7 +350,12 @@ a:hover { color: var(--brand-primary); }
     text-decoration: none;
 }
 
-.desk-company-dropdown a:hover {
+.desk-company-dropdown a.hidden {
+    display: none;
+}
+
+.desk-company-dropdown a:hover,
+.desk-company-dropdown a.highlight {
     background: var(--brand-bg);
 }
 
