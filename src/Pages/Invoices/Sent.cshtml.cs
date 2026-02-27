@@ -7,7 +7,7 @@ public class SentModel(ApiManager apiManager, SessionManager sessionManager, Des
     : AppPageModel(apiManager, sessionManager, config)
 {
     public async Task<IActionResult> OnGetListAsync(
-        int page = 1, int pageSize = 50, string? sort = null,
+        int page = 1, int pageSize = 20, string? sort = null,
         string? dateFrom = null, string? dateTo = null, string? q = null)
     {
         try
@@ -28,27 +28,38 @@ public class SentModel(ApiManager apiManager, SessionManager sessionManager, Des
 
             var extraQuery = filters.Count > 0 ? string.Join("&", filters) : null;
 
-            // Fetch invoices and latest updates in parallel
-            var invoicesTask = ApiManager.List<Send>(page, pageSize, sort, extraQuery);
-
+            // Fetch invoices and a first batch of recent updates in parallel
             var updateFilters = new List<string>();
             if (CompanyFilter is not null)
                 updateFilters.Add(CompanyFilter);
             var updateQuery = updateFilters.Count > 0 ? string.Join("&", updateFilters) : null;
-            var updatesTask = ApiManager.List<Update>(1, 100, "-last_update", updateQuery);
 
+            var invoicesTask = ApiManager.List<Send>(page, pageSize, sort, extraQuery);
+            var updatesTask = ApiManager.List<Update>(1, pageSize, "-last_update", updateQuery);
             await Task.WhenAll(invoicesTask, updatesTask);
 
             var (invoices, totalCount) = invoicesTask.Result;
             var (updates, _) = updatesTask.Result;
 
-            // Build map: sendId → latest state (updates are sorted by -last_update)
+            // Build map from initial batch
             var stateMap = new Dictionary<int, string>();
             if (updates is not null)
             {
                 foreach (var u in updates)
-                {
                     stateMap.TryAdd(u.SendId, u.State.ToString());
+            }
+
+            // For any displayed invoices still missing a state, fetch their updates directly
+            var missing = invoices?.Where(i => !stateMap.ContainsKey(i.Id)).ToList() ?? [];
+            if (missing.Count > 0)
+            {
+                var tasks = missing.Select(inv =>
+                    ApiManager.List<Update>(1, 1, "-last_update", $"send_id={inv.Id}"));
+                var results = await Task.WhenAll(tasks);
+                foreach (var (result, _) in results)
+                {
+                    if (result is [var u, ..])
+                        stateMap.TryAdd(u.SendId, u.State.ToString());
                 }
             }
 

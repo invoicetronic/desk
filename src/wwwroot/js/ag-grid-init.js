@@ -102,10 +102,10 @@ function defaultGridOptions(overrides) {
     return Object.assign({
         theme: deskTheme,
         rowModelType: 'infinite',
-        cacheBlockSize: 50,
+        cacheBlockSize: 20,
         maxBlocksInCache: 10,
         pagination: true,
-        paginationPageSize: 50,
+        paginationPageSize: 20,
         animateRows: true,
         suppressCellFocus: true,
         domLayout: 'autoHeight',
