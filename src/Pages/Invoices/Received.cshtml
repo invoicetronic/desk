@@ -148,8 +148,8 @@
                     }
                 ],
                 datasource: createDatasource(listUrl, getFilterParams),
-                cacheBlockSize: 50,
-                paginationPageSize: 50,
+                cacheBlockSize: 20,
+                paginationPageSize: 20,
                 onRowDoubleClicked: function(e) {
                     if (e.data) window.location.href = '/Invoices/Detail?type=receive&id=' + e.data.id;
                 },

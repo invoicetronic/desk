@@ -7,7 +7,7 @@ public class ReceivedModel(ApiManager apiManager, SessionManager sessionManager,
     : AppPageModel(apiManager, sessionManager, config)
 {
     public async Task<IActionResult> OnGetListAsync(
-        int page = 1, int pageSize = 50, string? sort = null,
+        int page = 1, int pageSize = 20, string? sort = null,
         bool unreadOnly = false, string? q = null)
     {
         try
