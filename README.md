@@ -6,7 +6,7 @@ Desk is a ready-to-use frontend for the [Invoicetronic API](https://invoicetroni
 
 ## Features
 
-- **Send & receive invoices** — full-text search, date filters, infinite scroll, XML download
+- **Send & receive invoices** — full-text search, date filters, server-side pagination, XML download
 - **Invoice detail** — metadata and complete SDI status timeline
 - **Upload** — drag-and-drop multi-file upload
 - **Export** — filter by month/quarter/date range, download as ZIP
