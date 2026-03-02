@@ -7,7 +7,7 @@ public class SentModel(ApiManager apiManager, SessionManager sessionManager, Des
     : AppPageModel(apiManager, sessionManager, config)
 {
     public async Task<IActionResult> OnGetListAsync(
-        int page = 1, int pageSize = 20, string? sort = null,
+        [FromQuery] int page = 1, int pageSize = 20, string? sort = null,
         string? dateFrom = null, string? dateTo = null, string? q = null)
     {
         try

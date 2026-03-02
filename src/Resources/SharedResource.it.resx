@@ -68,6 +68,7 @@
   <data name="Invoices_DocumentNumber"><value>Numero documento</value></data>
   <data name="Invoices_DocumentDate"><value>Data documento</value></data>
   <data name="Invoices_DateSent"><value>Data invio</value></data>
+  <data name="Invoices_Created"><value>Data creazione</value></data>
   <data name="Invoices_LastUpdate"><value>Ultimo aggiornamento</value></data>
   <data name="Invoices_Status"><value>Stato</value></data>
   <data name="Invoices_Format"><value>Formato</value></data>

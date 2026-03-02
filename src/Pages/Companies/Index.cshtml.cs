@@ -10,7 +10,7 @@ public class IndexModel(ApiManager apiManager, SessionManager sessionManager, De
     [BindProperty]
     public Company CompanyInput { get; set; } = new();
 
-    public async Task<IActionResult> OnGetListAsync(int page = 1, int pageSize = 100, string? sort = null,
+    public async Task<IActionResult> OnGetListAsync([FromQuery] int page = 1, int pageSize = 100, string? sort = null,
         string? q = null)
     {
         try
