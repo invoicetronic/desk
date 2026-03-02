@@ -33,7 +33,7 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/ag-grid-init.js"></script>
+    <script src="~/js/ag-grid-init.js" asp-append-version="true"></script>
     <script>
         const listUrl = '/Invoices/Sent?handler=List';
         const detailLabel = '@L["Invoices_DetailTitle"].Value';
@@ -129,10 +129,11 @@
                         valueGetter: function(p) { return p.data ? formatDocuments(p.data) : ''; }
                     },
                     {
-                        field: 'dateSent',
-                        headerName: '@L["Invoices_DateSent"].Value',
+                        field: 'created',
+                        headerName: '@L["Invoices_Created"].Value',
                         flex: 0.9,
-                        valueGetter: function(p) { return p.data ? formatDate(p.data.dateSent) : ''; }
+                        sort: 'desc',
+                        valueGetter: function(p) { return p.data ? formatDate(p.data.created) : ''; }
                     },
                     {
                         field: 'lastUpdate',
