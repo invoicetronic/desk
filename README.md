@@ -158,6 +158,19 @@ volumes:
   - ./my-theme:/app/custom
 ```
 
+## Localization
+
+Desk supports **Italian** and **English**. By default the language is auto-detected from the browser's `Accept-Language` header, with Italian as the fallback.
+
+To force a specific language for all users, set `locale` in `desk.yml`:
+
+```yaml
+app:
+  locale: en    # it | en
+```
+
+All UI strings — including Identity pages (login, registration, password reset) and validation errors — are fully localized.
+
 ## Architecture
 
 ```
