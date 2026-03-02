@@ -21,7 +21,7 @@ Desk is a ready-to-use frontend for the [Invoicetronic API](https://invoicetroni
 
 ### 1. Get an API key
 
-Sign up at [invoicetronic.com](https://invoicetronic.com) and get your API key from the dashboard.
+Sign up at [invoicetronic.com](https://invoicetronic.com) and get your API key from the dashboard. Desk works with both **sandbox** and **live** API keys — the environment is determined by the key you use. Start with a sandbox key for testing, then switch to live when you're ready.
 
 ### 2. Deploy with Docker
 
