@@ -82,6 +82,8 @@ dotnet run --project src
 
 The app starts at `http://localhost:5100`. Create a `desk.yml` in the project root to configure it.
 
+> **Note:** Safari forces HTTPS on `localhost`. Use `http://127.0.0.1:5100` instead, or trust the .NET dev certificate with `dotnet dev-certs https --trust`.
+
 ## Configuration
 
 All configuration goes in `desk.yml`. The file is optional — sensible defaults are used when it's absent.
