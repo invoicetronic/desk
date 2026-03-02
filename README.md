@@ -76,11 +76,11 @@ Requires [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0).
 
 ```bash
 git clone https://github.com/invoicetronic/desk.git
-cd desk/src
-dotnet run
+cd desk
+dotnet run --project src
 ```
 
-The app starts at `http://localhost:5000`. Create a `desk.yml` in the `src/` directory to configure it.
+The app starts at `http://localhost:5100`. Create a `desk.yml` in the project root to configure it.
 
 ## Configuration
 
