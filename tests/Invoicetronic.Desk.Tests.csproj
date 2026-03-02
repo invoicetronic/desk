@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <RootNamespace>Desk.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\src\Desk.csproj" />
+        <ProjectReference Include="..\src\Invoicetronic.Desk.csproj" />
     </ItemGroup>
 
     <ItemGroup>
