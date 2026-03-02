@@ -1,3 +1,7 @@
+using Microsoft.Extensions.Localization;
+
+[assembly: RootNamespace("Desk")]
+
 namespace Desk;
 
 /// <summary>
