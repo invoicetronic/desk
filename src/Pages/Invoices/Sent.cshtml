@@ -99,13 +99,21 @@
         function formatDocuments(data) {
             if (!data || !data.documents || data.documents.length === 0) return '';
             const doc = data.documents[0];
-            return doc.number || '';
+            let html = '<span>' + (doc.number || '') + '</span>';
+            if (data.documents.length > 1) {
+                html += ' <span class="desk-badge desk-badge-neutral">+' + (data.documents.length - 1) + '</span>';
+            }
+            return html;
         }
 
         function formatDocDate(data) {
             if (!data || !data.documents || data.documents.length === 0) return '';
             const doc = data.documents[0];
-            return doc.date ? new Date(doc.date).toLocaleDateString() : '';
+            let html = doc.date ? '<span>' + new Date(doc.date).toLocaleDateString() + '</span>' : '';
+            if (data.documents.length > 1) {
+                html += ' <span class="desk-badge desk-badge-neutral">+' + (data.documents.length - 1) + '</span>';
+            }
+            return html;
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -126,14 +134,14 @@
                         headerName: '@L["Invoices_DocumentNumber"].Value',
                         flex: 0.8,
                         sortable: false,
-                        valueGetter: function(p) { return p.data ? formatDocuments(p.data) : ''; }
+                        cellRenderer: function(p) { return p.data ? formatDocuments(p.data) : ''; }
                     },
                     {
                         field: 'documentDate',
                         headerName: '@L["Invoices_DocumentDate"].Value',
                         flex: 0.9,
                         sort: 'desc',
-                        valueGetter: function(p) { return p.data ? formatDocDate(p.data) : ''; }
+                        cellRenderer: function(p) { return p.data ? formatDocDate(p.data) : ''; }
                     },
                     {
                         field: 'lastUpdate',
