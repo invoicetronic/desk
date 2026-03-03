@@ -129,24 +129,17 @@
                         valueGetter: function(p) { return p.data ? formatDocuments(p.data) : ''; }
                     },
                     {
-                        field: 'created',
-                        headerName: '@L["Invoices_Created"].Value',
+                        field: 'documentDate',
+                        headerName: '@L["Invoices_DocumentDate"].Value',
                         flex: 0.9,
                         sort: 'desc',
-                        valueGetter: function(p) { return p.data ? formatDate(p.data.created) : ''; }
+                        valueGetter: function(p) { return p.data ? formatDocDate(p.data) : ''; }
                     },
                     {
                         field: 'lastUpdate',
                         headerName: '@L["Invoices_LastUpdate"].Value',
                         flex: 0.9,
                         valueGetter: function(p) { return p.data ? formatDate(p.data.lastUpdate) : ''; }
-                    },
-                    {
-                        field: 'created',
-                        headerName: '@L["Invoices_DateSent"].Value',
-                        flex: 0.9,
-                        sort: 'desc',
-                        valueFormatter: function(p) { return formatDate(p.value); }
                     },
                     {
                         field: 'state',
