@@ -19,7 +19,7 @@ app:
   # Branding (testi, non aspetto visuale)
   branding:
     app_name: Invoicetronic Desk
-    footer_text: Powered by Invoicetronic
+    footer_text: 'Powered by <a href="https://invoicetronic.com">Invoicetronic</a>'
 
   # Localizzazione
   locale: it                   # it | en
