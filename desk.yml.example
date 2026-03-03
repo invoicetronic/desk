@@ -2,7 +2,7 @@
 
 app:
   # API Invoicetronic
-  api_url: https://api.invoicetronic.com
+  api_url: https://api.invoicetronic.com/v1
 
   # API key (opzionale) — se presente, Desk gira SENZA registrazione/login
   # Tutte le chiamate API usano questa key. Niente Identity, niente DB locale.
