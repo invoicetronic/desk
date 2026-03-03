@@ -136,6 +136,13 @@
                         valueGetter: function(p) { return p.data ? formatDocDate(p.data) : ''; }
                     },
                     {
+                        field: 'created',
+                        headerName: '@L["Invoices_Created"].Value',
+                        flex: 0.9,
+                        sort: 'desc',
+                        valueFormatter: function(p) { return formatDate(p.value); }
+                    },
+                    {
                         headerName: '',
                         sortable: false,
                         resizable: false,

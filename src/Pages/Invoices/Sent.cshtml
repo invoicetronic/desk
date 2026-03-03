@@ -142,6 +142,13 @@
                         valueGetter: function(p) { return p.data ? formatDate(p.data.lastUpdate) : ''; }
                     },
                     {
+                        field: 'created',
+                        headerName: '@L["Invoices_DateSent"].Value',
+                        flex: 0.9,
+                        sort: 'desc',
+                        valueFormatter: function(p) { return formatDate(p.value); }
+                    },
+                    {
                         field: 'state',
                         headerName: '@L["Invoices_Status"].Value',
                         flex: 1,
