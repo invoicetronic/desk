@@ -36,7 +36,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 // This ensures consistent service registration regardless of mode.
 // Auth behavior is controlled at runtime by DeskAuthHandler.
 var connString = config.IsStandalone
-    ? "DataSource=:memory:"
+    ? $"DataSource=standalone_{Guid.NewGuid():N};Mode=Memory;Cache=Shared"
     : config.Database.ConnectionString;
 
 if (config.Database.Provider is "pgsql" && !config.IsStandalone)
