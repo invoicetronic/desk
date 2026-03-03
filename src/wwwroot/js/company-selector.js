@@ -22,7 +22,10 @@ function filterCompanies(term) {
     const links = document.querySelectorAll('#companyList a');
     const lower = term.toLowerCase();
     links.forEach(a => {
-        if (a.hasAttribute('data-all')) return; // always show "All companies"
+        if (a.hasAttribute('data-all')) {
+            a.classList.toggle('hidden', lower.length > 0);
+            return;
+        }
         a.classList.toggle('hidden', !a.textContent.toLowerCase().includes(lower));
     });
 }
