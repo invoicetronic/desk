@@ -4,6 +4,8 @@ Open-source, white-label web app for Italian electronic invoicing. Deploy with D
 
 Desk is a ready-to-use frontend for the [Invoicetronic API](https://invoicetronic.com). ISVs and developers can self-host it, apply their own branding, and give their customers a complete invoicing interface — without writing a single line of UI code.
 
+![Invoicetronic Desk](assets/screenshot.png)
+
 ## Features
 
 - **Send & receive invoices** — full-text search, date filters, server-side pagination, XML download
