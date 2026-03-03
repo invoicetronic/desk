@@ -174,6 +174,7 @@
   <data name="Common_Edit"><value>Modifica</value></data>
   <data name="Common_Add"><value>Aggiungi</value></data>
   <data name="Common_Search"><value>Cerca</value></data>  <data name="Common_Loading"><value>Caricamento...</value></data>
+  <data name="Common_Refresh"><value>Aggiorna</value></data>
   <data name="Common_Error"><value>Errore</value></data>
   <data name="Common_Success"><value>Operazione completata</value></data>
   <data name="Common_Confirm"><value>Conferma</value></data>
