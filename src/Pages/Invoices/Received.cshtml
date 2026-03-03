@@ -130,17 +130,11 @@
                         valueGetter: function(p) { return p.data ? formatDocuments(p.data) : ''; }
                     },
                     {
+                        field: 'documentDate',
                         headerName: '@L["Invoices_DocumentDate"].Value',
                         flex: 0.9,
-                        sortable: false,
-                        valueGetter: function(p) { return p.data ? formatDocDate(p.data) : ''; }
-                    },
-                    {
-                        field: 'created',
-                        headerName: '@L["Invoices_Created"].Value',
-                        flex: 0.9,
                         sort: 'desc',
-                        valueFormatter: function(p) { return formatDate(p.value); }
+                        valueGetter: function(p) { return p.data ? formatDocDate(p.data) : ''; }
                     },
                     {
                         headerName: '',
