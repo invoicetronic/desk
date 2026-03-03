@@ -21,7 +21,7 @@ public class IndexModel(ApiManager apiManager, SessionManager sessionManager, De
         var statusTask = SafeCall(() => ApiManager.GetStatus());
         var sentTask = SafeCall(() => ApiManager.List<Send>(pageSize: 5, sort: "-created", extraQuery: CompanyFilter));
         var receivedTask = SafeCall(() => ApiManager.List<Receive>(pageSize: 5, sort: "-created", extraQuery: CompanyFilter));
-        var unreadTask = SafeCall(() => ApiManager.List<Receive>(pageSize: 1, extraQuery: CombineFilters(CompanyFilter, "is_read=false")));
+        var unreadTask = SafeCall(() => ApiManager.List<Receive>(pageSize: 1, extraQuery: CombineFilters(CompanyFilter, "unread=true")));
         var updatesTask = SafeCall(() => ApiManager.List<Update>(pageSize: 10, sort: "-last_update", extraQuery: CompanyFilter));
 
         await Task.WhenAll(statusTask, sentTask, receivedTask, unreadTask, updatesTask);
