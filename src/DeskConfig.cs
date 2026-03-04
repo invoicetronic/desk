@@ -14,7 +14,10 @@ public class DeskConfig
     public BrandingConfig Branding { get; set; } = new();
     public string? Locale { get; set; }
 
+    public StripeConfig Stripe { get; set; } = new();
+
     public bool IsStandalone => !string.IsNullOrEmpty(ApiKey);
+    public bool IsBillingEnabled => !IsStandalone && Stripe.IsConfigured;
 }
 
 public class DatabaseConfig
@@ -23,6 +26,31 @@ public class DatabaseConfig
 
     [ConfigurationKeyName("connection_string")]
     public string? ConnectionString { get; set; }
+}
+
+public class StripeConfig
+{
+    [ConfigurationKeyName("secret_key")]
+    public string? SecretKey { get; set; }
+
+    [ConfigurationKeyName("publishable_key")]
+    public string? PublishableKey { get; set; }
+
+    [ConfigurationKeyName("webhook_secret")]
+    public string? WebhookSecret { get; set; }
+
+    [ConfigurationKeyName("price_id_it")]
+    public string? PriceIdIt { get; set; }
+
+    [ConfigurationKeyName("price_id_foreign")]
+    public string? PriceIdForeign { get; set; }
+
+    public bool IsConfigured =>
+        !string.IsNullOrEmpty(SecretKey) &&
+        !string.IsNullOrEmpty(PublishableKey) &&
+        !string.IsNullOrEmpty(WebhookSecret) &&
+        !string.IsNullOrEmpty(PriceIdIt) &&
+        !string.IsNullOrEmpty(PriceIdForeign);
 }
 
 public class BrandingConfig
