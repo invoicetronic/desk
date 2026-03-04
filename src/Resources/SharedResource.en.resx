@@ -53,6 +53,21 @@
   <data name="Profile_PersonalInfo"><value>Personal information</value></data>
   <data name="Profile_SaveProfile"><value>Save profile</value></data>
   <data name="Profile_ProfileSaved"><value>Profile updated successfully.</value></data>
+  <data name="Profile_BillingInfo"><value>Billing information</value></data>
+  <data name="Profile_CompanyName"><value>Company name</value></data>
+  <data name="Profile_TaxId"><value>Tax ID / VAT number</value></data>
+  <data name="Profile_Address"><value>Address</value></data>
+  <data name="Profile_City"><value>City</value></data>
+  <data name="Profile_State"><value>State / Province</value></data>
+  <data name="Profile_ZipCode"><value>ZIP code</value></data>
+  <data name="Profile_Country"><value>Country</value></data>
+  <data name="Profile_Pec"><value>PEC</value></data>
+  <data name="Profile_CodiceDestinatario"><value>Recipient code</value></data>
+  <data name="Profile_PhoneNumber"><value>Phone number</value></data>
+  <data name="Profile_SaveBillingInfo"><value>Save billing information</value></data>
+  <data name="Profile_BillingInfoSaved"><value>Billing information updated successfully.</value></data>
+  <data name="Profile_BillingInfoNotUsedDuringTrial"><value>This information will only be used when you subscribe. No charges during the free trial.</value></data>
+  <data name="Profile_ItalianFieldsNote"><value>For Italy: PEC or Recipient code is required. Tax ID must be in IT + 11 digits format.</value></data>
   <data name="Profile_AccountStatus"><value>Account status</value></data>
   <data name="Profile_OperationsLeft"><value>Operations left</value></data>
   <data name="Profile_SignaturesLeft"><value>Signatures left</value></data>
@@ -122,6 +137,9 @@
   <data name="Validation_EmailInvalid"><value>Please enter a valid email address.</value></data>
   <data name="Validation_StringLength"><value>Must be between {2} and {1} characters.</value></data>
   <data name="Validation_PasswordMismatch"><value>Passwords do not match.</value></data>
+  <data name="Validation_ItalianTaxIdFormat"><value>For Italy, the Tax ID must start with "IT".</value></data>
+  <data name="Validation_ItalianTaxIdLength"><value>For Italy, the Tax ID must be 13 characters (e.g. IT12345678901).</value></data>
+  <data name="Validation_RequireOne"><value>For Italy, you must provide at least PEC or Codice Destinatario.</value></data>
 
   <!-- Identity errors -->
   <data name="Identity_DuplicateEmail"><value>The email '{0}' is already registered.</value></data>
@@ -193,6 +211,28 @@
 
   <!-- Footer -->
   <data name="Footer_PoweredBy"><value>Powered by Invoicetronic</value></data>
+
+  <!-- Billing -->
+  <data name="Billing_Subscription"><value>Subscription</value></data>
+  <data name="Billing_PlanPrice"><value>€5/month</value></data>
+  <data name="Billing_TrialInfo"><value>Billed annually at €60. No immediate charge.</value></data>
+  <data name="Billing_StartTrial"><value>Start free trial</value></data>
+  <data name="Billing_SubscribeNow"><value>Subscribe now</value></data>
+  <data name="Billing_PreviewBanner"><value>You have {0} days left in your free trial.</value></data>
+  <data name="Billing_ManageSubscription"><value>Manage subscription</value></data>
+  <data name="Billing_SubscribeTitle"><value>Subscribe to Desk</value></data>
+  <data name="Billing_SubscribeHintExpired"><value>Your free trial has ended. Subscribe to keep using all features.</value></data>
+  <data name="Billing_SubscribeHintActive"><value>You're using Desk on a free trial. Subscribe anytime to keep access when it expires.</value></data>
+  <data name="Billing_RenewHint"><value>Your subscription has expired or was canceled. You can reactivate it from the management portal.</value></data>
+  <data name="Billing_SuccessTitle"><value>Thank you!</value></data>
+  <data name="Billing_SuccessMessage"><value>Your subscription is active. Enjoy Desk!</value></data>
+  <data name="Billing_GoToApp"><value>Go to application</value></data>
+  <data name="Billing_Status"><value>Status</value></data>
+  <data name="Billing_Status_active"><value>Active</value></data>
+  <data name="Billing_Status_trialing"><value>Trialing</value></data>
+  <data name="Billing_Status_past_due"><value>Past due</value></data>
+  <data name="Billing_Status_canceled"><value>Canceled</value></data>
+  <data name="Billing_Status_none"><value>None</value></data>
 
   <!-- Error -->
   <data name="Error_Title"><value>Error</value></data>

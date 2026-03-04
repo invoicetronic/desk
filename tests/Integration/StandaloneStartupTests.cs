@@ -48,6 +48,14 @@ public class StandaloneStartupTests : IClassFixture<StandaloneStartupTests.Stand
         Assert.Equal("/", response.Headers.Location?.OriginalString);
     }
 
+    [Fact]
+    public async Task StripeWebhook_Returns404_InStandaloneMode()
+    {
+        var response = await _client.PostAsync("/api/stripe/webhook",
+            new StringContent("{}", System.Text.Encoding.UTF8, "application/json"));
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
     public class StandaloneFactory : WebApplicationFactory<Program>
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)

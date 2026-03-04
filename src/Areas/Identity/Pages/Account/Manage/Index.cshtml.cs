@@ -12,18 +12,25 @@ public class IndexModel(
     UserManager<DeskUser> userManager,
     SignInManager<DeskUser> signInManager,
     ApiManager apiManager,
-    SessionManager sessionManager) : PageModel
+    SessionManager sessionManager,
+    DeskConfig config) : PageModel
 {
+    public DeskConfig Config => config;
     [BindProperty]
     public string? ApiKeyInput { get; set; }
 
     [BindProperty]
     public string? DisplayNameInput { get; set; }
 
+    [BindProperty]
+    public BillingProfileModel? BillingProfile { get; set; }
+
     public string? SuccessMessage { get; set; }
     public string? ErrorMessage { get; set; }
     public Status? AccountStatus { get; set; }
     public string? CurrentEmail { get; set; }
+    public string? UserSubscriptionStatus { get; set; }
+    public string? UserStripeCustomerId { get; set; }
 
     public async Task<IActionResult> OnGetAsync(bool apiKeyRequired = false)
     {
@@ -40,6 +47,11 @@ public class IndexModel(
         ApiKeyInput = user.ApiKey;
         DisplayNameInput = user.DisplayName;
         CurrentEmail = user.Email;
+        UserSubscriptionStatus = user.SubscriptionStatus;
+        UserStripeCustomerId = user.StripeCustomerId;
+
+        if (config.IsBillingEnabled)
+            PopulateBillingProfile(user);
 
         if (!string.IsNullOrEmpty(user.ApiKey))
         {
@@ -55,6 +67,24 @@ public class IndexModel(
         }
 
         return Page();
+    }
+
+    private void PopulateBillingProfile(DeskUser user)
+    {
+        BillingProfile = new BillingProfileModel
+        {
+            CompanyName = user.CompanyName ?? "",
+            TaxId = user.TaxId ?? "",
+            Address = user.Address ?? "",
+            City = user.City ?? "",
+            State = user.State,
+            ZipCode = user.ZipCode ?? "",
+            Country = user.Country ?? BillingProfileModel.DefaultCountry,
+            PecMail = user.PecMail,
+            CodiceDestinatario = user.CodiceDestinatario,
+            PhoneNumber = user.PhoneNumber,
+            IsTaxIdReadOnly = user.SubscriptionStatus is "active" or "trialing"
+        };
     }
 
     public async Task<IActionResult> OnPostSaveApiKeyAsync()
@@ -135,5 +165,88 @@ public class IndexModel(
         }
 
         return Page();
+    }
+
+    public async Task<IActionResult> OnPostSaveBillingInfoAsync()
+    {
+        var user = await userManager.GetUserAsync(User);
+        if (user is null)
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToPage("/Account/Login", new { area = "Identity" });
+        }
+
+        CurrentEmail = user.Email;
+        ApiKeyInput = user.ApiKey;
+        DisplayNameInput = user.DisplayName;
+        UserSubscriptionStatus = user.SubscriptionStatus;
+        UserStripeCustomerId = user.StripeCustomerId;
+
+        if (BillingProfile is null || !ModelState.IsValid)
+        {
+            if (BillingProfile is not null)
+                BillingProfile.IsTaxIdReadOnly = user.SubscriptionStatus is "active" or "trialing";
+            if (!string.IsNullOrEmpty(user.ApiKey))
+            {
+                try
+                {
+                    sessionManager.SetApiKey(user.ApiKey);
+                    AccountStatus = await apiManager.GetStatus();
+                }
+                catch { /* ignore */ }
+            }
+            return Page();
+        }
+
+        user.CompanyName = BillingProfile.CompanyName;
+        if (!BillingProfile.IsTaxIdReadOnly)
+            user.TaxId = BillingProfile.TaxId;
+        user.Address = BillingProfile.Address;
+        user.City = BillingProfile.City;
+        user.State = BillingProfile.State;
+        user.ZipCode = BillingProfile.ZipCode;
+        user.Country = BillingProfile.Country;
+        user.PecMail = BillingProfile.PecMail;
+        user.CodiceDestinatario = BillingProfile.CodiceDestinatario;
+        user.PhoneNumber = BillingProfile.PhoneNumber;
+
+        var result = await userManager.UpdateAsync(user);
+
+        if (result.Succeeded)
+            SuccessMessage = "Profile_BillingInfoSaved";
+        else
+            ErrorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
+
+        PopulateBillingProfile(user);
+
+        if (!string.IsNullOrEmpty(user.ApiKey))
+        {
+            try
+            {
+                sessionManager.SetApiKey(user.ApiKey);
+                AccountStatus = await apiManager.GetStatus();
+            }
+            catch { /* ignore */ }
+        }
+
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostManageSubscriptionAsync()
+    {
+        var user = await userManager.GetUserAsync(User);
+        if (user?.StripeCustomerId is null)
+            return RedirectToPage();
+
+        var stripeService = HttpContext.RequestServices.GetService<StripeService>();
+        if (stripeService is null)
+            return RedirectToPage();
+
+        var baseUrl = $"{Request.Scheme}://{Request.Host}";
+        var session = await stripeService.CreatePortalSessionAsync(
+            user.StripeCustomerId,
+            $"{baseUrl}/Identity/Account/Manage");
+
+        return Redirect(session.Url);
     }
 }
