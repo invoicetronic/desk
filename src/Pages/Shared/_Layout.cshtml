@@ -1,4 +1,5 @@
 @inject DeskConfig Config
+@inject Microsoft.AspNetCore.Identity.UserManager<Desk.Data.DeskUser> UserManager
 <!DOCTYPE html>
 <html lang="@(Config.Locale ?? System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)">
 <head>
@@ -19,6 +20,22 @@
     <div class="desk-app">
         <partial name="_Navbar" />
         <partial name="_SubNav" />
+
+        @if (Config.IsBillingEnabled && User.Identity?.IsAuthenticated == true)
+        {
+            var deskUser = await UserManager.GetUserAsync(User);
+            if (deskUser is not null && deskUser.SubscriptionStatus is not ("active" or "trialing"))
+            {
+                var daysLeft = Desk.Pages.AppPageModel.PreviewDays - (int)(DateTime.UtcNow - deskUser.CreatedAt).TotalDays;
+                if (daysLeft > 0)
+                {
+                    <div style="background: #f59e0b; color: #1a1a1a; text-align: center; padding: var(--space-2) var(--space-4); font-size: var(--text-sm); font-weight: 500;">
+                        @L["Billing_PreviewBanner", daysLeft]
+                        <a href="/Billing/Subscribe" style="color: #1a1a1a; font-weight: 700; text-decoration: underline; margin-left: var(--space-2);">@L["Billing_SubscribeNow"]</a>
+                    </div>
+                }
+            }
+        }
 
         <main class="desk-content">
             @RenderBody()

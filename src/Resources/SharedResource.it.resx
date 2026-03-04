@@ -53,6 +53,21 @@
   <data name="Profile_PersonalInfo"><value>Informazioni personali</value></data>
   <data name="Profile_SaveProfile"><value>Salva profilo</value></data>
   <data name="Profile_ProfileSaved"><value>Profilo aggiornato con successo.</value></data>
+  <data name="Profile_BillingInfo"><value>Dati di fatturazione</value></data>
+  <data name="Profile_CompanyName"><value>Ragione sociale</value></data>
+  <data name="Profile_TaxId"><value>Codice fiscale / P.IVA</value></data>
+  <data name="Profile_Address"><value>Indirizzo</value></data>
+  <data name="Profile_City"><value>Città</value></data>
+  <data name="Profile_State"><value>Provincia</value></data>
+  <data name="Profile_ZipCode"><value>CAP</value></data>
+  <data name="Profile_Country"><value>Nazione</value></data>
+  <data name="Profile_Pec"><value>PEC</value></data>
+  <data name="Profile_CodiceDestinatario"><value>Codice Destinatario</value></data>
+  <data name="Profile_PhoneNumber"><value>Telefono</value></data>
+  <data name="Profile_SaveBillingInfo"><value>Salva dati di fatturazione</value></data>
+  <data name="Profile_BillingInfoSaved"><value>Dati di fatturazione aggiornati con successo.</value></data>
+  <data name="Profile_BillingInfoNotUsedDuringTrial"><value>Questi dati saranno utilizzati solo al momento dell'abbonamento. Durante la prova gratuita non verrà effettuato alcun addebito.</value></data>
+  <data name="Profile_ItalianFieldsNote"><value>Per l'Italia: PEC o Codice Destinatario è obbligatorio. Il codice fiscale/P.IVA deve essere nel formato IT + 11 cifre.</value></data>
   <data name="Profile_AccountStatus"><value>Stato account</value></data>
   <data name="Profile_OperationsLeft"><value>Operazioni rimaste</value></data>
   <data name="Profile_SignaturesLeft"><value>Firme rimaste</value></data>
@@ -122,6 +137,9 @@
   <data name="Validation_EmailInvalid"><value>Inserisci un indirizzo email valido.</value></data>
   <data name="Validation_StringLength"><value>Deve essere tra {2} e {1} caratteri.</value></data>
   <data name="Validation_PasswordMismatch"><value>Le password non corrispondono.</value></data>
+  <data name="Validation_ItalianTaxIdFormat"><value>Per l'Italia, il codice fiscale/P.IVA deve iniziare con "IT".</value></data>
+  <data name="Validation_ItalianTaxIdLength"><value>Per l'Italia, il codice fiscale/P.IVA deve essere di 13 caratteri (es. IT12345678901).</value></data>
+  <data name="Validation_RequireOne"><value>Per l'Italia, è necessario specificare almeno PEC o Codice Destinatario.</value></data>
 
   <!-- Identity errors -->
   <data name="Identity_DuplicateEmail"><value>L'indirizzo email '{0}' è già registrato.</value></data>
@@ -193,6 +211,28 @@
 
   <!-- Footer -->
   <data name="Footer_PoweredBy"><value>Powered by Invoicetronic</value></data>
+
+  <!-- Billing -->
+  <data name="Billing_Subscription"><value>Abbonamento</value></data>
+  <data name="Billing_PlanPrice"><value>€5/mese</value></data>
+  <data name="Billing_TrialInfo"><value>Pagamento annuale di €60 + IVA. Nessun addebito immediato.</value></data>
+  <data name="Billing_StartTrial"><value>Inizia prova gratuita</value></data>
+  <data name="Billing_SubscribeNow"><value>Abbonati ora</value></data>
+  <data name="Billing_PreviewBanner"><value>Ti restano {0} giorni di prova gratuita.</value></data>
+  <data name="Billing_ManageSubscription"><value>Gestisci abbonamento</value></data>
+  <data name="Billing_SubscribeTitle"><value>Abbonati a Desk</value></data>
+  <data name="Billing_SubscribeHintExpired"><value>Il tuo periodo di prova è terminato. Abbonati per continuare a usare tutte le funzionalità.</value></data>
+  <data name="Billing_SubscribeHintActive"><value>Stai usando Desk in prova gratuita. Abbonati quando vuoi per non perdere l'accesso alla scadenza.</value></data>
+  <data name="Billing_RenewHint"><value>Il tuo abbonamento è scaduto o è stato annullato. Puoi riattivarlo dal portale di gestione.</value></data>
+  <data name="Billing_SuccessTitle"><value>Grazie!</value></data>
+  <data name="Billing_SuccessMessage"><value>Il tuo abbonamento è attivo. Buon lavoro con Desk!</value></data>
+  <data name="Billing_GoToApp"><value>Vai all'applicazione</value></data>
+  <data name="Billing_Status"><value>Stato</value></data>
+  <data name="Billing_Status_active"><value>Attivo</value></data>
+  <data name="Billing_Status_trialing"><value>In prova</value></data>
+  <data name="Billing_Status_past_due"><value>Pagamento scaduto</value></data>
+  <data name="Billing_Status_canceled"><value>Annullato</value></data>
+  <data name="Billing_Status_none"><value>Nessuno</value></data>
 
   <!-- Error -->
   <data name="Error_Title"><value>Errore</value></data>
