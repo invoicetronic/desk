@@ -7,6 +7,7 @@ public class SessionManager(IHttpContextAccessor httpContextAccessor, DeskConfig
 {
     private const string ApiKeySessionKey = "ApiKey";
     private const string SelectedCompanyIdKey = "SelectedCompanyId";
+    private const string SelectedCompanyCookieKey = "SelectedCompanyId";
     private const string CompaniesKey = "Companies";
 
     private HttpContext? HttpContext => httpContextAccessor.HttpContext;
@@ -26,16 +27,42 @@ public class SessionManager(IHttpContextAccessor httpContextAccessor, DeskConfig
 
     public int? GetSelectedCompanyId()
     {
+        // Session has priority; empty string is sentinel for "all companies"
         var value = HttpContext?.Session.GetString(SelectedCompanyIdKey);
-        return value is not null ? int.Parse(value) : null;
+        if (value is not null)
+            return value.Length > 0 ? int.Parse(value) : null;
+
+        // No session value → fall back to persistent cookie
+        var cookie = HttpContext?.Request.Cookies[SelectedCompanyCookieKey];
+        if (cookie is not null && int.TryParse(cookie, out var cookieId))
+        {
+            HttpContext?.Session.SetString(SelectedCompanyIdKey, cookie);
+            return cookieId;
+        }
+
+        return null;
     }
 
     public void SetSelectedCompanyId(int? companyId)
     {
         if (companyId is null)
-            HttpContext?.Session.Remove(SelectedCompanyIdKey);
+        {
+            // Use empty string as sentinel so cookie fallback is skipped this request
+            HttpContext?.Session.SetString(SelectedCompanyIdKey, "");
+            HttpContext?.Response.Cookies.Delete(SelectedCompanyCookieKey);
+        }
         else
-            HttpContext?.Session.SetString(SelectedCompanyIdKey, companyId.Value.ToString());
+        {
+            var value = companyId.Value.ToString();
+            HttpContext?.Session.SetString(SelectedCompanyIdKey, value);
+            HttpContext?.Response.Cookies.Append(SelectedCompanyCookieKey, value, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Lax,
+                MaxAge = TimeSpan.FromDays(365),
+                IsEssential = true
+            });
+        }
     }
 
     public List<Company>? GetCompanies()
