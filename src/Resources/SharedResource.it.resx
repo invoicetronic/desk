@@ -40,6 +40,17 @@
   <data name="Auth_LoginTitle"><value>Accedi al tuo account</value></data>
   <data name="Auth_RegisterTitle"><value>Crea un nuovo account</value></data>
   <data name="Auth_InvalidLogin"><value>Email o password non validi.</value></data>
+  <data name="Auth_ForgotPasswordTitle"><value>Password dimenticata</value></data>
+  <data name="Auth_ForgotPasswordHint"><value>Inserisci il tuo indirizzo email e ti invieremo un link per reimpostare la password.</value></data>
+  <data name="Auth_SendResetLink"><value>Invia link di reset</value></data>
+  <data name="Auth_BackToLogin"><value>Torna al login</value></data>
+  <data name="Auth_CheckEmail"><value>Controlla la tua email</value></data>
+  <data name="Auth_CheckEmailHint"><value>Se l'indirizzo email è associato a un account, riceverai un link per reimpostare la password.</value></data>
+  <data name="Auth_ResetPasswordTitle"><value>Reimposta password</value></data>
+  <data name="Auth_NewPassword"><value>Nuova password</value></data>
+  <data name="Auth_ResetPassword"><value>Reimposta password</value></data>
+  <data name="Auth_PasswordResetDone"><value>Password reimpostata</value></data>
+  <data name="Auth_PasswordResetDoneHint"><value>La tua password è stata reimpostata con successo. Ora puoi accedere con la nuova password.</value></data>
 
   <!-- Profile -->
   <data name="Profile_Title"><value>Profilo</value></data>
