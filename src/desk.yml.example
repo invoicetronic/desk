@@ -1,34 +1,36 @@
-# desk.yml - Configurazione Invoicetronic Desk
+# desk.yml - Invoicetronic Desk configuration
 
 desk:
-  # API Invoicetronic
+  # Invoicetronic API
   api_url: https://api.invoicetronic.com/v1
 
-  # API key (opzionale) — se presente, Desk gira SENZA registrazione/login
-  # Tutte le chiamate API usano questa key. Niente Identity, niente DB locale.
-  # Utile per ISV che self-hostano in rete interna sicura.
-  # Se assente, Desk richiede registrazione e ogni utente inserisce la propria key.
+  # API key (optional) — if set, Desk runs WITHOUT registration/login.
+  # All API calls use this key. No Identity, no local DB.
+  # Useful for ISVs self-hosting on a trusted internal network.
+  # If omitted, Desk requires registration and each user enters their own key.
   # api_key: itk_live_xxxxxxxxxx
-  # Consiglio: per non salvare la key su file, usare la env var Desk__api_key
+  # Tip: to avoid storing the key in a file, use the env var Desk__api_key
 
-  # Database (ignorato se api_key è presente — non serve DB locale)
+  # Database (ignored when api_key is set — no local DB needed)
   database:
     provider: sqlite           # sqlite | pgsql
-    # sqlite: path default desk.db (nella directory dell'app)
-    # pgsql: connection string da env var Desk__Database__ConnectionString
+    # sqlite: default path data/desk.db
+    # pgsql: connection_string via env var Desk__database__connection_string
+    # connection_string is optional for sqlite (useful to choose a different path)
+    # connection_string: "Data Source=/mnt/host/desk.db"
 
   # Branding
   branding:
     app_name: Invoicetronic Desk
     footer_text: 'Powered by <a href="https://invoicetronic.com">Invoicetronic</a>'
-    # logo_url: https://example.com/logo-light.svg       # navbar (sfondo scuro)
-    # logo_dark_url: https://example.com/logo-dark.svg    # pagine auth (sfondo chiaro)
+    # logo_url: https://example.com/logo-light.svg       # navbar (dark background)
+    # logo_dark_url: https://example.com/logo-dark.svg    # auth pages (light background)
     # favicon_url: https://example.com/favicon.png
     # primary_color: "#1A237E"
     # accent_color: "#E91E63"
 
-  # SMTP (opzionale) — necessario per il recupero password in modalità multi-utente.
-  # Se non configurato, il link "Password dimenticata?" non viene mostrato nel login.
+  # SMTP (optional) — required for password reset in multi-user mode.
+  # If not configured, the "Forgot password?" link is not shown on the login page.
   # smtp:
   #   host: smtp.example.com
   #   port: 587                  # 587 (StartTLS) | 465 (SSL)
@@ -37,5 +39,5 @@ desk:
   #   sender_email: noreply@example.com
   #   sender_name: Invoicetronic Desk
 
-  # Localizzazione
+  # Localization
   locale: it                   # it | en

@@ -91,6 +91,15 @@ docker compose up -d
 
 Open `http://localhost:8080`, register, and enter your API key in the profile page.
 
+> **Tip:** the SQLite database defaults to `data/desk.db` inside the container. The volume above persists it. Alternatively, you can map the database file directly to the host filesystem:
+>
+> ```yaml
+> environment:
+>   - Desk__database__connection_string=Data Source=/app/data/desk.db
+> volumes:
+>   - ./desk.db:/app/data/desk.db
+> ```
+
 #### Build from source
 
 Requires [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0).
@@ -126,8 +135,10 @@ desk:
   # Database (ignored in standalone mode)
   database:
     provider: sqlite    # sqlite | pgsql
-    # For PostgreSQL, set connection string via env var:
-    # Desk__Database__ConnectionString=Host=...;Database=desk;...
+    # SQLite default path: data/desk.db (persisted with ./data:/app/data volume)
+    # Use connection_string to override (works for both sqlite and pgsql):
+    # connection_string: "Data Source=/my/custom/path/desk.db"
+    # For PostgreSQL: Desk__database__connection_string=Host=...;Database=desk;...
 
   # Branding
   branding:
@@ -143,7 +154,7 @@ desk:
   # locale: it    # it | en
 ```
 
-Environment variables override YAML values using the `Desk__` prefix (e.g., `Desk__Database__ConnectionString`).
+Environment variables override YAML values using the `Desk__` prefix (e.g., `Desk__database__connection_string`).
 
 > **Secrets:** for sensitive values like the API key, prefer environment variables over `desk.yml`:
 >
