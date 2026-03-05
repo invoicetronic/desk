@@ -188,6 +188,7 @@ Only `host` and `sender_email` are required. If the `smtp` section is not config
 > # docker-compose.yml
 > environment:
 >   - Desk__smtp__host=smtp.example.com
+>   - Desk__smtp__port=587
 >   - Desk__smtp__username=user@example.com
 >   - Desk__smtp__password=secret
 >   - Desk__smtp__sender_email=noreply@example.com
