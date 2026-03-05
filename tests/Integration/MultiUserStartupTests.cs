@@ -49,6 +49,42 @@ public class MultiUserStartupTests : IClassFixture<MultiUserStartupTests.MultiUs
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
+    [Fact]
+    public async Task Register_Succeeds_WithoutBilling()
+    {
+        // GET the register page to obtain antiforgery token
+        var getResponse = await _client.GetAsync("/Identity/Account/Register");
+        var html = await getResponse.Content.ReadAsStringAsync();
+
+        const string marker = "name=\"__RequestVerificationToken\" type=\"hidden\" value=\"";
+        var start = html.IndexOf(marker, StringComparison.Ordinal);
+        Assert.True(start >= 0, "Antiforgery token not found");
+        start += marker.Length;
+        var end = html.IndexOf('"', start);
+        var token = html[start..end];
+
+        var form = new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["Input.Email"] = $"test-{Guid.NewGuid():N}@example.com",
+            ["Input.DisplayName"] = "Test User",
+            ["Input.Password"] = "Test123!",
+            ["Input.ConfirmPassword"] = "Test123!",
+            ["__RequestVerificationToken"] = token
+        });
+
+        // Forward cookies from GET (antiforgery cookie)
+        var cookies = getResponse.Headers.GetValues("Set-Cookie");
+        var request = new HttpRequestMessage(HttpMethod.Post, "/Identity/Account/Register") { Content = form };
+        foreach (var cookie in cookies)
+            request.Headers.Add("Cookie", cookie.Split(';')[0]);
+
+        var response = await _client.SendAsync(request);
+
+        // Successful registration redirects to profile page
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Contains("/Identity/Account/Manage", response.Headers.Location?.OriginalString ?? "");
+    }
+
     public void Dispose()
     {
         _client.Dispose();
