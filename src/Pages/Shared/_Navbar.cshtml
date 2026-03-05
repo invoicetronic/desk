@@ -1,7 +1,7 @@
 @inject DeskConfig Config
 <nav class="desk-navbar">
     <a class="desk-navbar-brand" href="/">
-        <img src="~/images/logo-white.svg" alt="Logo" />
+        <img src="@(Config.Branding.LogoUrl ?? Url.Content("~/images/logo-white.svg"))" alt="Logo" />
         <span>@Config.Branding.AppName</span>
     </a>
 

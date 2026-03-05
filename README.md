@@ -133,6 +133,11 @@ desk:
   branding:
     app_name: My Invoicing App
     footer_text: "Powered by <a href=\"https://example.com\">My Company</a>"
+    logo_url: https://example.com/logo-light.svg       # navbar (dark background)
+    logo_dark_url: https://example.com/logo-dark.svg    # auth pages (light background)
+    favicon_url: https://example.com/favicon.png
+    primary_color: "#1A237E"
+    accent_color: "#E91E63"
 
   # Language — if omitted, auto-detected from browser
   # locale: it    # it | en
@@ -162,11 +167,21 @@ Environment variables override YAML values using the `Desk__` prefix (e.g., `Des
 
 ## Theming
 
-Desk uses CSS custom properties for theming. Override them by mounting a `custom/` directory.
+Customize colors, logo, and favicon directly in `desk.yml` under the `branding` section (see [Configuration](#configuration) above). All properties are optional — if omitted, Invoicetronic defaults are used.
 
-### CSS variables
+| Property | Description |
+|---|---|
+| `app_name` | Application name shown in navbar and page titles |
+| `footer_text` | Footer HTML |
+| `logo_url` | Logo for the navbar (dark background). URL or path |
+| `logo_dark_url` | Logo for auth pages (light background). URL or path |
+| `favicon_url` | Browser favicon. URL or path |
+| `primary_color` | Primary brand color (hex, e.g. `"#1A237E"`) |
+| `accent_color` | Accent color for links and buttons (hex, e.g. `"#E91E63"`) |
 
-Create `custom/theme.css` to override the default palette:
+### Advanced CSS overrides
+
+For full control over the design system, mount a `custom/theme.css` file that overrides any CSS custom property:
 
 ```css
 :root {
@@ -176,22 +191,10 @@ Create `custom/theme.css` to override the default palette:
 }
 ```
 
-### Custom logo and favicon
-
-Place your files in the `custom/` directory:
-
-```
-custom/
-├── theme.css       # CSS variable overrides
-├── logo.svg        # navbar logo
-└── favicon.png     # browser favicon
-```
-
-### Docker mount
-
 ```yaml
+# docker-compose.yml
 volumes:
-  - ./my-theme:/app/custom
+  - ./my-theme.css:/app/wwwroot/custom/theme.css
 ```
 
 ## Localization
@@ -213,7 +216,15 @@ All UI strings — including Identity pages (login, registration, password reset
 Desk (this project)  →  frontend for end users (invoicing operations)
 Dashboard            →  developer panel (API keys, billing, logs, webhooks)
 API                  →  shared backend (invoicetronic.com/v1)
+Website              →  documentation and marketing (invoicetronic.com)
 ```
+
+| Project | Link |
+|---|---|
+| **Desk** | [desk.invoicetronic.com](https://desk.invoicetronic.com) |
+| **Dashboard** | [dashboard.invoicetronic.com](https://dashboard.invoicetronic.com) |
+| **API** | [API reference](https://api.invoicetronic.com/v1/docs) |
+| **Website & docs** | [invoicetronic.com](https://invoicetronic.com) |
 
 Desk has no billing logic — it's a pure operational frontend. Authorization is entirely in the API, driven by the API key.
 

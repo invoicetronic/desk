@@ -61,6 +61,10 @@ a:hover { color: var(--brand-primary); }
     white-space: nowrap;
 }
 
+.desk-navbar-brand:hover {
+    color: var(--color-text-inverse);
+}
+
 .desk-navbar-brand img {
     height: 28px;
     width: auto;

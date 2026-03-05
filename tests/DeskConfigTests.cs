@@ -34,6 +34,11 @@ public class DeskConfigTests
         Assert.Null(config.Locale);
         Assert.Equal("Invoicetronic Desk", config.Branding.AppName);
         Assert.Contains("Invoicetronic", config.Branding.FooterText);
+        Assert.Null(config.Branding.LogoUrl);
+        Assert.Null(config.Branding.LogoDarkUrl);
+        Assert.Null(config.Branding.FaviconUrl);
+        Assert.Null(config.Branding.PrimaryColor);
+        Assert.Null(config.Branding.AccentColor);
     }
 
     [Fact]
