@@ -109,6 +109,9 @@ builder.Services.AddScoped<SessionManager>();
 builder.Services.AddHttpClient<ApiClient>();
 builder.Services.AddScoped<ApiManager>();
 
+builder.Services.AddScoped<StripeService>();
+builder.Services.AddScoped<EmailService>();
+
 var app = builder.Build();
 
 if (!app.Services.GetRequiredService<DeskConfig>().IsStandalone)
@@ -116,6 +119,55 @@ if (!app.Services.GetRequiredService<DeskConfig>().IsStandalone)
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<DeskDbContext>();
     db.Database.EnsureCreated();
+
+    // Add Stripe columns if they don't exist (no EF Core Migrations)
+    var conn = db.Database.GetDbConnection();
+    await conn.OpenAsync();
+    using var cmd = conn.CreateCommand();
+
+    string[] extraColumns =
+    [
+        "StripeCustomerId", "SubscriptionStatus",
+        "CompanyName", "TaxId", "Address", "City", "State", "ZipCode",
+        "Country", "PecMail", "CodiceDestinatario"
+    ];
+
+    if (config.Database.Provider is "pgsql")
+    {
+        var checks = string.Join("\n", extraColumns.Select(c =>
+            $"""
+                        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='AspNetUsers' AND column_name='{c}') THEN
+                            ALTER TABLE "AspNetUsers" ADD COLUMN "{c}" TEXT;
+                        END IF;
+            """));
+        cmd.CommandText = $"""
+            DO $$
+            BEGIN
+            {checks}
+            END $$;
+            """;
+    }
+    else
+    {
+        // SQLite: check via PRAGMA table_info
+        cmd.CommandText = "PRAGMA table_info(AspNetUsers)";
+        var columns = new HashSet<string>();
+        using (var reader = await cmd.ExecuteReaderAsync())
+        {
+            while (await reader.ReadAsync())
+                columns.Add(reader.GetString(1));
+        }
+
+        var alterStatements = extraColumns
+            .Where(c => !columns.Contains(c))
+            .Select(c => $"ALTER TABLE AspNetUsers ADD COLUMN {c} TEXT")
+            .ToList();
+
+        cmd.CommandText = string.Join("; ", alterStatements);
+    }
+
+    if (!string.IsNullOrEmpty(cmd.CommandText))
+        await cmd.ExecuteNonQueryAsync();
 }
 
 if (!app.Environment.IsDevelopment())
@@ -168,6 +220,9 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
+
+if (app.Services.GetRequiredService<DeskConfig>().IsBillingEnabled)
+    app.MapStripeWebhook();
 
 app.Run();
 

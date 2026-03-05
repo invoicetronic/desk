@@ -80,6 +80,98 @@
     </div>
 </div>
 
+@if (Model.Config.IsBillingEnabled && Model.BillingProfile is not null)
+{
+    <div class="desk-card" style="margin-top: var(--space-6);">
+        <h2 style="font-size: var(--text-lg); margin-bottom: var(--space-5);">@L["Profile_BillingInfo"]</h2>
+
+        <form method="post" asp-page-handler="SaveBillingInfo">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="BillingProfile!.CompanyName">@L["Profile_CompanyName"]</label>
+                    <input asp-for="BillingProfile!.CompanyName" class="desk-input" />
+                    <span asp-validation-for="BillingProfile!.CompanyName" class="text-danger text-xs"></span>
+                </div>
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="BillingProfile!.TaxId">@L["Profile_TaxId"]</label>
+                    <input asp-for="BillingProfile!.TaxId" class="desk-input" readonly="@Model.BillingProfile.IsTaxIdReadOnly" />
+                    <span asp-validation-for="BillingProfile!.TaxId" class="text-danger text-xs"></span>
+                    <input type="hidden" asp-for="BillingProfile!.IsTaxIdReadOnly" />
+                </div>
+            </div>
+            <div class="desk-form-group">
+                <label class="desk-label" asp-for="BillingProfile!.Address">@L["Profile_Address"]</label>
+                <input asp-for="BillingProfile!.Address" class="desk-input" />
+                <span asp-validation-for="BillingProfile!.Address" class="text-danger text-xs"></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="BillingProfile!.City">@L["Profile_City"]</label>
+                    <input asp-for="BillingProfile!.City" class="desk-input" />
+                    <span asp-validation-for="BillingProfile!.City" class="text-danger text-xs"></span>
+                </div>
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="BillingProfile!.ZipCode">@L["Profile_ZipCode"]</label>
+                    <input asp-for="BillingProfile!.ZipCode" class="desk-input" />
+                    <span asp-validation-for="BillingProfile!.ZipCode" class="text-danger text-xs"></span>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="BillingProfile!.State">@L["Profile_State"]</label>
+                    <input asp-for="BillingProfile!.State" class="desk-input" />
+                    <span asp-validation-for="BillingProfile!.State" class="text-danger text-xs"></span>
+                </div>
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="BillingProfile!.Country">@L["Profile_Country"]</label>
+                    <select asp-for="BillingProfile!.Country" asp-items="Desk.Countries.GetList()" class="desk-input"></select>
+                    <span asp-validation-for="BillingProfile!.Country" class="text-danger text-xs"></span>
+                </div>
+            </div>
+            <div class="desk-form-group">
+                <label class="desk-label" asp-for="BillingProfile!.PhoneNumber">@L["Profile_PhoneNumber"]</label>
+                <input asp-for="BillingProfile!.PhoneNumber" class="desk-input" type="tel" />
+                <span asp-validation-for="BillingProfile!.PhoneNumber" class="text-danger text-xs"></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="BillingProfile!.CodiceDestinatario">@L["Profile_CodiceDestinatario"]</label>
+                    <input asp-for="BillingProfile!.CodiceDestinatario" class="desk-input" />
+                    <span asp-validation-for="BillingProfile!.CodiceDestinatario" class="text-danger text-xs"></span>
+                </div>
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="BillingProfile!.PecMail">@L["Profile_Pec"]</label>
+                    <input asp-for="BillingProfile!.PecMail" class="desk-input" type="email" />
+                    <span asp-validation-for="BillingProfile!.PecMail" class="text-danger text-xs"></span>
+                </div>
+            </div>
+            <p class="text-xs text-muted" style="margin-bottom: var(--space-4);">@L["Profile_ItalianFieldsNote"]</p>
+            <button type="submit" class="btn-brand btn-brand-primary">@L["Profile_SaveBillingInfo"]</button>
+        </form>
+    </div>
+}
+
+@if (Model.Config.IsBillingEnabled && Model.UserStripeCustomerId is not null)
+{
+    <div class="desk-card" style="margin-top: var(--space-6);">
+        <h2 style="font-size: var(--text-lg); margin-bottom: var(--space-5);">@L["Billing_Subscription"]</h2>
+        <div style="display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-5);">
+            <span class="text-sm">@L["Billing_Status"]:</span>
+            <span class="desk-badge">@L[$"Billing_Status_{Model.UserSubscriptionStatus ?? "none"}"]</span>
+        </div>
+        @if (Model.UserSubscriptionStatus is "active" or "trialing")
+        {
+            <form method="post" asp-page-handler="ManageSubscription">
+                <button type="submit" class="btn-brand btn-brand-primary">@L["Billing_ManageSubscription"]</button>
+            </form>
+        }
+        else
+        {
+            <a href="/Billing/Subscribe" class="btn-brand btn-brand-primary">@L["Billing_SubscribeNow"]</a>
+        }
+    </div>
+}
+
 @section Scripts {
     <script>
         function toggleApiKeyVisibility() {

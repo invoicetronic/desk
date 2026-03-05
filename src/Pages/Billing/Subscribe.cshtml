@@ -1,0 +1,59 @@
+@page
+@model Desk.Pages.Billing.SubscribeModel
+@{
+    ViewData["Title"] = L["Billing_SubscribeTitle"].Value;
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="@Model.Config.Locale">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="icon" type="image/png" href="~/images/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Zain:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/theme-default.css" />
+    <link rel="stylesheet" href="~/css/components.css" />
+    <link rel="stylesheet" href="~/css/layout.css" />
+    <link rel="stylesheet" href="~/custom/theme.css" onerror="this.remove()" />
+</head>
+<body>
+    <div class="desk-auth-layout">
+        <div class="desk-card desk-auth-card">
+            <div class="desk-auth-logo">
+                <img src="~/images/logo-green.svg" alt="Logo" />
+            </div>
+            <h1 class="desk-auth-title" style="font-size: var(--text-xl);">@L["Billing_SubscribeTitle"]</h1>
+
+            <p class="text-muted text-sm" style="text-align: center; margin-bottom: var(--space-6);">
+                @if (Model.IsPreviewExpired)
+                {
+                    @L["Billing_SubscribeHintExpired"]
+                }
+                else
+                {
+                    @L["Billing_SubscribeHintActive"]
+                }
+            </p>
+
+            <div class="desk-card" style="margin-bottom: var(--space-6); padding: var(--space-5); text-align: center;">
+                <div style="font-size: var(--text-2xl); font-weight: 700; color: var(--color-brand-primary);">
+                    @L["Billing_PlanPrice"]
+                </div>
+                <div class="text-sm text-muted" style="margin-top: var(--space-2);">
+                    @L["Billing_TrialInfo"]
+                </div>
+            </div>
+
+            <form method="post" asp-page-handler="Checkout">
+                <button type="submit" class="btn-brand btn-brand-primary" style="width: 100%; justify-content: center;">
+                    @L["Billing_SubscribeNow"]
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
