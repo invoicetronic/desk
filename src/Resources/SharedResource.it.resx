@@ -99,7 +99,6 @@
   <data name="Invoices_BackToList"><value>Torna alla lista</value></data>
   <data name="Invoices_SdiTimeline"><value>Cronologia SDI</value></data>
   <data name="Invoices_Documents"><value>Documenti</value></data>
-  <data name="Invoices_Created"><value>Data ricezione</value></data>
 
   <!-- SDI States -->
   <data name="State_Inviato"><value>Inviato</value></data>
