@@ -48,9 +48,22 @@ services:
 
 ```yaml
 # desk.yml
-app:
+desk:
   api_key: itk_live_xxxxxxxxxx
 ```
+
+> **Tip:** to avoid storing the API key in a file, pass it via environment variable instead:
+>
+> ```yaml
+> # docker-compose.yml
+> services:
+>   desk:
+>     image: invoicetronic/desk
+>     ports:
+>       - "8080:8080"
+>     environment:
+>       - Desk__ApiKey=itk_live_xxxxxxxxxx
+> ```
 
 ```bash
 docker compose up -d
@@ -102,7 +115,7 @@ cp src/desk.yml.example src/desk.yml
 ```
 
 ```yaml
-app:
+desk:
   # API endpoint (default: https://api.invoicetronic.com/v1)
   api_url: https://api.invoicetronic.com/v1
 
@@ -114,7 +127,7 @@ app:
   database:
     provider: sqlite    # sqlite | pgsql
     # For PostgreSQL, set connection string via env var:
-    # App__Database__ConnectionString=Host=...;Database=desk;...
+    # Desk__Database__ConnectionString=Host=...;Database=desk;...
 
   # Branding
   branding:
@@ -125,7 +138,15 @@ app:
   # locale: it    # it | en
 ```
 
-Environment variables override YAML values using the `App__` prefix (e.g., `App__Database__ConnectionString`).
+Environment variables override YAML values using the `Desk__` prefix (e.g., `Desk__Database__ConnectionString`).
+
+> **Secrets:** for sensitive values like the API key, prefer environment variables over `desk.yml`:
+>
+> ```bash
+> export Desk__ApiKey=itk_live_xxxxxxxxxx
+> ```
+>
+> In Docker, use `environment:` in your compose file or Docker secrets. This keeps credentials out of config files and version control.
 
 ### Standalone vs multi-user
 
@@ -180,7 +201,7 @@ Desk supports **Italian** and **English**. By default the language is auto-detec
 To force a specific language for all users, set `locale` in `desk.yml`:
 
 ```yaml
-app:
+desk:
   locale: en    # it | en
 ```
 
