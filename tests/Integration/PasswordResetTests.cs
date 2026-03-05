@@ -1,8 +1,11 @@
 using System.Net;
+using Desk.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Desk.Tests.Integration;
 
@@ -65,6 +68,7 @@ public class PasswordResetTests : IClassFixture<PasswordResetTests.SmtpFactory>,
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.ConfigureLogging(l => l.SetMinimumLevel(LogLevel.Warning));
             builder.ConfigureTestServices(services =>
             {
                 services.AddSingleton(new DeskConfig
@@ -81,6 +85,8 @@ public class PasswordResetTests : IClassFixture<PasswordResetTests.SmtpFactory>,
                         SenderEmail = "noreply@example.com"
                     }
                 });
+
+                services.AddDbContext<DeskDbContext>(o => o.UseSqlite($"Data Source={DbPath}"));
             });
         }
     }
@@ -126,6 +132,7 @@ public class PasswordResetNoSmtpTests : IClassFixture<PasswordResetNoSmtpTests.N
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.ConfigureLogging(l => l.SetMinimumLevel(LogLevel.Warning));
             builder.ConfigureTestServices(services =>
             {
                 services.AddSingleton(new DeskConfig
@@ -137,6 +144,8 @@ public class PasswordResetNoSmtpTests : IClassFixture<PasswordResetNoSmtpTests.N
                         ConnectionString = $"Data Source={DbPath}"
                     }
                 });
+
+                services.AddDbContext<DeskDbContext>(o => o.UseSqlite($"Data Source={DbPath}"));
             });
         }
     }
@@ -174,6 +183,7 @@ public class PasswordResetStandaloneTests : IClassFixture<PasswordResetStandalon
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.ConfigureLogging(l => l.SetMinimumLevel(LogLevel.Warning));
             builder.ConfigureTestServices(services =>
             {
                 services.AddSingleton(new DeskConfig

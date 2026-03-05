@@ -1,8 +1,11 @@
 using System.Net;
+using Desk.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Desk.Tests.Integration;
 
@@ -97,10 +100,9 @@ public class MultiUserStartupTests : IClassFixture<MultiUserStartupTests.MultiUs
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.ConfigureLogging(l => l.SetMinimumLevel(LogLevel.Warning));
             builder.ConfigureTestServices(services =>
             {
-                // Explicitly set multi-user mode (no API key).
-                // This ensures tests are not affected by any desk.yml in src/.
                 services.AddSingleton(new DeskConfig
                 {
                     ApiUrl = "https://api.invoicetronic.com",
@@ -110,6 +112,8 @@ public class MultiUserStartupTests : IClassFixture<MultiUserStartupTests.MultiUs
                         ConnectionString = $"Data Source={DbPath}"
                     }
                 });
+
+                services.AddDbContext<DeskDbContext>(o => o.UseSqlite($"Data Source={DbPath}"));
             });
         }
     }
