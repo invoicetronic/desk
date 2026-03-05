@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Desk.Tests.Integration;
 
@@ -168,6 +170,7 @@ public class BillingTests : IClassFixture<BillingTests.BillingFactory>, IDisposa
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.ConfigureLogging(l => l.SetMinimumLevel(LogLevel.Warning));
             builder.ConfigureTestServices(services =>
             {
                 services.AddSingleton(new DeskConfig
@@ -187,6 +190,9 @@ public class BillingTests : IClassFixture<BillingTests.BillingFactory>, IDisposa
                         PriceIdForeign = "price_fake_foreign_for_testing"
                     }
                 });
+
+                // Override DbContext to use unique test DB (Program.cs registers with default path)
+                services.AddDbContext<DeskDbContext>(o => o.UseSqlite($"Data Source={DbPath}"));
             });
         }
     }
