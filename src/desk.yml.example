@@ -16,8 +16,6 @@ desk:
     provider: sqlite           # sqlite | pgsql
     # sqlite: default path data/desk.db
     # pgsql: connection_string via env var Desk__database__connection_string
-    # connection_string is optional for sqlite (useful to choose a different path)
-    # connection_string: "Data Source=/mnt/host/desk.db"
 
   # Branding
   branding:
