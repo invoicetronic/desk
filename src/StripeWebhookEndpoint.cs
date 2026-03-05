@@ -17,7 +17,8 @@ public static class StripeWebhookEndpoint
     private static async Task<IResult> HandleWebhookAsync(
         HttpContext context,
         StripeService stripeService,
-        UserManager<DeskUser> userManager)
+        UserManager<DeskUser> userManager,
+        EmailService emailService)
     {
         var json = await new StreamReader(context.Request.Body).ReadToEndAsync();
         var signature = context.Request.Headers["Stripe-Signature"].ToString();
@@ -47,6 +48,10 @@ public static class StripeWebhookEndpoint
                             user.StripeCustomerId = session.CustomerId;
                             user.SubscriptionStatus = "active";
                             await userManager.UpdateAsync(user);
+
+                            var email = user.Email ?? session.CustomerEmail ?? "";
+                            try { await emailService.SendSubscriptionWelcomeAsync(email); } catch { /* non-blocking */ }
+                            try { await emailService.SendSubscriptionAdminNotifyAsync(email, "checkout.session.completed", "active"); } catch { /* non-blocking */ }
                         }
                     }
                 }
@@ -62,6 +67,9 @@ public static class StripeWebhookEndpoint
                     {
                         user.SubscriptionStatus = subscription.Status;
                         await userManager.UpdateAsync(user);
+
+                        var email = user.Email ?? "";
+                        try { await emailService.SendSubscriptionAdminNotifyAsync(email, "customer.subscription.updated", subscription.Status); } catch { /* non-blocking */ }
                     }
                 }
                 break;
@@ -76,6 +84,10 @@ public static class StripeWebhookEndpoint
                     {
                         user.SubscriptionStatus = "canceled";
                         await userManager.UpdateAsync(user);
+
+                        var email = user.Email ?? "";
+                        try { await emailService.SendSubscriptionCanceledAsync(email); } catch { /* non-blocking */ }
+                        try { await emailService.SendSubscriptionAdminNotifyAsync(email, "customer.subscription.deleted", "canceled"); } catch { /* non-blocking */ }
                     }
                 }
                 break;
@@ -90,6 +102,10 @@ public static class StripeWebhookEndpoint
                     {
                         user.SubscriptionStatus = "past_due";
                         await userManager.UpdateAsync(user);
+
+                        var email = user.Email ?? "";
+                        try { await emailService.SendPaymentFailedAsync(email); } catch { /* non-blocking */ }
+                        try { await emailService.SendSubscriptionAdminNotifyAsync(email, "invoice.payment_failed", "past_due"); } catch { /* non-blocking */ }
                     }
                 }
                 break;

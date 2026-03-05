@@ -48,25 +48,11 @@
                 </div>
             </div>
 
-            @if (Model.StripeCustomerId is not null)
-            {
-                <p class="text-sm text-muted" style="text-align: center; margin-bottom: var(--space-5);">
-                    @L["Billing_RenewHint"]
-                </p>
-                <form method="post" asp-page-handler="Portal">
-                    <button type="submit" class="btn-brand btn-brand-primary" style="width: 100%; justify-content: center;">
-                        @L["Billing_ManageSubscription"]
-                    </button>
-                </form>
-            }
-            else
-            {
-                <form method="post" asp-page-handler="Checkout">
-                    <button type="submit" class="btn-brand btn-brand-primary" style="width: 100%; justify-content: center;">
-                        @L["Billing_SubscribeNow"]
-                    </button>
-                </form>
-            }
+            <form method="post" asp-page-handler="Checkout">
+                <button type="submit" class="btn-brand btn-brand-primary" style="width: 100%; justify-content: center;">
+                    @L["Billing_SubscribeNow"]
+                </button>
+            </form>
         </div>
     </div>
 </body>
