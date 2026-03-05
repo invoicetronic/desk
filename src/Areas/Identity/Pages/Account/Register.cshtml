@@ -1,30 +1,42 @@
 @page
 @model Desk.Areas.Identity.Pages.Account.RegisterModel
+@inject DeskConfig Config
 @{
     ViewData["Title"] = L["Auth_Register"].Value;
     Layout = null;
 }
 
 <!DOCTYPE html>
-<html lang="@(((DeskConfig)ViewContext.HttpContext.RequestServices.GetService(typeof(DeskConfig))!).Locale)">
+<html lang="@Config.Locale">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="icon" type="image/png" href="~/images/favicon.png" />
+    <link rel="icon" type="image/png" href="@(Config.Branding.FaviconUrl ?? Url.Content("~/images/favicon.png"))" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Zain:wght@700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/theme-default.css" />
     <link rel="stylesheet" href="~/css/components.css" />
     <link rel="stylesheet" href="~/css/layout.css" />
+    @if (Config.Branding.PrimaryColor is not null || Config.Branding.AccentColor is not null)
+    {
+        <style>
+            :root {
+                @if (Config.Branding.PrimaryColor is not null) { @: --brand-primary: @Config.Branding.PrimaryColor;
+                }
+                @if (Config.Branding.AccentColor is not null) { @: --brand-accent: @Config.Branding.AccentColor;
+                }
+            }
+        </style>
+    }
     <link rel="stylesheet" href="~/custom/theme.css" onerror="this.remove()" />
 </head>
 <body>
     <div class="desk-auth-layout">
         <div class="desk-card desk-auth-card">
             <div class="desk-auth-logo">
-                <img src="~/images/logo-green.svg" alt="Logo" />
+                <img src="@(Config.Branding.LogoDarkUrl ?? Url.Content("~/images/logo-green.svg"))" alt="Logo" />
             </div>
             <h1 class="desk-auth-title" style="font-size: var(--text-xl);">@L["Auth_RegisterTitle"]</h1>
 
