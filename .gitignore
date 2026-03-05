@@ -64,6 +64,9 @@ nunit-*.xml
 ANALYSIS.md
 IMPLEMENTATION.md
 
+# Local config (use desk.yml.example as template)
+src/desk.yml
+
 # SQLite database
 *.db
 *.db-shm
