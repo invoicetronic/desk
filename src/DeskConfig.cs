@@ -82,4 +82,19 @@ public class BrandingConfig
 
     [ConfigurationKeyName("footer_text")]
     public string FooterText { get; set; } = "Powered by <a href=\"https://invoicetronic.com\">Invoicetronic</a>";
+
+    [ConfigurationKeyName("logo_url")]
+    public string? LogoUrl { get; set; }
+
+    [ConfigurationKeyName("logo_dark_url")]
+    public string? LogoDarkUrl { get; set; }
+
+    [ConfigurationKeyName("favicon_url")]
+    public string? FaviconUrl { get; set; }
+
+    [ConfigurationKeyName("primary_color")]
+    public string? PrimaryColor { get; set; }
+
+    [ConfigurationKeyName("accent_color")]
+    public string? AccentColor { get; set; }
 }

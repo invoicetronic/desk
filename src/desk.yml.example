@@ -17,10 +17,15 @@ desk:
     # sqlite: path default desk.db (nella directory dell'app)
     # pgsql: connection string da env var Desk__Database__ConnectionString
 
-  # Branding (testi, non aspetto visuale)
+  # Branding
   branding:
     app_name: Invoicetronic Desk
     footer_text: 'Powered by <a href="https://invoicetronic.com">Invoicetronic</a>'
+    # logo_url: https://example.com/logo-light.svg       # navbar (sfondo scuro)
+    # logo_dark_url: https://example.com/logo-dark.svg    # pagine auth (sfondo chiaro)
+    # favicon_url: https://example.com/favicon.png
+    # primary_color: "#1A237E"
+    # accent_color: "#E91E63"
 
   # Localizzazione
   locale: it                   # it | en
