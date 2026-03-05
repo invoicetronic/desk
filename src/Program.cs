@@ -2,6 +2,7 @@ using System.Globalization;
 using Desk;
 using Desk.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -115,6 +116,9 @@ builder.Services.AddScoped<ApiManager>();
 builder.Services.AddScoped<StripeService>();
 builder.Services.AddScoped<EmailService>();
 
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "data", "keys")));
+
 var app = builder.Build();
 
 if (!app.Services.GetRequiredService<DeskConfig>().IsStandalone)
@@ -172,6 +176,12 @@ if (!app.Services.GetRequiredService<DeskConfig>().IsStandalone)
     if (!string.IsNullOrEmpty(cmd.CommandText))
         await cmd.ExecuteNonQueryAsync();
 }
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor
+        | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+});
 
 if (!app.Environment.IsDevelopment())
 {
