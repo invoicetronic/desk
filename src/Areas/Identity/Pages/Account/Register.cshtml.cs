@@ -55,6 +55,13 @@ public class RegisterModel(
     {
         returnUrl ??= Url.Content("~/");
 
+        if (!IsBillingEnabled && BillingProfile is not null)
+        {
+            var billingKeys = typeof(BillingProfileModel).GetProperties().Select(p => p.Name).ToHashSet();
+            foreach (var key in ModelState.Keys.Where(billingKeys.Contains).ToList())
+                ModelState.Remove(key);
+        }
+
         if (!ModelState.IsValid) return Page();
 
         var user = new DeskUser
