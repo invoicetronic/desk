@@ -91,13 +91,13 @@ docker compose up -d
 
 Open `http://localhost:8080`, register, and enter your API key in the profile page.
 
-> **Tip:** the SQLite database defaults to `data/desk.db` inside the container. The volume above persists it. Alternatively, you can map the database file directly to the host filesystem:
+> **Tip:** the SQLite database defaults to `data/desk.db` inside the container. The volume above persists it to `./data/desk.db` on the host. To store the database at a custom path, use `connection_string`:
 >
 > ```yaml
 > environment:
->   - Desk__database__connection_string=Data Source=/app/data/desk.db
+>   - Desk__database__connection_string=Data Source=/app/mydata/desk.db
 > volumes:
->   - ./desk.db:/app/data/desk.db
+>   - /mnt/dbdata:/app/mydata
 > ```
 
 #### Build from source
