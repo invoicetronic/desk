@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Desk.Tests.Integration;
 
@@ -60,10 +61,9 @@ public class StandaloneStartupTests : IClassFixture<StandaloneStartupTests.Stand
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.ConfigureLogging(l => l.SetMinimumLevel(LogLevel.Warning));
             builder.ConfigureTestServices(services =>
             {
-                // Override DeskConfig to standalone mode.
-                // DeskAuthHandler reads this at runtime → bypasses auth.
                 services.AddSingleton(new DeskConfig
                 {
                     ApiKey = "itk_test_standalone",
