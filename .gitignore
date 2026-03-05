@@ -60,6 +60,10 @@ nunit-*.xml
 .idea/
 *.DotSettings.user
 
+# Project docs (local only)
+ANALYSIS.md
+IMPLEMENTATION.md
+
 # SQLite database
 *.db
 *.db-shm
