@@ -128,8 +128,6 @@ desk:
   database:
     provider: sqlite    # sqlite | pgsql
     # SQLite default path: data/desk.db (persisted with ./data:/app/data volume)
-    # Use connection_string to override (works for both sqlite and pgsql):
-    # connection_string: "Data Source=/my/custom/path/desk.db"
     # For PostgreSQL: Desk__database__connection_string=Host=...;Database=desk;...
 
   # Branding
