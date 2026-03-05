@@ -66,7 +66,7 @@
   <data name="Profile_PhoneNumber"><value>Telefono</value></data>
   <data name="Profile_SaveBillingInfo"><value>Salva dati di fatturazione</value></data>
   <data name="Profile_BillingInfoSaved"><value>Dati di fatturazione aggiornati con successo.</value></data>
-  <data name="Profile_BillingInfoNotUsedDuringTrial"><value>Questi dati saranno utilizzati solo al momento dell'abbonamento. Durante la prova gratuita non verrà effettuato alcun addebito.</value></data>
+  <data name="Profile_BillingInfoNotUsedDuringTrial"><value>Questi dati saranno utilizzati al momento dell'abbonamento.</value></data>
   <data name="Profile_ItalianFieldsNote"><value>Per l'Italia: PEC o Codice Destinatario è obbligatorio. Il codice fiscale/P.IVA deve essere nel formato IT + 11 cifre.</value></data>
   <data name="Profile_AccountStatus"><value>Stato account</value></data>
   <data name="Profile_OperationsLeft"><value>Operazioni rimaste</value></data>
@@ -215,7 +215,7 @@
   <!-- Billing -->
   <data name="Billing_Subscription"><value>Abbonamento</value></data>
   <data name="Billing_PlanPrice"><value>€5/mese</value></data>
-  <data name="Billing_TrialInfo"><value>Pagamento annuale di €60 + IVA. Nessun addebito immediato.</value></data>
+  <data name="Billing_TrialInfo"><value>Pagamento annuale di €60 + IVA.</value></data>
   <data name="Billing_StartTrial"><value>Inizia prova gratuita</value></data>
   <data name="Billing_SubscribeNow"><value>Abbonati ora</value></data>
   <data name="Billing_PreviewBanner"><value>Ti restano {0} giorni di prova gratuita.</value></data>

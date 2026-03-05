@@ -159,9 +159,16 @@
             <span class="text-sm">@L["Billing_Status"]:</span>
             <span class="desk-badge">@L[$"Billing_Status_{Model.UserSubscriptionStatus ?? "none"}"]</span>
         </div>
-        <form method="post" asp-page-handler="ManageSubscription">
-            <button type="submit" class="btn-brand btn-brand-primary">@L["Billing_ManageSubscription"]</button>
-        </form>
+        @if (Model.UserSubscriptionStatus is "active" or "trialing")
+        {
+            <form method="post" asp-page-handler="ManageSubscription">
+                <button type="submit" class="btn-brand btn-brand-primary">@L["Billing_ManageSubscription"]</button>
+            </form>
+        }
+        else
+        {
+            <a href="/Billing/Subscribe" class="btn-brand btn-brand-primary">@L["Billing_SubscribeNow"]</a>
+        }
     </div>
 }
 
