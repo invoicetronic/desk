@@ -47,7 +47,7 @@ if (config.Database.Provider is "pgsql" && !config.IsStandalone)
     builder.Services.AddDbContext<DeskDbContext>(o => o.UseNpgsql(connString));
 else
     builder.Services.AddDbContext<DeskDbContext>(o =>
-        o.UseSqlite(connString ?? "Data Source=desk.db"));
+        o.UseSqlite(connString ?? "Data Source=data/desk.db"));
 
 builder.Services.AddIdentity<DeskUser, IdentityRole>(options =>
     {
@@ -125,6 +125,19 @@ if (!app.Services.GetRequiredService<DeskConfig>().IsStandalone)
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<DeskDbContext>();
+
+    // Ensure the parent directory exists for SQLite database files
+    var dbConnString = db.Database.GetConnectionString();
+    if (dbConnString is not null)
+    {
+        var builder2 = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder(dbConnString);
+        if (!string.IsNullOrEmpty(builder2.DataSource) && builder2.DataSource != ":memory:")
+        {
+            var dir = Path.GetDirectoryName(Path.GetFullPath(builder2.DataSource));
+            if (dir is not null) Directory.CreateDirectory(dir);
+        }
+    }
+
     db.Database.EnsureCreated();
 
     // Add Stripe columns if they don't exist (no EF Core Migrations)
