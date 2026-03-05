@@ -85,10 +85,11 @@ Requires [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0).
 ```bash
 git clone https://github.com/invoicetronic/desk.git
 cd desk
+cp src/desk.yml.example src/desk.yml
 dotnet run --project src
 ```
 
-The app starts at `http://localhost:5100`. Edit `src/desk.yml` to configure it (the app reads the config from the `src/` directory).
+The app starts at `http://localhost:5100`. Edit `src/desk.yml` to configure it — see `src/desk.yml.example` for all available options.
 
 > **Note:** Safari forces HTTPS on `localhost`. Use `http://127.0.0.1:5100` instead, or trust the .NET dev certificate with `dotnet dev-certs https --trust`.
 
