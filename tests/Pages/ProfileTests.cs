@@ -45,7 +45,7 @@ public class ProfileTests
         var signInManagerMock = CreateSignInManagerMock(userManagerMock);
 
         var model = new Desk.Areas.Identity.Pages.Account.Manage.IndexModel(
-            userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager);
+            userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager, config);
 
         return (model, handler, userManagerMock);
     }
@@ -134,7 +134,7 @@ public class ProfileTests
             .ReturnsAsync(user);
 
         var model = new Desk.Areas.Identity.Pages.Account.Manage.IndexModel(
-            userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager);
+            userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager, config);
 
         model.ApiKeyInput = "itk_live_key";
         _ = await model.OnPostSaveApiKeyAsync();
@@ -169,7 +169,7 @@ public class ProfileTests
             .ReturnsAsync(IdentityResult.Success);
 
         var model = new Desk.Areas.Identity.Pages.Account.Manage.IndexModel(
-            userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager);
+            userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager, config);
 
         model.ApiKeyInput = "itk_live_new_key";
         _ = await model.OnPostSaveApiKeyAsync();
