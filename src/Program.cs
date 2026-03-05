@@ -14,7 +14,7 @@ if (!File.Exists(Path.Combine(builder.Environment.ContentRootPath, "desk.yml")))
     Console.WriteLine("info: desk.yml not found. To customize settings: cp desk.yml.example desk.yml");
 
 var config = new DeskConfig();
-builder.Configuration.GetSection("app").Bind(config);
+builder.Configuration.GetSection("desk").Bind(config);
 builder.Services.AddSingleton(config);
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
