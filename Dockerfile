@@ -12,4 +12,4 @@ WORKDIR /app
 COPY --from=build /app ./
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
-ENTRYPOINT ["dotnet", "Desk.dll"]
+ENTRYPOINT ["dotnet", "Invoicetronic.Desk.dll"]
