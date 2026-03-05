@@ -213,7 +213,18 @@ public class IndexModel(
         var result = await userManager.UpdateAsync(user);
 
         if (result.Succeeded)
+        {
             SuccessMessage = "Profile_BillingInfoSaved";
+
+            if (!string.IsNullOrEmpty(user.StripeCustomerId))
+            {
+                var stripeService = HttpContext.RequestServices.GetService<StripeService>();
+                if (stripeService is not null)
+                {
+                    try { await stripeService.CreateOrUpdateCustomerAsync(user); } catch { /* non-blocking */ }
+                }
+            }
+        }
         else
             ErrorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
 

@@ -1,3 +1,4 @@
+using Desk.Data;
 using Stripe;
 using Stripe.Checkout;
 
@@ -13,15 +14,17 @@ public class StripeService
         StripeConfiguration.ApiKey = config.Stripe.SecretKey;
     }
 
-    public async Task<Session> CreateCheckoutSessionAsync(string userId, string email, string? taxId, string successUrl, string cancelUrl)
+    public async Task<Session> CreateCheckoutSessionAsync(DeskUser user, string successUrl, string cancelUrl)
     {
-        var priceId = taxId?.StartsWith("IT", StringComparison.OrdinalIgnoreCase) == true
+        var customerId = user.StripeCustomerId ?? (await CreateOrUpdateCustomerAsync(user)).Id;
+
+        var priceId = user.TaxId?.StartsWith("IT", StringComparison.OrdinalIgnoreCase) == true
             ? _config.Stripe.PriceIdIt
             : _config.Stripe.PriceIdForeign;
 
         var options = new SessionCreateOptions
         {
-            CustomerEmail = email,
+            Customer = customerId,
             PaymentMethodTypes = ["card"],
             Mode = "subscription",
             LineItems =
@@ -34,15 +37,68 @@ public class StripeService
             ],
             SubscriptionData = new SessionSubscriptionDataOptions
             {
-                Metadata = new Dictionary<string, string> { ["desk_user_id"] = userId }
+                Metadata = new Dictionary<string, string> { ["desk_user_id"] = user.Id }
             },
-            Metadata = new Dictionary<string, string> { ["desk_user_id"] = userId },
+            Metadata = new Dictionary<string, string> { ["desk_user_id"] = user.Id },
             SuccessUrl = successUrl,
             CancelUrl = cancelUrl
         };
 
         var service = new SessionService();
         return await service.CreateAsync(options);
+    }
+
+    public async Task<Customer> CreateOrUpdateCustomerAsync(DeskUser user)
+    {
+        var address = new AddressOptions
+        {
+            Line1 = user.Address,
+            City = user.City,
+            State = user.State,
+            PostalCode = user.ZipCode,
+            Country = user.Country
+        };
+
+        if (!string.IsNullOrEmpty(user.StripeCustomerId))
+        {
+            var updateOptions = new CustomerUpdateOptions
+            {
+                Name = user.CompanyName,
+                Email = user.Email,
+                Phone = user.PhoneNumber,
+                Address = address,
+                Metadata = new Dictionary<string, string>
+                {
+                    ["desk_user_id"] = user.Id,
+                    ["tax_id"] = user.TaxId ?? "",
+                    ["pec_mail"] = user.PecMail ?? "",
+                    ["codice_destinatario"] = user.CodiceDestinatario ?? ""
+                }
+            };
+
+            var service = new CustomerService();
+            return await service.UpdateAsync(user.StripeCustomerId, updateOptions);
+        }
+        else
+        {
+            var createOptions = new CustomerCreateOptions
+            {
+                Name = user.CompanyName,
+                Email = user.Email,
+                Phone = user.PhoneNumber,
+                Address = address,
+                Metadata = new Dictionary<string, string>
+                {
+                    ["desk_user_id"] = user.Id,
+                    ["tax_id"] = user.TaxId ?? "",
+                    ["pec_mail"] = user.PecMail ?? "",
+                    ["codice_destinatario"] = user.CodiceDestinatario ?? ""
+                }
+            };
+
+            var service = new CustomerService();
+            return await service.CreateAsync(createOptions);
+        }
     }
 
     public async Task<Stripe.BillingPortal.Session> CreatePortalSessionAsync(string stripeCustomerId, string returnUrl)
@@ -59,6 +115,6 @@ public class StripeService
 
     public Event ConstructWebhookEvent(string json, string signature)
     {
-        return EventUtility.ConstructEvent(json, signature, _config.Stripe.WebhookSecret);
+        return EventUtility.ConstructEvent(json, signature, _config.Stripe.WebhookSecret, throwOnApiVersionMismatch: false);
     }
 }

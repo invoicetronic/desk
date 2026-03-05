@@ -98,4 +98,34 @@ public class DeskConfigTests
         var stripe = new StripeConfig();
         Assert.False(stripe.IsConfigured);
     }
+
+    [Fact]
+    public void SmtpConfig_IsConfigured_ReturnsFalse_WhenDefault()
+    {
+        var smtp = new SmtpConfig();
+        Assert.False(smtp.IsConfigured);
+    }
+
+    [Fact]
+    public void SmtpConfig_IsConfigured_ReturnsFalse_WhenOnlyHostSet()
+    {
+        var smtp = new SmtpConfig { Host = "smtp.example.com" };
+        Assert.False(smtp.IsConfigured);
+    }
+
+    [Fact]
+    public void SmtpConfig_IsConfigured_ReturnsTrue_WhenHostAndSenderEmailSet()
+    {
+        var smtp = new SmtpConfig { Host = "smtp.example.com", SenderEmail = "noreply@example.com" };
+        Assert.True(smtp.IsConfigured);
+    }
+
+    [Fact]
+    public void SmtpConfig_Defaults_AreCorrect()
+    {
+        var smtp = new SmtpConfig();
+        Assert.Equal(587, smtp.Port);
+        Assert.Equal("Invoicetronic Desk", smtp.SenderName);
+        Assert.Null(smtp.NotifyEmail);
+    }
 }

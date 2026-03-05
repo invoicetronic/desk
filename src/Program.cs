@@ -110,6 +110,7 @@ builder.Services.AddHttpClient<ApiClient>();
 builder.Services.AddScoped<ApiManager>();
 
 builder.Services.AddScoped<StripeService>();
+builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();
 

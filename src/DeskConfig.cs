@@ -15,6 +15,7 @@ public class DeskConfig
     public string? Locale { get; set; }
 
     public StripeConfig Stripe { get; set; } = new();
+    public SmtpConfig Smtp { get; set; } = new();
 
     public bool IsStandalone => !string.IsNullOrEmpty(ApiKey);
     public bool IsBillingEnabled => !IsStandalone && Stripe.IsConfigured;
@@ -51,6 +52,27 @@ public class StripeConfig
         !string.IsNullOrEmpty(WebhookSecret) &&
         !string.IsNullOrEmpty(PriceIdIt) &&
         !string.IsNullOrEmpty(PriceIdForeign);
+}
+
+public class SmtpConfig
+{
+    public string? Host { get; set; }
+    public int Port { get; set; } = 587;
+    public string? Username { get; set; }
+    public string? Password { get; set; }
+
+    [ConfigurationKeyName("sender_email")]
+    public string? SenderEmail { get; set; }
+
+    [ConfigurationKeyName("sender_name")]
+    public string? SenderName { get; set; } = "Invoicetronic Desk";
+
+    [ConfigurationKeyName("notify_email")]
+    public string? NotifyEmail { get; set; }
+
+    public bool IsConfigured =>
+        !string.IsNullOrEmpty(Host) &&
+        !string.IsNullOrEmpty(SenderEmail);
 }
 
 public class BrandingConfig
