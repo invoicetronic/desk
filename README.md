@@ -95,7 +95,11 @@ The app starts at `http://localhost:5100`. Edit `src/desk.yml` to configure it �
 
 ## Configuration
 
-All configuration goes in `desk.yml`. The file is optional — sensible defaults are used when it's absent.
+All configuration goes in `desk.yml`. The file is optional — sensible defaults are used when it's absent. To get started, copy the example:
+
+```bash
+cp src/desk.yml.example src/desk.yml
+```
 
 ```yaml
 app:

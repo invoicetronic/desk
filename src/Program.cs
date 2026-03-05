@@ -10,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddYamlFile("desk.yml", optional: true, reloadOnChange: false);
 
+if (!File.Exists(Path.Combine(builder.Environment.ContentRootPath, "desk.yml")))
+    Console.WriteLine("info: desk.yml not found. To customize settings: cp desk.yml.example desk.yml");
+
 var config = new DeskConfig();
 builder.Configuration.GetSection("app").Bind(config);
 builder.Services.AddSingleton(config);
