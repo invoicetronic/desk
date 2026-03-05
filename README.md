@@ -165,6 +165,34 @@ Environment variables override YAML values using the `Desk__` prefix (e.g., `Des
 
 > **Warning**: in standalone mode anyone who can reach the host has full access. Use only in trusted networks.
 
+### Password reset (SMTP)
+
+In multi-user mode, users can reset their forgotten password via email. To enable this, configure an SMTP server in `desk.yml`:
+
+```yaml
+desk:
+  smtp:
+    host: smtp.example.com
+    port: 587                  # 587 (StartTLS) | 465 (SSL)
+    username: user@example.com
+    password: secret
+    sender_email: noreply@example.com
+    sender_name: My App
+```
+
+Only `host` and `sender_email` are required. If the `smtp` section is not configured, the "Forgot password?" link is not shown on the login page.
+
+> **Tip:** pass SMTP credentials via environment variables to keep them out of config files:
+>
+> ```yaml
+> # docker-compose.yml
+> environment:
+>   - Desk__smtp__host=smtp.example.com
+>   - Desk__smtp__username=user@example.com
+>   - Desk__smtp__password=secret
+>   - Desk__smtp__sender_email=noreply@example.com
+> ```
+
 ## Theming
 
 Customize colors, logo, and favicon directly in `desk.yml` under the `branding` section (see [Configuration](#configuration) above). All properties are optional — if omitted, Invoicetronic defaults are used.
