@@ -5,7 +5,7 @@ COPY src/*.csproj ./src/
 RUN dotnet restore src/
 
 COPY src/. ./src/
-RUN dotnet publish src/ -c release -o /app --no-restore
+RUN dotnet publish src/ -c release -o /app
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
