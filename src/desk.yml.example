@@ -9,7 +9,7 @@ desk:
   # Utile per ISV che self-hostano in rete interna sicura.
   # Se assente, Desk richiede registrazione e ogni utente inserisce la propria key.
   # api_key: itk_live_xxxxxxxxxx
-  # Consiglio: per non salvare la key su file, usare la env var Desk__ApiKey
+  # Consiglio: per non salvare la key su file, usare la env var Desk__api_key
 
   # Database (ignorato se api_key è presente — non serve DB locale)
   database:

@@ -62,7 +62,7 @@ desk:
 >     ports:
 >       - "8080:8080"
 >     environment:
->       - Desk__ApiKey=itk_live_xxxxxxxxxx
+>       - Desk__api_key=itk_live_xxxxxxxxxx
 > ```
 
 ```bash
@@ -148,7 +148,7 @@ Environment variables override YAML values using the `Desk__` prefix (e.g., `Des
 > **Secrets:** for sensitive values like the API key, prefer environment variables over `desk.yml`:
 >
 > ```bash
-> export Desk__ApiKey=itk_live_xxxxxxxxxx
+> export Desk__api_key=itk_live_xxxxxxxxxx
 > ```
 >
 > In Docker, use `environment:` in your compose file or Docker secrets. This keeps credentials out of config files and version control.
