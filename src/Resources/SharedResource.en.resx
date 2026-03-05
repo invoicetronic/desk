@@ -40,6 +40,17 @@
   <data name="Auth_LoginTitle"><value>Sign in to your account</value></data>
   <data name="Auth_RegisterTitle"><value>Create a new account</value></data>
   <data name="Auth_InvalidLogin"><value>Invalid email or password.</value></data>
+  <data name="Auth_ForgotPasswordTitle"><value>Forgot password</value></data>
+  <data name="Auth_ForgotPasswordHint"><value>Enter your email address and we'll send you a link to reset your password.</value></data>
+  <data name="Auth_SendResetLink"><value>Send reset link</value></data>
+  <data name="Auth_BackToLogin"><value>Back to login</value></data>
+  <data name="Auth_CheckEmail"><value>Check your email</value></data>
+  <data name="Auth_CheckEmailHint"><value>If the email address is associated with an account, you'll receive a password reset link.</value></data>
+  <data name="Auth_ResetPasswordTitle"><value>Reset password</value></data>
+  <data name="Auth_NewPassword"><value>New password</value></data>
+  <data name="Auth_ResetPassword"><value>Reset password</value></data>
+  <data name="Auth_PasswordResetDone"><value>Password reset</value></data>
+  <data name="Auth_PasswordResetDoneHint"><value>Your password has been reset successfully. You can now sign in with your new password.</value></data>
 
   <!-- Profile -->
   <data name="Profile_Title"><value>Profile</value></data>

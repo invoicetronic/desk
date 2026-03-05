@@ -8,6 +8,19 @@ public class EmailService(DeskConfig config, ILogger<EmailService> logger)
 {
     private readonly SmtpConfig _smtp = config.Smtp;
 
+    public async Task SendPasswordResetAsync(string userEmail, string resetLink)
+    {
+        await SendTemplateEmailAsync(
+            userEmail,
+            "Invoicetronic Desk — Reimposta password / Reset password",
+            "PasswordReset",
+            new Dictionary<string, string>
+            {
+                ["{{UserEmail}}"] = userEmail,
+                ["{{ResetLink}}"] = resetLink
+            });
+    }
+
     public async Task SendSubscriptionWelcomeAsync(string userEmail)
     {
         await SendTemplateEmailAsync(

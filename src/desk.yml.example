@@ -27,5 +27,15 @@ desk:
     # primary_color: "#1A237E"
     # accent_color: "#E91E63"
 
+  # SMTP (opzionale) — necessario per il recupero password in modalità multi-utente.
+  # Se non configurato, il link "Password dimenticata?" non viene mostrato nel login.
+  # smtp:
+  #   host: smtp.example.com
+  #   port: 587                  # 587 (StartTLS) | 465 (SSL)
+  #   username: user@example.com
+  #   password: secret
+  #   sender_email: noreply@example.com
+  #   sender_name: Invoicetronic Desk
+
   # Localizzazione
   locale: it                   # it | en
