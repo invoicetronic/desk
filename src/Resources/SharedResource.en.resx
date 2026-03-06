@@ -61,6 +61,7 @@
   <data name="Profile_ApiKeyInvalid"><value>Invalid API key or API unreachable.</value></data>
   <data name="Profile_ApiKeySaved"><value>API key saved successfully.</value></data>
   <data name="Profile_ApiKeyRequired"><value>To use the application, please configure your API key first.</value></data>
+  <data name="Profile_BillingProfileRequired"><value>Please complete your billing information before subscribing.</value></data>
   <data name="Profile_PersonalInfo"><value>Personal information</value></data>
   <data name="Profile_SaveProfile"><value>Save profile</value></data>
   <data name="Profile_ProfileSaved"><value>Profile updated successfully.</value></data>

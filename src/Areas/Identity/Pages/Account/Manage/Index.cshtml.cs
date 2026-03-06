@@ -32,7 +32,7 @@ public class IndexModel(
     public string? UserSubscriptionStatus { get; set; }
     public string? UserStripeCustomerId { get; set; }
 
-    public async Task<IActionResult> OnGetAsync(bool apiKeyRequired = false)
+    public async Task<IActionResult> OnGetAsync(bool apiKeyRequired = false, bool billingProfileRequired = false)
     {
         var user = await userManager.GetUserAsync(User);
         if (user is null)
@@ -43,6 +43,8 @@ public class IndexModel(
 
         if (apiKeyRequired)
             ErrorMessage = "Profile_ApiKeyRequired";
+        else if (billingProfileRequired)
+            ErrorMessage = "Profile_BillingProfileRequired";
 
         ApiKeyInput = user.ApiKey;
         DisplayNameInput = user.DisplayName;

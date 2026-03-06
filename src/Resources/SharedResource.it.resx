@@ -61,6 +61,7 @@
   <data name="Profile_ApiKeyInvalid"><value>API key non valida o API non raggiungibile.</value></data>
   <data name="Profile_ApiKeySaved"><value>API key salvata con successo.</value></data>
   <data name="Profile_ApiKeyRequired"><value>Per utilizzare l'applicazione, configura prima la tua API key.</value></data>
+  <data name="Profile_BillingProfileRequired"><value>Completa i dati di fatturazione prima di sottoscrivere l'abbonamento.</value></data>
   <data name="Profile_PersonalInfo"><value>Informazioni personali</value></data>
   <data name="Profile_SaveProfile"><value>Salva profilo</value></data>
   <data name="Profile_ProfileSaved"><value>Profilo aggiornato con successo.</value></data>
