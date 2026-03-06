@@ -13,7 +13,8 @@
     <div class="desk-grid-toolbar">
         <div class="desk-grid-filters">
             <input type="search" id="filterSearch" class="desk-input" style="width:260px"
-                   placeholder="@L["Invoices_SearchPlaceholder"].Value" />
+                   placeholder="@L["Invoices_SearchPlaceholder"].Value"
+                   title="@L["Invoices_SearchPlaceholder"].Value (/)" />
             <span class="desk-date-wrap">
                 <input type="date" id="filterDateFrom" class="desk-input" style="width:150px"
                        title="@L["Invoices_DateFrom"].Value" onchange="updateDateClear('filterDateFrom')" />
@@ -28,7 +29,7 @@
                 @L["Common_Search"]
             </button>
         </div>
-        <button class="btn-icon" onclick="applyFilters()" title="@L["Common_Refresh"].Value">
+        <button class="btn-icon" onclick="applyFilters()" title="@L["Common_Refresh"].Value (F5)">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6"/><path d="M2.5 22v-6h6"/><path d="M2.5 11.5a10 10 0 0 1 18.4-4.5L21.5 8"/><path d="M21.5 12.5a10 10 0 0 1-18.4 4.5L2.5 16"/></svg>
         </button>
     </div>
@@ -190,6 +191,18 @@
                 if (e.key === 'Enter') applyFilters();
             });
             searchField.addEventListener('search', applyFilters);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F5') {
+                    e.preventDefault();
+                    applyFilters();
+                }
+                if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey &&
+                    !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) {
+                    e.preventDefault();
+                    searchField.focus();
+                }
+            });
         });
     </script>
     <style>
