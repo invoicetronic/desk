@@ -242,6 +242,30 @@ desk:
 
 All UI strings — including Identity pages (login, registration, password reset) and validation errors — are fully localized.
 
+## Dashboard vs Desk
+
+Invoicetronic has two web apps with different purposes:
+
+- **[Dashboard](https://dashboard.invoicetronic.com)** is for **developers and account administrators**. Use it to manage API keys, configure webhooks, view API logs, switch between test/live environments, and handle billing.
+- **[Desk](https://desk.invoicetronic.com)** (this project) is for **end users who work with invoices daily**. Use it to send, receive, search, upload, export invoices and manage companies — without touching code or APIs.
+
+| | Dashboard | Desk |
+|---|---|---|
+| **Target user** | Developer / admin | Accountant / operator / ISV (internal use or integration testing) |
+| **API keys** | Create, rotate, manage | Uses one (configured or per-user) |
+| **Webhooks** | Configure endpoints and events | — |
+| **API logs** | Browse request/response history | — |
+| **Test/Live mode** | Switch environments | Determined by the API key |
+| **Billing** | Manage subscription and payment | — |
+| **Send & receive invoices** | — | Full-text search, filters, pagination |
+| **Invoice detail & SDI timeline** | — | Complete status history |
+| **Upload invoices** | — | Drag-and-drop multi-file |
+| **Export** | — | ZIP download by date range |
+| **Company management** | — | CRUD for linked companies |
+| **White-label / self-host** | No | Yes (Docker, custom branding) |
+
+**In short:** Dashboard is where you set up the plumbing; Desk is where you (or your customers) do the actual invoicing work. Most users need both: Dashboard once during setup, Desk every day — eventually alongside your own integrations.
+
 ## Architecture
 
 ```
