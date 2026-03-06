@@ -40,6 +40,10 @@ public class SubscribeModel(
         if (user is null)
             return RedirectToPage("/Account/Login", new { area = "Identity" });
 
+        // Require billing profile before checkout
+        if (string.IsNullOrEmpty(user.TaxId) || string.IsNullOrEmpty(user.CompanyName))
+            return RedirectToPage("/Account/Manage/Index", new { area = "Identity", billingProfileRequired = true });
+
         var stripeService = HttpContext.RequestServices.GetService<StripeService>();
         if (stripeService is null)
             return RedirectToPage("/Index");
