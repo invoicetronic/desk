@@ -29,6 +29,18 @@ public abstract class AppPageModel(
     {
         var apiKey = SessionManager.GetApiKey();
 
+        // Session expired but user still authenticated → reload API key from DB
+        if (apiKey is null && !Config.IsStandalone)
+        {
+            var um = context.HttpContext.RequestServices.GetRequiredService<UserManager<DeskUser>>();
+            var user = await um.GetUserAsync(context.HttpContext.User);
+            if (user?.ApiKey is { Length: > 0 } savedKey)
+            {
+                SessionManager.SetApiKey(savedKey);
+                apiKey = savedKey;
+            }
+        }
+
         // No API key → redirect to profile page (multi-user) or show error
         if (apiKey is null && !Config.IsStandalone)
         {

@@ -55,7 +55,7 @@
   <!-- Profile -->
   <data name="Profile_Title"><value>Profilo</value></data>
   <data name="Profile_ApiKey"><value>API Key</value></data>
-  <data name="Profile_ApiKeyHint"><value>Inserisci la tua API key Invoicetronic. Puoi ottenerla dal pannello sviluppatore.</value></data>
+  <data name="Profile_ApiKeyHint"><value>Inserisci la tua API key Invoicetronic. Puoi ottenerla dal &lt;a href="https://dashboard.invoicetronic.com" target="_blank"&gt;pannello sviluppatore&lt;/a&gt;.</value></data>
   <data name="Profile_SaveApiKey"><value>Salva API Key</value></data>
   <data name="Profile_ApiKeyValid"><value>API key valida. Operazioni rimaste: {0}, Firme rimaste: {1}.</value></data>
   <data name="Profile_ApiKeyInvalid"><value>API key non valida o API non raggiungibile.</value></data>
