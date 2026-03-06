@@ -67,6 +67,9 @@ IMPLEMENTATION.md
 # Local config (use desk.yml.example as template)
 src/desk.yml
 
+# ASP.NET Data Protection keys
+src/[Dd]ata/[Kk]eys/
+
 # SQLite database
 *.db
 *.db-shm
