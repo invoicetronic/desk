@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);
+builder.Logging.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
+
 builder.Configuration.AddYamlFile("desk.yml", optional: true, reloadOnChange: false);
 
 if (!File.Exists(Path.Combine(builder.Environment.ContentRootPath, "desk.yml")))
