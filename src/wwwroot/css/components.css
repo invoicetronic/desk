@@ -230,6 +230,14 @@ a:hover { color: var(--brand-primary); }
     transition: border-color var(--duration-fast) var(--ease-out),
                 box-shadow var(--duration-fast) var(--ease-out);
 }
+select.desk-input {
+    appearance: none;
+    padding-right: var(--space-8);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--space-3) center;
+    cursor: pointer;
+}
 .desk-input:focus {
     outline: none;
     border-color: var(--brand-accent);
