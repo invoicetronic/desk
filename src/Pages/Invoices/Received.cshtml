@@ -124,16 +124,6 @@
                                 : '<span title="' + unreadLabel + '" style="color:var(--brand-accent);font-weight:bold">●</span>';
                         }
                     },
-                    {
-                        field: 'identifier',
-                        headerName: '@L["Invoices_Identifier"].Value',
-                        flex: 1.2,
-                        cellRenderer: function(p) {
-                            if (!p.data) return '';
-                            return '<a href="/Invoices/Detail?type=receive&id=' + p.data.id + '" style="color:var(--brand-accent);font-weight:500">' +
-                                   (p.data.identifier || '—') + '</a>';
-                        }
-                    },
                     { field: 'prestatore', headerName: '@L["Invoices_Prestatore"].Value', flex: 1.5 },
                     {
                         headerName: '@L["Invoices_DocumentNumber"].Value',
@@ -147,6 +137,16 @@
                         flex: 0.9,
                         sort: 'desc',
                         cellRenderer: function(p) { return p.data ? formatDocDate(p.data) : ''; }
+                    },
+                    {
+                        field: 'identifier',
+                        headerName: '@L["Invoices_Identifier"].Value',
+                        flex: 1.2,
+                        cellRenderer: function(p) {
+                            if (!p.data) return '';
+                            return '<a href="/Invoices/Detail?type=receive&id=' + p.data.id + '" style="color:var(--brand-accent);font-weight:500">' +
+                                   (p.data.identifier || '—') + '</a>';
+                        }
                     },
                     {
                         headerName: '',
