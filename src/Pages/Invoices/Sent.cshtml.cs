@@ -72,6 +72,7 @@ public class SentModel(ApiManager apiManager, SessionManager sessionManager, Des
                 inv.UserId,
                 inv.CompanyId,
                 inv.Committente,
+                inv.NomeCommittente,
                 inv.Prestatore,
                 inv.Identifier,
                 inv.FileName,

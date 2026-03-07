@@ -124,7 +124,12 @@
                                 : '<span title="' + unreadLabel + '" style="color:var(--brand-accent);font-weight:bold">●</span>';
                         }
                     },
-                    { field: 'prestatore', headerName: '@L["Invoices_Prestatore"].Value', flex: 1.5 },
+                    {
+                        field: 'prestatore',
+                        headerName: '@L["Invoices_Prestatore"].Value',
+                        flex: 1.5,
+                        valueGetter: function(p) { return p.data ? (p.data.nomePrestatore || p.data.prestatore) : ''; }
+                    },
                     {
                         headerName: '@L["Invoices_DocumentNumber"].Value',
                         flex: 0.8,
