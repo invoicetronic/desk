@@ -103,7 +103,7 @@ public class ReceivedTests
     {
         var (model, handler) = CreateModel();
         handler.WithResponse(HttpStatusCode.OK,
-                """[{"id":1,"file_name":"rx.xml","committente":"Buyer","prestatore":"Seller","format":"FPA12","is_read":false,"message_id":"MSG1"}]""")
+                """[{"id":1,"file_name":"rx.xml","committente":"Buyer","prestatore":"IT09876543210","nome_prestatore":"Seller Srl","format":"FPA12","is_read":false,"message_id":"MSG1"}]""")
             .WithHeader("Invoicetronic-Total-Count", "1");
 
         var result = await model.OnGetListAsync(1, 50, null);

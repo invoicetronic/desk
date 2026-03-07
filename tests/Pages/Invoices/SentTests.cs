@@ -114,7 +114,7 @@ public class SentTests
     {
         var (model, handler) = CreateModel();
         handler.WithResponse(HttpStatusCode.OK,
-                """[{"id":1,"identifier":"IT01","file_name":"test.xml","committente":"Buyer","prestatore":"Seller","format":"FPA12","date_sent":"2025-01-01"}]""")
+                """[{"id":1,"identifier":"IT01","file_name":"test.xml","committente":"IT01234567890","nome_committente":"Buyer Srl","prestatore":"Seller","format":"FPA12","date_sent":"2025-01-01"}]""")
             .WithHeader("Invoicetronic-Total-Count", "1");
 
         var result = await model.OnGetListAsync(1, 50, null);
