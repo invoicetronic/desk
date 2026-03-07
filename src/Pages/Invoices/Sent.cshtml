@@ -123,16 +123,6 @@
         document.addEventListener('DOMContentLoaded', function () {
             gridApi = initGrid('sentGrid', {
                 columnDefs: [
-                    {
-                        field: 'identifier',
-                        headerName: '@L["Invoices_Identifier"].Value',
-                        flex: 1.2,
-                        cellRenderer: function(p) {
-                            if (!p.data) return '';
-                            return '<a href="/Invoices/Detail?type=send&id=' + p.data.id + '" style="color:var(--brand-accent);font-weight:500">' +
-                                   (p.data.identifier || '—') + '</a>';
-                        }
-                    },
                     { field: 'committente', headerName: '@L["Invoices_Committente"].Value', flex: 1.5 },
                     {
                         headerName: '@L["Invoices_DocumentNumber"].Value',
@@ -148,12 +138,6 @@
                         cellRenderer: function(p) { return p.data ? formatDocDate(p.data) : ''; }
                     },
                     {
-                        field: 'lastUpdate',
-                        headerName: '@L["Invoices_LastUpdate"].Value',
-                        flex: 0.9,
-                        valueGetter: function(p) { return p.data ? formatDate(p.data.lastUpdate) : ''; }
-                    },
-                    {
                         field: 'state',
                         headerName: '@L["Invoices_Status"].Value',
                         flex: 1,
@@ -164,6 +148,22 @@
                             const label = stateLabels[state] || state;
                             const cls = stateBadgeClass[state] || 'desk-badge-neutral';
                             return '<span class="desk-badge ' + cls + '">' + label + '</span>';
+                        }
+                    },
+                    {
+                        field: 'lastUpdate',
+                        headerName: '@L["Invoices_LastUpdate"].Value',
+                        flex: 0.9,
+                        valueGetter: function(p) { return p.data ? formatDate(p.data.lastUpdate) : ''; }
+                    },
+                    {
+                        field: 'identifier',
+                        headerName: '@L["Invoices_Identifier"].Value',
+                        flex: 1.2,
+                        cellRenderer: function(p) {
+                            if (!p.data) return '';
+                            return '<a href="/Invoices/Detail?type=send&id=' + p.data.id + '" style="color:var(--brand-accent);font-weight:500">' +
+                                   (p.data.identifier || '—') + '</a>';
                         }
                     },
                     {
