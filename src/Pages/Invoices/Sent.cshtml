@@ -196,6 +196,9 @@
                 if (e.key === 'Enter') applyFilters();
             });
             searchField.addEventListener('search', applyFilters);
+            searchField.addEventListener('input', function() {
+                if (!searchField.value) applyFilters();
+            });
 
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'F5') {
