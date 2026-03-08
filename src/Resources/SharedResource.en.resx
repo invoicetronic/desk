@@ -91,7 +91,9 @@
   <data name="Invoices_Identifier"><value>Identifier</value></data>
   <data name="Invoices_FileName"><value>File name</value></data>
   <data name="Invoices_Committente"><value>Buyer</value></data>
+  <data name="Invoices_CommittenteVat"><value>Buyer VAT</value></data>
   <data name="Invoices_Prestatore"><value>Seller</value></data>
+  <data name="Invoices_PrestatoreVat"><value>Seller VAT</value></data>
   <data name="Invoices_DocumentNumber"><value>Document number</value></data>
   <data name="Invoices_DocumentDate"><value>Document date</value></data>
   <data name="Invoices_DateSent"><value>Date sent</value></data>
@@ -204,6 +206,8 @@
   <data name="Common_Add"><value>Add</value></data>
   <data name="Common_Search"><value>Search</value></data>  <data name="Common_Loading"><value>Loading...</value></data>
   <data name="Common_Refresh"><value>Refresh</value></data>
+  <data name="Common_Columns"><value>Columns</value></data>
+  <data name="Common_ResetDefault"><value>Reset to default</value></data>
   <data name="Common_Error"><value>Error</value></data>
   <data name="Common_Success"><value>Operation completed</value></data>
   <data name="Common_Confirm"><value>Confirm</value></data>

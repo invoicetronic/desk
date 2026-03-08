@@ -129,9 +129,198 @@ function initGrid(containerId, gridOptions) {
         console.error('Grid container not found:', containerId);
         return null;
     }
+
+    // Snapshot defaults, then restore saved state (order + visibility)
+    const storageKey = 'desk-grid-cols-' + containerId;
+    if (gridOptions.columnDefs) {
+        gridOptions.columnDefs.forEach((col, i) => {
+            col._defaultHide = !!col.hide;
+            col._defaultIndex = i;
+        });
+        const saved = loadColumnState(storageKey);
+        if (saved) {
+            applyColumnState(gridOptions.columnDefs, saved);
+        }
+    }
+
     const options = defaultGridOptions(gridOptions);
     const gridApi = agGrid.createGrid(container, options);
     return gridApi;
+}
+
+/** Column id helper. */
+function colId(col) {
+    return col.field || col.headerName;
+}
+
+/**
+ * Applies saved state (order + visibility) to columnDefs array in-place.
+ * @param {Array} columnDefs
+ * @param {Array} saved - [{id, visible}, ...]
+ */
+function applyColumnState(columnDefs, saved) {
+    if (!Array.isArray(saved)) return;
+    const orderMap = {};
+    saved.forEach((entry, i) => {
+        orderMap[entry.id] = { index: i, visible: entry.visible };
+    });
+    columnDefs.forEach(col => {
+        const id = colId(col);
+        if (id && id in orderMap) {
+            col.hide = !orderMap[id].visible;
+        }
+    });
+    // Reorder: saved columns first (in saved order), then any new columns not in saved state
+    columnDefs.sort((a, b) => {
+        const ai = colId(a) in orderMap ? orderMap[colId(a)].index : 9999 + (a._defaultIndex || 0);
+        const bi = colId(b) in orderMap ? orderMap[colId(b)].index : 9999 + (b._defaultIndex || 0);
+        return ai - bi;
+    });
+}
+
+/**
+ * Builds current column state from grid API.
+ * @param {object} gridApi
+ * @returns {Array} [{id, visible}, ...]
+ */
+function getColumnState(gridApi) {
+    return gridApi.getColumnDefs()
+        .map(col => ({ id: colId(col), visible: !col.hide }))
+        .filter(entry => entry.id);
+}
+
+/**
+ * Loads column state from localStorage.
+ * @param {string} key
+ * @returns {Array|null}
+ */
+function loadColumnState(key) {
+    try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+}
+
+/**
+ * Saves column state to localStorage.
+ * @param {string} key
+ * @param {Array} state - [{id, visible}, ...]
+ */
+function saveColumnState(key, state) {
+    try { localStorage.setItem(key, JSON.stringify(state)); } catch {}
+}
+
+/* Column chooser SVG icon (static, safe) */
+const _colChooserSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>';
+
+/**
+ * Creates a column chooser button and attaches it to the grid toolbar.
+ * @param {string} containerId - The grid container DOM ID (used as storage key)
+ * @param {object} gridApi - The AG Grid API instance
+ * @param {string} [label] - Button tooltip text
+ * @param {string} [resetLabel] - Reset link text
+ */
+function initColumnChooser(containerId, gridApi, label, resetLabel) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const wrapper_el = container.closest('.desk-grid-wrapper');
+    if (!wrapper_el) return;
+    const toolbar = wrapper_el.querySelector('.desk-grid-toolbar-actions') || wrapper_el.querySelector('.desk-grid-toolbar');
+    if (!toolbar) return;
+
+    const storageKey = 'desk-grid-cols-' + containerId;
+
+    // Snapshot default order + visibility
+    const defaultDefs = gridApi.getColumnDefs().map(col => ({
+        id: colId(col),
+        visible: !col._defaultHide,
+        _defaultIndex: col._defaultIndex
+    })).filter(e => e.id);
+
+    function persistState() {
+        saveColumnState(storageKey, getColumnState(gridApi));
+    }
+
+    // Persist order on column drag
+    gridApi.addEventListener('columnMoved', (e) => {
+        if (e.finished) persistState();
+    });
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'desk-col-chooser';
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn-icon';
+    btn.title = label || 'Columns';
+    btn.innerHTML = _colChooserSvg; // static SVG, safe
+
+    const panel = document.createElement('div');
+    panel.className = 'desk-col-chooser-panel';
+
+    function buildPanel() {
+        panel.textContent = '';
+        const cols = gridApi.getColumnDefs();
+        cols.forEach(col => {
+            const id = colId(col);
+            if (!id || col.suppressMovable) return;
+
+            const item = document.createElement('label');
+            item.className = 'desk-col-chooser-item';
+
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.checked = !col.hide;
+            cb.addEventListener('change', () => {
+                col.hide = !cb.checked;
+                gridApi.setGridOption('columnDefs', cols);
+                persistState();
+            });
+
+            const span = document.createElement('span');
+            span.textContent = col.headerName || col.field;
+
+            item.appendChild(cb);
+            item.appendChild(span);
+            panel.appendChild(item);
+        });
+
+        // Reset link
+        const resetBtn = document.createElement('button');
+        resetBtn.type = 'button';
+        resetBtn.className = 'desk-col-chooser-reset';
+        resetBtn.textContent = resetLabel || 'Reset to default';
+        resetBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            localStorage.removeItem(storageKey);
+            // Restore default order and visibility
+            const cols = gridApi.getColumnDefs();
+            defaultDefs.forEach(def => {
+                const col = cols.find(c => colId(c) === def.id);
+                if (col) col.hide = !def.visible;
+            });
+            cols.sort((a, b) => ((a._defaultIndex ?? 999) - (b._defaultIndex ?? 999)));
+            gridApi.setGridOption('columnDefs', cols);
+            buildPanel();
+        });
+        panel.appendChild(resetBtn);
+    }
+
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = wrapper.classList.toggle('open');
+        if (isOpen) buildPanel();
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!wrapper.contains(e.target)) {
+            wrapper.classList.remove('open');
+        }
+    });
+
+    wrapper.appendChild(btn);
+    wrapper.appendChild(panel);
+    toolbar.appendChild(wrapper);
 }
 
 /**
