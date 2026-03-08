@@ -29,9 +29,11 @@
                 @L["Common_Search"]
             </button>
         </div>
-        <button class="btn-icon" onclick="applyFilters()" title="@L["Common_Refresh"].Value (F5)">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6"/><path d="M2.5 22v-6h6"/><path d="M2.5 11.5a10 10 0 0 1 18.4-4.5L21.5 8"/><path d="M21.5 12.5a10 10 0 0 1-18.4 4.5L2.5 16"/></svg>
-        </button>
+        <div class="desk-grid-toolbar-actions">
+            <button class="btn-icon" onclick="applyFilters()" title="@L["Common_Refresh"].Value (F5)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6"/><path d="M2.5 22v-6h6"/><path d="M2.5 11.5a10 10 0 0 1 18.4-4.5L21.5 8"/><path d="M21.5 12.5a10 10 0 0 1-18.4 4.5L2.5 16"/></svg>
+            </button>
+        </div>
     </div>
     <div id="sentGrid" style="width: 100%;"></div>
 </div>
@@ -42,6 +44,8 @@
         const listUrl = '/Invoices/Sent?handler=List';
         const detailLabel = '@L["Invoices_DetailTitle"].Value';
         const downloadLabel = '@L["Invoices_DownloadXml"].Value';
+        const columnsLabel = '@L["Common_Columns"].Value';
+        const resetDefaultLabel = '@L["Common_ResetDefault"].Value';
         let gridApi = null;
 
         const stateLabels = {
@@ -124,10 +128,22 @@
             gridApi = initGrid('sentGrid', {
                 columnDefs: [
                     {
-                        field: 'committente',
+                        field: 'nomeCommittente',
                         headerName: '@L["Invoices_Committente"].Value',
                         flex: 1.5,
                         valueGetter: function(p) { return p.data ? (p.data.nomeCommittente || p.data.committente) : ''; }
+                    },
+                    {
+                        field: 'committente',
+                        headerName: '@L["Invoices_CommittenteVat"].Value',
+                        flex: 1,
+                        hide: true
+                    },
+                    {
+                        field: 'prestatore',
+                        headerName: '@L["Invoices_PrestatoreVat"].Value',
+                        flex: 1,
+                        hide: true
                     },
                     {
                         headerName: '@L["Invoices_DocumentNumber"].Value',
@@ -162,6 +178,13 @@
                         valueGetter: function(p) { return p.data ? formatDate(p.data.lastUpdate) : ''; }
                     },
                     {
+                        field: 'dateSent',
+                        headerName: '@L["Invoices_DateSent"].Value',
+                        flex: 0.9,
+                        hide: true,
+                        valueGetter: function(p) { return p.data ? formatDate(p.data.dateSent) : ''; }
+                    },
+                    {
                         field: 'identifier',
                         headerName: '@L["Invoices_Identifier"].Value',
                         flex: 1.2,
@@ -172,9 +195,30 @@
                         }
                     },
                     {
+                        field: 'fileName',
+                        headerName: '@L["Invoices_FileName"].Value',
+                        flex: 1,
+                        hide: true
+                    },
+                    {
+                        field: 'format',
+                        headerName: '@L["Invoices_Format"].Value',
+                        flex: 0.6,
+                        hide: true
+                    },
+                    {
+                        field: 'created',
+                        headerName: '@L["Invoices_Created"].Value',
+                        flex: 0.9,
+                        hide: true,
+                        valueGetter: function(p) { return p.data ? formatDate(p.data.created) : ''; }
+                    },
+                    {
                         headerName: '',
                         sortable: false,
                         resizable: false,
+                        suppressMovable: true,
+                        lockPosition: 'right',
                         width: 90,
                         cellRenderer: function(p) {
                             if (!p.data) return '';
@@ -190,6 +234,7 @@
                     if (e.data) window.location.href = '/Invoices/Detail?type=send&id=' + e.data.id;
                 },
             });
+            initColumnChooser('sentGrid', gridApi, columnsLabel, resetDefaultLabel);
 
             const searchField = document.getElementById('filterSearch');
             searchField.addEventListener('keydown', function(e) {

@@ -71,6 +71,12 @@
     flex-wrap: wrap;
 }
 
+.desk-grid-toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
 /* ── Auth layout (Login / Register) ── */
 .desk-auth-layout {
     display: flex;
