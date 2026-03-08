@@ -48,8 +48,22 @@ jobs:
           short-description: Open-source, white-label web app for Italian electronic invoicing (FatturaPA/SDI)
           readme-filepath: ./DOCKERHUB.md
 
+      - name: Publish native binaries
+        run: |
+          for rid in win-x64 linux-x64 linux-arm64 osx-x64 osx-arm64; do
+            dotnet publish src/ -c release -r "$rid" --self-contained -p:PublishSingleFile=true -o "publish/$rid"
+          done
+
+      - name: Package binaries
+        run: |
+          mkdir -p artifacts
+          cd publish
+          for rid in win-x64 linux-x64 linux-arm64 osx-x64 osx-arm64; do
+            zip -j "../artifacts/desk-${rid}.zip" "$rid"/*
+          done
+
       - name: Create release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ github.ref_name }}
-        run: gh release create "$TAG" --generate-notes
+        run: gh release create "$TAG" artifacts/*.zip --generate-notes
