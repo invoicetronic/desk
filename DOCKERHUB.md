@@ -120,6 +120,11 @@ environment:
 GET /health → {"status":"healthy"}
 ```
 
+## Supported platforms
+
+- `linux/amd64` — Intel/AMD (most cloud servers, Windows with Docker Desktop)
+- `linux/arm64` — Apple Silicon, AWS Graviton, Raspberry Pi 4+
+
 The image includes a built-in health check. Use it in orchestrators like Docker Compose, Kubernetes, or Swarm.
 
 ## Dashboard vs Desk

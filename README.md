@@ -17,7 +17,7 @@ Desk is a ready-to-use frontend for the [Invoicetronic API](https://invoicetroni
 - **Two auth modes** — multi-user (Identity + login) or standalone (single API key, no login)
 - **White-label** — custom app name, footer, CSS variables, logo
 - **Localization** — Italian (default) and English
-- **Docker ready** — multi-stage build, health check endpoint
+- **Docker ready** — multi-platform (amd64/arm64), health check endpoint
 
 ## Quick start
 
@@ -294,7 +294,7 @@ Desk has no billing logic — it's a pure operational frontend. Authorization is
 | Auth | ASP.NET Core Identity |
 | Database | SQLite (default) / PostgreSQL |
 | Config | YAML (`desk.yml`) |
-| Container | Docker multi-stage |
+| Container | Docker multi-platform (amd64/arm64) |
 
 ## Health check
 
