@@ -131,7 +131,7 @@
                         field: 'nomeCommittente',
                         headerName: '@L["Invoices_Committente"].Value',
                         flex: 1.5,
-                        valueGetter: function(p) { return p.data ? (p.data.nomeCommittente || p.data.committente) : ''; }
+                        valueGetter: function(p) { return p.data ? (p.data.nomeCommittente || '') : ''; }
                     },
                     {
                         field: 'committente',
