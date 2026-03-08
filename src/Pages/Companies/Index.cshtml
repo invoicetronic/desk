@@ -23,6 +23,7 @@
                 @L["Common_Search"]
             </button>
         </div>
+        <div class="desk-grid-toolbar-actions"></div>
     </div>
     <div id="companiesGrid" style="width: 100%;"></div>
 </div>
@@ -80,6 +81,8 @@
         const deleteLabel = '@L["Common_Delete"].Value';
         const deleteConfirmMsg = '@L["Companies_DeleteConfirm"].Value';
         const deleteForceConfirmMsg = '@L["Companies_DeleteForceConfirm"].Value';
+        const columnsLabel = '@L["Common_Columns"].Value';
+        const resetDefaultLabel = '@L["Common_ResetDefault"].Value';
         let gridApi = null;
 
         function getFilterParams() {
@@ -109,6 +112,8 @@
                         headerName: '@L["Companies_Actions"].Value',
                         sortable: false,
                         resizable: false,
+                        suppressMovable: true,
+                        lockPosition: 'right',
                         width: 100,
                         cellRenderer: function(params) {
                             if (!params.data) return '';
@@ -124,6 +129,7 @@
                     if (e.data) openEditModal(e.data);
                 },
             });
+            initColumnChooser('companiesGrid', gridApi, columnsLabel, resetDefaultLabel);
 
             const searchField = document.getElementById('filterSearch');
             searchField.addEventListener('keydown', function(e) {
