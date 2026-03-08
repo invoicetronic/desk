@@ -6,6 +6,8 @@ Desk is a ready-to-use frontend for the [Invoicetronic API](https://invoicetroni
 
 **Don't want to self-host?** Try [Desk Cloud](https://desk.invoicetronic.com) — no Docker, no servers, no configuration. Sign up and start invoicing immediately.
 
+![Invoicetronic Desk screenshot](https://raw.githubusercontent.com/invoicetronic/desk/main/assets/screenshot.png)
+
 ## Quick start
 
 ### Standalone mode
