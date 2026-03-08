@@ -1,0 +1,4 @@
+[
+  {"id": 1, "created": "2025-01-15T10:00:00Z", "version": 1, "user_id": 1, "vat": "IT01234567890", "fiscal_code": "01234567890", "name": "Acme S.r.l."},
+  {"id": 2, "created": "2025-02-01T10:00:00Z", "version": 1, "user_id": 1, "vat": "IT09876543210", "fiscal_code": "09876543210", "name": "Tech Solutions S.p.A."}
+]
