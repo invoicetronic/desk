@@ -18,6 +18,7 @@ Desk is a ready-to-use frontend for the [Invoicetronic API](https://invoicetroni
 - **White-label** — custom app name, footer, CSS variables, logo
 - **Localization** — Italian (default) and English
 - **Docker ready** — multi-platform (amd64/arm64), health check endpoint
+- **Native binaries** — self-contained downloads for Windows, Linux, macOS (no .NET required)
 
 ## Quick start
 
