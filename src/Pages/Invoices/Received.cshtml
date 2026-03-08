@@ -132,7 +132,7 @@
                         field: 'nomePrestatore',
                         headerName: '@L["Invoices_Prestatore"].Value',
                         flex: 1.5,
-                        valueGetter: function(p) { return p.data ? (p.data.nomePrestatore || p.data.prestatore) : ''; }
+                        valueGetter: function(p) { return p.data ? (p.data.nomePrestatore || '') : ''; }
                     },
                     {
                         field: 'prestatore',
