@@ -48,7 +48,7 @@ services:
   desk:
     image: invoicetronic/desk
     ports:
-      - "8080:80"
+      - "8080:8080"
     volumes:
       - ./desk.yml:/app/desk.yml
 ```
@@ -67,7 +67,7 @@ desk:
 >   desk:
 >     image: invoicetronic/desk
 >     ports:
->       - "8080:80"
+>       - "8080:8080"
 >     environment:
 >       - Desk__api_key=itk_live_xxxxxxxxxx
 > ```
@@ -86,7 +86,7 @@ services:
   desk:
     image: invoicetronic/desk
     ports:
-      - "8080:80"
+      - "8080:8080"
     volumes:
       - ./desk.yml:/app/desk.yml    # optional
       - ./data:/app/data            # persist user database
