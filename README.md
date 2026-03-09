@@ -1,6 +1,6 @@
 # Invoicetronic Desk
 
-Open-source, white-label web app for Italian electronic invoicing (FatturaPA/SDI). Available as a cloud service or self-hosted with Docker. Customize with your brand, manage invoices in minutes.
+Open-source, white-label web app for Italian electronic invoicing (FatturaPA/SDI). Available as a cloud service or self-hosted with Docker or native binaries. Customize with your brand, manage invoices in minutes.
 
 Desk is a ready-to-use frontend for the [Invoicetronic API](https://invoicetronic.com). ISVs and developers can self-host it, apply their own branding, and give their customers a complete invoicing interface — without writing a single line of UI code.
 
@@ -94,6 +94,52 @@ docker compose up -d
 
 Open `http://localhost:8080`, register, and enter your API key in the profile page.
 
+
+#### Native binaries
+
+Every [GitHub release](https://github.com/invoicetronic/desk/releases) includes self-contained, single-file binaries — no .NET installation required.
+
+| File | OS | Architecture |
+|---|---|---|
+| `desk-win-x64.zip` | Windows | x86-64 (Intel/AMD) |
+| `desk-linux-x64.zip` | Linux | x86-64 (Intel/AMD) |
+| `desk-linux-arm64.zip` | Linux | ARM64 (Raspberry Pi 4/5, AWS Graviton) |
+| `desk-osx-x64.zip` | macOS | Intel |
+| `desk-osx-arm64.zip` | macOS | Apple Silicon (M1/M2/M3/M4) |
+
+**Windows:**
+
+```powershell
+# Extract the archive, create desk.yml, then:
+.\desk.exe
+```
+
+**Linux:**
+
+```bash
+unzip desk-linux-x64.zip -d desk
+chmod +x desk/desk
+./desk/desk
+```
+
+**macOS:**
+
+```bash
+unzip desk-osx-arm64.zip -d desk    # or desk-osx-x64.zip for Intel
+chmod +x desk/desk
+xattr -d com.apple.quarantine desk/desk   # remove Gatekeeper quarantine
+./desk/desk
+```
+
+The app listens on `http://localhost:5000` by default. Place a `desk.yml` file in the same directory as the binary to configure it (see [Configuration](#configuration)).
+
+> **Tip:** to change the listening address or port, use the `--urls` flag or the `ASPNETCORE_URLS` environment variable:
+>
+> ```bash
+> ./desk --urls http://0.0.0.0:8080
+> # or
+> export ASPNETCORE_URLS=http://0.0.0.0:8080
+> ```
 
 #### Build from source
 
