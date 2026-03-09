@@ -8,7 +8,7 @@ Open-source, white-label web app for Italian electronic invoicing (FatturaPA/SDI
 
 Desk is a ready-to-use frontend for the [Invoicetronic API](https://invoicetronic.com). ISVs and developers can self-host it, apply their own branding, and give their customers a complete invoicing interface — without writing a single line of UI code.
 
-<a href="assets/screenshot.png"><img src="assets/screenshot.png" alt="Invoicetronic Desk" width="600"></a>
+<p align="center"><a href="assets/screenshot.png"><img src="assets/screenshot.png" alt="Invoicetronic Desk" width="600"></a></p>
 
 ## Features
 
