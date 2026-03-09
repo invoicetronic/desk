@@ -39,15 +39,6 @@ jobs:
             invoicetronic/desk:${{ github.ref_name }}
             invoicetronic/desk:latest
 
-      - name: Update Docker Hub description
-        uses: peter-evans/dockerhub-description@v4
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: invoicetronic/desk
-          short-description: Open-source, white-label web app for Italian electronic invoicing (FatturaPA/SDI)
-          readme-filepath: ./DOCKERHUB.md
-
       - name: Publish native binaries
         run: |
           for rid in win-x64 linux-x64 linux-arm64 osx-x64 osx-arm64; do
