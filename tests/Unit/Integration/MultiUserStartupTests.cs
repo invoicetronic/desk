@@ -1,5 +1,6 @@
 using System.Net;
 using Desk.Data;
+using Desk.Tests.Helpers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -114,6 +115,9 @@ public class MultiUserStartupTests : IClassFixture<MultiUserStartupTests.MultiUs
                 });
 
                 services.AddDbContext<DeskDbContext>(o => o.UseSqlite($"Data Source={DbPath}"));
+
+                services.AddHttpClient<ApiClient>()
+                    .ConfigurePrimaryHttpMessageHandler(() => new IntegrationApiHandler());
             });
         }
     }
