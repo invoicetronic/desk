@@ -1,12 +1,12 @@
 # Invoicetronic Desk
 
-Open-source, white-label web app for Italian electronic invoicing (FatturaPA/SDI). Self-host with Docker or use the cloud version — manage invoices in minutes, no code required.
+Open-source, white-label web app for Italian electronic invoicing (FatturaPA/SDI). Self-host with Docker or use the cloud version — manage invoices in minutes, no code required. Fully localized in Italian and English.
 
 Desk is a ready-to-use frontend for the [Invoicetronic API](https://invoicetronic.com). ISVs and developers can self-host it, apply their own branding, and give their customers a complete invoicing interface — without writing a single line of UI code.
 
 **Don't want to self-host?** Try [Desk Cloud](https://desk.invoicetronic.com) — no Docker, no servers, no configuration. Sign up and start invoicing immediately.
 
-![Invoicetronic Desk screenshot](https://raw.githubusercontent.com/invoicetronic/desk/main/assets/screenshot.png)
+<p align="center"><a href="https://raw.githubusercontent.com/invoicetronic/desk/main/assets/screenshot.png"><img src="https://raw.githubusercontent.com/invoicetronic/desk/main/assets/screenshot.png" alt="Invoicetronic Desk screenshot" width="600"></a></p>
 
 ## Quick start
 
