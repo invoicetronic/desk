@@ -38,8 +38,8 @@ public class SentModel(ApiManager apiManager, SessionManager sessionManager, Des
             var updatesTask = ApiManager.List<Update>(1, pageSize, "-last_update", updateQuery);
             await Task.WhenAll(invoicesTask, updatesTask);
 
-            var (invoices, totalCount) = invoicesTask.Result;
-            var (updates, _) = updatesTask.Result;
+            var (invoices, totalCount) = await invoicesTask;
+            var (updates, _) = await updatesTask;
 
             // Build map from initial batch
             var stateMap = new Dictionary<int, string>();
