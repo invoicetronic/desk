@@ -118,4 +118,17 @@ public class ApiManagerTests
         Assert.NotNull(result);
         Assert.Equal(100, result!.OperationLeft);
     }
+
+    [Fact]
+    public async Task Get_ThrowsInvalidOperationException_ForUnregisteredType()
+    {
+        var (manager, _) = CreateManager();
+
+        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
+            () => manager.Get<UnregisteredModel>(1));
+
+        Assert.Contains("UnregisteredModel", ex.Message);
+    }
+
+    private class UnregisteredModel;
 }
