@@ -1,4 +1,5 @@
 using System.Net;
+using Desk.Tests.Helpers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -69,6 +70,9 @@ public class StandaloneStartupTests : IClassFixture<StandaloneStartupTests.Stand
                     ApiKey = "itk_test_standalone",
                     ApiUrl = "https://api.invoicetronic.com"
                 });
+
+                services.AddHttpClient<ApiClient>()
+                    .ConfigurePrimaryHttpMessageHandler(() => new IntegrationApiHandler());
             });
         }
     }

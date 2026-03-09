@@ -1,5 +1,6 @@
 using System.Net;
 using Desk.Data;
+using Desk.Tests.Helpers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -193,6 +194,9 @@ public class BillingTests : IClassFixture<BillingTests.BillingFactory>, IDisposa
 
                 // Override DbContext to use unique test DB (Program.cs registers with default path)
                 services.AddDbContext<DeskDbContext>(o => o.UseSqlite($"Data Source={DbPath}"));
+
+                services.AddHttpClient<ApiClient>()
+                    .ConfigurePrimaryHttpMessageHandler(() => new IntegrationApiHandler());
             });
         }
     }
