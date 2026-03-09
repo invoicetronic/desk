@@ -1,5 +1,6 @@
 using System.Net;
 using Desk.Data;
+using Desk.Tests.Helpers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -87,6 +88,9 @@ public class PasswordResetTests : IClassFixture<PasswordResetTests.SmtpFactory>,
                 });
 
                 services.AddDbContext<DeskDbContext>(o => o.UseSqlite($"Data Source={DbPath}"));
+
+                services.AddHttpClient<ApiClient>()
+                    .ConfigurePrimaryHttpMessageHandler(() => new IntegrationApiHandler());
             });
         }
     }
@@ -146,6 +150,9 @@ public class PasswordResetNoSmtpTests : IClassFixture<PasswordResetNoSmtpTests.N
                 });
 
                 services.AddDbContext<DeskDbContext>(o => o.UseSqlite($"Data Source={DbPath}"));
+
+                services.AddHttpClient<ApiClient>()
+                    .ConfigurePrimaryHttpMessageHandler(() => new IntegrationApiHandler());
             });
         }
     }
@@ -196,6 +203,9 @@ public class PasswordResetStandaloneTests : IClassFixture<PasswordResetStandalon
                         SenderEmail = "noreply@example.com"
                     }
                 });
+
+                services.AddHttpClient<ApiClient>()
+                    .ConfigurePrimaryHttpMessageHandler(() => new IntegrationApiHandler());
             });
         }
     }
