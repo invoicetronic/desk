@@ -20,7 +20,7 @@ services:
   desk:
     image: invoicetronic/desk
     ports:
-      - "8080:8080"
+      - "8080:80"
     environment:
       - Desk__api_key=YOUR_API_KEY
 ```
@@ -41,7 +41,7 @@ services:
   desk:
     image: invoicetronic/desk
     ports:
-      - "8080:8080"
+      - "8080:80"
     volumes:
       - ./data:/app/data    # persist user database
 ```
