@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Desk.Pages.Invoices;
 
-public class DetailModel(ApiManager apiManager, SessionManager sessionManager, DeskConfig config)
+public class DetailModel(ApiManager apiManager, SessionManager sessionManager, DeskConfig config, ILogger<DetailModel> logger)
     : AppPageModel(apiManager, sessionManager, config)
 {
     public Send? SendInvoice { get; set; }
@@ -55,8 +55,9 @@ public class DetailModel(ApiManager apiManager, SessionManager sessionManager, D
                             extraQuery: $"send_id={id}", sort: "-last_update");
                         Updates = updates ?? [];
                     }
-                    catch
+                    catch (Exception ex)
                     {
+                        logger.LogWarning(ex, "Failed to load SDI updates for send invoice {Id}", id);
                         Updates = [];
                     }
                     break;

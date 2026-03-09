@@ -5,6 +5,7 @@ using Desk.Tests.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Desk.Tests.Pages.Invoices;
 
@@ -23,7 +24,7 @@ public class DetailTests
         var apiClient = new ApiClient(config, sessionManager, httpClient);
         var apiManager = new ApiManager(apiClient);
 
-        var model = new DetailModel(apiManager, sessionManager, config);
+        var model = new DetailModel(apiManager, sessionManager, config, NullLogger<DetailModel>.Instance);
         return (model, handler);
     }
 
