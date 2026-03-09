@@ -48,7 +48,7 @@ jobs:
         run: dotnet build tests/E2E/ --no-restore
 
       - name: Install Playwright browsers
-        run: pwsh tests/E2E/bin/Debug/net10.0/playwright.ps1 install --with-deps chromium
+        run: pwsh $(find tests/E2E/bin -name playwright.ps1 -print -quit) install --with-deps chromium
 
       - name: Test
         run: dotnet test tests/E2E/ --no-build
