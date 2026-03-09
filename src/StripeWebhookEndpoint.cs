@@ -18,7 +18,8 @@ public static class StripeWebhookEndpoint
         HttpContext context,
         StripeService stripeService,
         UserManager<DeskUser> userManager,
-        EmailService emailService)
+        EmailService emailService,
+        ILogger<StripeService> logger)
     {
         var json = await new StreamReader(context.Request.Body).ReadToEndAsync();
         var signature = context.Request.Headers["Stripe-Signature"].ToString();
@@ -50,8 +51,8 @@ public static class StripeWebhookEndpoint
                             await userManager.UpdateAsync(user);
 
                             var email = user.Email ?? session.CustomerEmail ?? "";
-                            try { await emailService.SendSubscriptionWelcomeAsync(email); } catch { /* non-blocking */ }
-                            try { await emailService.SendSubscriptionAdminNotifyAsync(email, "checkout.session.completed", "active"); } catch { /* non-blocking */ }
+                            try { await emailService.SendSubscriptionWelcomeAsync(email); } catch (Exception ex) { logger.LogWarning(ex, "Failed to send subscription welcome email to {Email}", email); }
+                            try { await emailService.SendSubscriptionAdminNotifyAsync(email, "checkout.session.completed", "active"); } catch (Exception ex) { logger.LogWarning(ex, "Failed to send admin notification for checkout.session.completed"); }
                         }
                     }
                 }
@@ -69,7 +70,7 @@ public static class StripeWebhookEndpoint
                         await userManager.UpdateAsync(user);
 
                         var email = user.Email ?? "";
-                        try { await emailService.SendSubscriptionAdminNotifyAsync(email, "customer.subscription.updated", subscription.Status); } catch { /* non-blocking */ }
+                        try { await emailService.SendSubscriptionAdminNotifyAsync(email, "customer.subscription.updated", subscription.Status); } catch (Exception ex) { logger.LogWarning(ex, "Failed to send admin notification for customer.subscription.updated"); }
                     }
                 }
                 break;
@@ -86,8 +87,8 @@ public static class StripeWebhookEndpoint
                         await userManager.UpdateAsync(user);
 
                         var email = user.Email ?? "";
-                        try { await emailService.SendSubscriptionCanceledAsync(email); } catch { /* non-blocking */ }
-                        try { await emailService.SendSubscriptionAdminNotifyAsync(email, "customer.subscription.deleted", "canceled"); } catch { /* non-blocking */ }
+                        try { await emailService.SendSubscriptionCanceledAsync(email); } catch (Exception ex) { logger.LogWarning(ex, "Failed to send subscription canceled email to {Email}", email); }
+                        try { await emailService.SendSubscriptionAdminNotifyAsync(email, "customer.subscription.deleted", "canceled"); } catch (Exception ex) { logger.LogWarning(ex, "Failed to send admin notification for customer.subscription.deleted"); }
                     }
                 }
                 break;
@@ -104,8 +105,8 @@ public static class StripeWebhookEndpoint
                         await userManager.UpdateAsync(user);
 
                         var email = user.Email ?? "";
-                        try { await emailService.SendPaymentFailedAsync(email); } catch { /* non-blocking */ }
-                        try { await emailService.SendSubscriptionAdminNotifyAsync(email, "invoice.payment_failed", "past_due"); } catch { /* non-blocking */ }
+                        try { await emailService.SendPaymentFailedAsync(email); } catch (Exception ex) { logger.LogWarning(ex, "Failed to send payment failed email to {Email}", email); }
+                        try { await emailService.SendSubscriptionAdminNotifyAsync(email, "invoice.payment_failed", "past_due"); } catch (Exception ex) { logger.LogWarning(ex, "Failed to send admin notification for invoice.payment_failed"); }
                     }
                 }
                 break;

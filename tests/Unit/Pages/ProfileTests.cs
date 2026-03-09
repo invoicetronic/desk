@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
 
@@ -45,7 +46,8 @@ public class ProfileTests
         var signInManagerMock = CreateSignInManagerMock(userManagerMock);
 
         var model = new Desk.Areas.Identity.Pages.Account.Manage.IndexModel(
-            userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager, config);
+            userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager, config,
+            NullLogger<Desk.Areas.Identity.Pages.Account.Manage.IndexModel>.Instance);
 
         return (model, handler, userManagerMock);
     }
@@ -134,7 +136,8 @@ public class ProfileTests
             .ReturnsAsync(user);
 
         var model = new Desk.Areas.Identity.Pages.Account.Manage.IndexModel(
-            userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager, config);
+            userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager, config,
+            NullLogger<Desk.Areas.Identity.Pages.Account.Manage.IndexModel>.Instance);
 
         model.ApiKeyInput = "itk_live_key";
         _ = await model.OnPostSaveApiKeyAsync();
@@ -169,7 +172,8 @@ public class ProfileTests
             .ReturnsAsync(IdentityResult.Success);
 
         var model = new Desk.Areas.Identity.Pages.Account.Manage.IndexModel(
-            userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager, config);
+            userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager, config,
+            NullLogger<Desk.Areas.Identity.Pages.Account.Manage.IndexModel>.Instance);
 
         model.ApiKeyInput = "itk_live_new_key";
         _ = await model.OnPostSaveApiKeyAsync();

@@ -13,7 +13,8 @@ public class IndexModel(
     SignInManager<DeskUser> signInManager,
     ApiManager apiManager,
     SessionManager sessionManager,
-    DeskConfig config) : PageModel
+    DeskConfig config,
+    ILogger<IndexModel> logger) : PageModel
 {
     public DeskConfig Config => config;
     [BindProperty]
@@ -62,9 +63,9 @@ public class IndexModel(
                 sessionManager.SetApiKey(user.ApiKey);
                 AccountStatus = await apiManager.GetStatus();
             }
-            catch
+            catch (Exception ex)
             {
-                // API unreachable, just don't show status
+                logger.LogWarning(ex, "Failed to load API status");
             }
         }
 
@@ -163,7 +164,7 @@ public class IndexModel(
                 sessionManager.SetApiKey(user.ApiKey);
                 AccountStatus = await apiManager.GetStatus();
             }
-            catch { /* ignore */ }
+            catch (Exception ex) { logger.LogWarning(ex, "Failed to load API status"); }
         }
 
         return Page();
@@ -195,7 +196,7 @@ public class IndexModel(
                     sessionManager.SetApiKey(user.ApiKey);
                     AccountStatus = await apiManager.GetStatus();
                 }
-                catch { /* ignore */ }
+                catch (Exception ex) { logger.LogWarning(ex, "Failed to load API status"); }
             }
             return Page();
         }
@@ -223,7 +224,7 @@ public class IndexModel(
                 var stripeService = HttpContext.RequestServices.GetService<StripeService>();
                 if (stripeService is not null)
                 {
-                    try { await stripeService.CreateOrUpdateCustomerAsync(user); } catch { /* non-blocking */ }
+                    try { await stripeService.CreateOrUpdateCustomerAsync(user); } catch (Exception ex) { logger.LogWarning(ex, "Failed to update Stripe customer for user {UserId}", user.Id); }
                 }
             }
         }
@@ -239,7 +240,7 @@ public class IndexModel(
                 sessionManager.SetApiKey(user.ApiKey);
                 AccountStatus = await apiManager.GetStatus();
             }
-            catch { /* ignore */ }
+            catch (Exception ex) { logger.LogWarning(ex, "Failed to load API status"); }
         }
 
         return Page();

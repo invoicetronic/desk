@@ -4,6 +4,7 @@ using Desk.Pages;
 using Desk.Tests.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Desk.Tests.Pages;
 
@@ -25,7 +26,7 @@ public class HomeTests
         if (selectedCompanyId is not null)
             sessionManager.SetSelectedCompanyId(selectedCompanyId);
 
-        var model = new IndexModel(apiManager, sessionManager, config);
+        var model = new IndexModel(apiManager, sessionManager, config, NullLogger<IndexModel>.Instance);
         return (model, handler);
     }
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Desk.Pages;
 
-public class IndexModel(ApiManager apiManager, SessionManager sessionManager, DeskConfig config)
+public class IndexModel(ApiManager apiManager, SessionManager sessionManager, DeskConfig config, ILogger<IndexModel> logger)
     : AppPageModel(apiManager, sessionManager, config)
 {
     public Status? AccountStatus { get; set; }
@@ -26,22 +26,22 @@ public class IndexModel(ApiManager apiManager, SessionManager sessionManager, De
 
         await Task.WhenAll(statusTask, sentTask, receivedTask, unreadTask, updatesTask);
 
-        AccountStatus = statusTask.Result;
-        if (sentTask.Result is var (sentList, sentTotal))
+        AccountStatus = await statusTask;
+        if (await sentTask is var (sentList, sentTotal))
         {
             RecentSent = sentList ?? [];
             SentCount = sentTotal;
         }
-        if (receivedTask.Result is var (recList, recTotal))
+        if (await receivedTask is var (recList, recTotal))
         {
             RecentReceived = recList ?? [];
             ReceivedCount = recTotal;
         }
-        if (unreadTask.Result is var (_, unreadTotal))
+        if (await unreadTask is var (_, unreadTotal))
         {
             UnreadCount = unreadTotal;
         }
-        if (updatesTask.Result is var (updateList, _))
+        if (await updatesTask is var (updateList, _))
         {
             RecentUpdates = updateList ?? [];
         }
@@ -49,14 +49,15 @@ public class IndexModel(ApiManager apiManager, SessionManager sessionManager, De
         return Page();
     }
 
-    private static async Task<T?> SafeCall<T>(Func<Task<T>> action)
+    private async Task<T?> SafeCall<T>(Func<Task<T>> action)
     {
         try
         {
             return await action();
         }
-        catch
+        catch (Exception ex)
         {
+            logger.LogWarning(ex, "Dashboard API call failed");
             return default;
         }
     }
