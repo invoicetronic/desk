@@ -2,6 +2,8 @@
 
 ## In Development
 
+## v1.2.0 (2026-03-10)
+
 - new: admin email notification on new user registration.
 - fix: show time (hh:mm:ss) in sent invoices last update column.
 - fix: document SQLite bind mount and locale fallback in desk.yml.example.
