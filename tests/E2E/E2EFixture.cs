@@ -1,10 +1,13 @@
+using System.Globalization;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
 
 namespace Desk.E2E;
@@ -120,7 +123,16 @@ public class DeskTestFactory : WebApplicationFactory<Program>
             services.AddSingleton(new DeskConfig
             {
                 ApiKey = "itk_test_e2e",
-                ApiUrl = "https://mock.api.test"
+                ApiUrl = "https://mock.api.test",
+                Locale = "it"
+            });
+
+            // Force Italian locale regardless of browser Accept-Language
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var italian = new CultureInfo("it");
+                options.DefaultRequestCulture = new RequestCulture(italian);
+                options.RequestCultureProviders.Clear();
             });
 
             services.AddHttpClient<ApiClient>()
