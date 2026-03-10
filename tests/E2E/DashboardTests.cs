@@ -103,4 +103,42 @@ public class DashboardTests(E2EFixture fixture)
         var link = page.Locator(".desk-timeline-title a[href*='Detail?type=send']").First;
         await Assertions.Expect(link).ToBeVisibleAsync();
     }
+
+    [Fact]
+    public async Task Dashboard_RefreshButtonIsVisible()
+    {
+        var page = await fixture.CreatePageAsync();
+        await page.GotoAsync(fixture.ServerAddress);
+
+        var refreshBtn = page.Locator(".desk-page-actions button", new() { HasText = "Aggiorna" });
+        await Assertions.Expect(refreshBtn).ToBeVisibleAsync();
+    }
+
+    [Fact]
+    public async Task Dashboard_RefreshButtonReloadsPage()
+    {
+        var page = await fixture.CreatePageAsync();
+        await page.GotoAsync(fixture.ServerAddress);
+
+        var refreshBtn = page.Locator(".desk-page-actions button", new() { HasText = "Aggiorna" });
+
+        // Click refresh and verify the page reloads (URL stays the same, content still present)
+        await refreshBtn.ClickAsync();
+        await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        await Assertions.Expect(page.Locator("h1")).ToContainTextAsync("Dashboard");
+        await Assertions.Expect(page.Locator("a[href='/Invoices/Sent'] .desk-card-value")).ToHaveTextAsync("3");
+    }
+
+    [Fact]
+    public async Task Dashboard_HasAutoRefreshScript()
+    {
+        var page = await fixture.CreatePageAsync();
+        await page.GotoAsync(fixture.ServerAddress);
+
+        // Verify the auto-refresh script is present in the page
+        var script = await page.ContentAsync();
+        Assert.Contains("setTimeout", script);
+        Assert.Contains("location.reload()", script);
+    }
 }
