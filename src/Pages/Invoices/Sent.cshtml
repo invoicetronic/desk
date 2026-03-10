@@ -173,8 +173,8 @@
                     {
                         field: 'lastUpdate',
                         headerName: '@L["Invoices_LastUpdate"].Value',
-                        flex: 0.9,
-                        valueGetter: function(p) { return p.data ? formatDate(p.data.lastUpdate) : ''; }
+                        flex: 1.2,
+                        valueGetter: function(p) { return p.data && p.data.lastUpdate ? new Date(p.data.lastUpdate).toLocaleString() : ''; }
                     },
                     {
                         field: 'dateSent',

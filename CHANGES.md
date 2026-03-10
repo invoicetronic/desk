@@ -3,6 +3,7 @@
 ## In Development
 
 - new: admin email notification on new user registration.
+- fix: show time (hh:mm:ss) in sent invoices last update column.
 
 ## v1.1.0 (2026-03-10)
 
