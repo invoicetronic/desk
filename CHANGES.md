@@ -2,6 +2,8 @@
 
 ## In Development
 
+- new: admin email notification on new user registration.
+
 ## v1.1.0 (2026-03-10)
 
 - fix: force Italian locale in E2E tests to avoid browser Accept-Language interference.

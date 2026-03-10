@@ -48,6 +48,23 @@ public class EmailService(DeskConfig config, ILogger<EmailService> logger)
             });
     }
 
+    public virtual async Task SendRegistrationAdminNotifyAsync(string userEmail, string displayName)
+    {
+        if (string.IsNullOrEmpty(_smtp.NotifyEmail))
+            return;
+
+        await SendTemplateEmailAsync(
+            _smtp.NotifyEmail,
+            "Invoicetronic Desk — New user registered",
+            "RegistrationNotifyAdmin",
+            new Dictionary<string, string>
+            {
+                ["{{UserEmail}}"] = userEmail,
+                ["{{DisplayName}}"] = displayName,
+                ["{{EventDate}}"] = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss UTC")
+            });
+    }
+
     public async Task SendSubscriptionCanceledAsync(string userEmail)
     {
         await SendTemplateEmailAsync(

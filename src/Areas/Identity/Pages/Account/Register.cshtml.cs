@@ -11,6 +11,7 @@ namespace Desk.Areas.Identity.Pages.Account;
 public class RegisterModel(
     UserManager<DeskUser> userManager,
     SignInManager<DeskUser> signInManager,
+    EmailService emailService,
     DeskConfig config) : PageModel
 {
     [BindProperty]
@@ -89,6 +90,7 @@ public class RegisterModel(
 
         if (result.Succeeded)
         {
+            _ = emailService.SendRegistrationAdminNotifyAsync(user.Email!, user.DisplayName ?? "");
             await signInManager.SignInAsync(user, isPersistent: false);
             return LocalRedirect("/Identity/Account/Manage");
         }
