@@ -6,5 +6,5 @@ services:
       - "8080:8080"
     volumes:
       - ./desk.yml:/app/desk.yml
-      - ./data:/app/data
+      - ./data:/app/data       # SQLite DB persisted on host (data/desk.db)
       - ./custom:/app/custom

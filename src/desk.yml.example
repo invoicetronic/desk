@@ -14,7 +14,8 @@ desk:
   # Database (ignored when api_key is set — no local DB needed)
   database:
     provider: sqlite           # sqlite | pgsql
-    # sqlite: default path data/desk.db
+    # sqlite: default path data/desk.db (bind-mount ./data:/app/data to persist on host)
+    # connection_string: "Data Source=data/desk.db"
     # pgsql: connection_string via env var Desk__database__connection_string
 
   # Branding
@@ -37,5 +38,5 @@ desk:
   #   sender_email: noreply@example.com
   #   sender_name: Invoicetronic Desk
 
-  # Localization
+  # Localization — if omitted, the browser's Accept-Language header is used (default: it)
   locale: it                   # it | en
