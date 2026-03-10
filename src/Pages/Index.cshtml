@@ -7,6 +7,9 @@
 
 <div class="desk-page-header">
     <h1 class="desk-page-title">@L["Dashboard_Title"]</h1>
+    <div class="desk-page-actions">
+        <button onclick="location.reload()" class="btn-brand btn-brand-secondary" title="@L["Dashboard_Refresh"]">↻ @L["Dashboard_Refresh"]</button>
+    </div>
 </div>
 
 <!-- Summary Cards -->
@@ -83,4 +86,10 @@
             }
         </div>
     </div>
+}
+
+@section Scripts {
+    <script>
+        setTimeout(function () { location.reload(); }, 60000);
+    </script>
 }

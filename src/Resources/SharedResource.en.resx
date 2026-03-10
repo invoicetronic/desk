@@ -223,6 +223,7 @@
   <data name="Dashboard_AccountStatus"><value>Account status</value></data>
   <data name="Dashboard_RecentUpdates"><value>Recent SDI updates</value></data>
   <data name="Dashboard_ViewAll"><value>View all</value></data>
+  <data name="Dashboard_Refresh"><value>Refresh</value></data>
 
   <!-- Footer -->
   <data name="Footer_PoweredBy"><value>Powered by Invoicetronic</value></data>
