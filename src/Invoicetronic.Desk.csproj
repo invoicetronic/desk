@@ -21,6 +21,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="..\CHANGES.md">
+        <Link>CHANGES.md</Link>
+      </Content>
       <Content Include="..\Dockerfile">
         <Link>Dockerfile</Link>
       </Content>
