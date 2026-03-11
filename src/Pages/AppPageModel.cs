@@ -36,8 +36,10 @@ public abstract class AppPageModel(
             var user = await um.GetUserAsync(context.HttpContext.User);
             if (user?.ApiKey is { Length: > 0 } savedKey)
             {
-                SessionManager.SetApiKey(savedKey);
-                apiKey = savedKey;
+                var protector = context.HttpContext.RequestServices.GetRequiredService<ApiKeyProtector>();
+                var plainKey = protector.Unprotect(savedKey);
+                SessionManager.SetApiKey(plainKey);
+                apiKey = plainKey;
             }
         }
 

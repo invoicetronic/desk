@@ -3,6 +3,7 @@ using Desk.Data;
 using Desk.Models;
 using Desk.Tests.Helpers;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -26,6 +27,9 @@ public class ProfileTests
             new Mock<IUserConfirmation<DeskUser>>().Object);
     }
 
+    private static readonly ApiKeyProtector Protector = new(
+        DataProtectionProvider.Create("Desk.Tests"));
+
     private static (Desk.Areas.Identity.Pages.Account.Manage.IndexModel model,
         MockHttpMessageHandler handler,
         Mock<UserManager<DeskUser>> userManagerMock) CreateModel()
@@ -47,6 +51,7 @@ public class ProfileTests
 
         var model = new Desk.Areas.Identity.Pages.Account.Manage.IndexModel(
             userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager, config,
+            Protector,
             NullLogger<Desk.Areas.Identity.Pages.Account.Manage.IndexModel>.Instance);
 
         return (model, handler, userManagerMock);
@@ -89,7 +94,7 @@ public class ProfileTests
         _ = await model.OnPostSaveApiKeyAsync();
 
         userManagerMock.Verify(m => m.UpdateAsync(
-            It.Is<DeskUser>(u => u.ApiKey == "itk_live_valid_key")), Times.Once);
+            It.Is<DeskUser>(u => u.ApiKey != null && u.ApiKey.StartsWith("ENC:"))), Times.Once);
     }
 
     [Fact]
@@ -137,6 +142,7 @@ public class ProfileTests
 
         var model = new Desk.Areas.Identity.Pages.Account.Manage.IndexModel(
             userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager, config,
+            Protector,
             NullLogger<Desk.Areas.Identity.Pages.Account.Manage.IndexModel>.Instance);
 
         model.ApiKeyInput = "itk_live_key";
@@ -173,6 +179,7 @@ public class ProfileTests
 
         var model = new Desk.Areas.Identity.Pages.Account.Manage.IndexModel(
             userManagerMock.Object, signInManagerMock.Object, apiManager, sessionManager, config,
+            Protector,
             NullLogger<Desk.Areas.Identity.Pages.Account.Manage.IndexModel>.Instance);
 
         model.ApiKeyInput = "itk_live_new_key";
