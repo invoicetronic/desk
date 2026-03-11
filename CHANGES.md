@@ -2,6 +2,8 @@
 
 ## In Development
 
+## v1.2.1 (2026-03-11)
+
 - fix: skip SQLite directory creation when using PostgreSQL provider.
 
 ## v1.2.0 (2026-03-10)
