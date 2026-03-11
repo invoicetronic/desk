@@ -2,6 +2,8 @@
 
 ## In Development
 
+- fix: upgrade docker/build-push-action to v7 for Node.js 24 compatibility.
+
 ## v1.3.0 (2026-03-11)
 
 - new: encrypt API keys at rest using ASP.NET Core Data Protection API with `ENC:` prefix; existing plaintext keys are migrated automatically at startup.
