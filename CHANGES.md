@@ -2,6 +2,8 @@
 
 ## In Development
 
+- fix: upgrade GitHub Actions to Node.js 24-compatible versions (checkout v5, setup-dotnet v5, docker actions v4).
+
 ## v1.2.1 (2026-03-11)
 
 - fix: skip SQLite directory creation when using PostgreSQL provider.
