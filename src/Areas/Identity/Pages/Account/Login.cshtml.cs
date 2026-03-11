@@ -12,7 +12,8 @@ namespace Desk.Areas.Identity.Pages.Account;
 public class LoginModel(
     SignInManager<DeskUser> signInManager,
     UserManager<DeskUser> userManager,
-    SessionManager sessionManager) : PageModel
+    SessionManager sessionManager,
+    ApiKeyProtector apiKeyProtector) : PageModel
 {
     [BindProperty]
     public InputModel Input { get; set; } = new();
@@ -52,7 +53,7 @@ public class LoginModel(
         {
             var user = await userManager.FindByEmailAsync(Input.Email);
             if (user?.ApiKey is not null)
-                sessionManager.SetApiKey(user.ApiKey);
+                sessionManager.SetApiKey(apiKeyProtector.Unprotect(user.ApiKey));
 
             return LocalRedirect(returnUrl);
         }
