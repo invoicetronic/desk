@@ -2,6 +2,8 @@
 
 ## In Development
 
+## v1.3.0 (2026-03-11)
+
 - new: encrypt API keys at rest using ASP.NET Core Data Protection API with `ENC:` prefix; existing plaintext keys are migrated automatically at startup.
 - new: persist Data Protection keys in database (SQLite/PostgreSQL) instead of filesystem; eliminates need to backup `data/keys/` separately.
 - fix: upgrade GitHub Actions to Node.js 24-compatible versions (checkout v5, setup-dotnet v5, docker actions v4).
