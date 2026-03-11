@@ -130,14 +130,17 @@ if (!app.Services.GetRequiredService<DeskConfig>().IsStandalone)
     var db = scope.ServiceProvider.GetRequiredService<DeskDbContext>();
 
     // Ensure the parent directory exists for SQLite database files
-    var dbConnString = db.Database.GetConnectionString();
-    if (dbConnString is not null)
+    if (config.Database.Provider is not "pgsql")
     {
-        var builder2 = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder(dbConnString);
-        if (!string.IsNullOrEmpty(builder2.DataSource) && builder2.DataSource != ":memory:")
+        var dbConnString = db.Database.GetConnectionString();
+        if (dbConnString is not null)
         {
-            var dir = Path.GetDirectoryName(Path.GetFullPath(builder2.DataSource));
-            if (dir is not null) Directory.CreateDirectory(dir);
+            var builder2 = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder(dbConnString);
+            if (!string.IsNullOrEmpty(builder2.DataSource) && builder2.DataSource != ":memory:")
+            {
+                var dir = Path.GetDirectoryName(Path.GetFullPath(builder2.DataSource));
+                if (dir is not null) Directory.CreateDirectory(dir);
+            }
         }
     }
 

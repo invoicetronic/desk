@@ -2,6 +2,8 @@
 
 ## In Development
 
+- fix: skip SQLite directory creation when using PostgreSQL provider.
+
 ## v1.2.0 (2026-03-10)
 
 - new: admin email notification on new user registration.
