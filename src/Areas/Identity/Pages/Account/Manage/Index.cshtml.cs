@@ -14,6 +14,7 @@ public class IndexModel(
     ApiManager apiManager,
     SessionManager sessionManager,
     DeskConfig config,
+    ApiKeyProtector apiKeyProtector,
     ILogger<IndexModel> logger) : PageModel
 {
     public DeskConfig Config => config;
@@ -47,7 +48,8 @@ public class IndexModel(
         else if (billingProfileRequired)
             ErrorMessage = "Profile_BillingProfileRequired";
 
-        ApiKeyInput = user.ApiKey;
+        var plainApiKey = apiKeyProtector.UnprotectOrNull(user.ApiKey);
+        ApiKeyInput = plainApiKey;
         DisplayNameInput = user.DisplayName;
         CurrentEmail = user.Email;
         UserSubscriptionStatus = user.SubscriptionStatus;
@@ -56,11 +58,11 @@ public class IndexModel(
         if (config.IsBillingEnabled)
             PopulateBillingProfile(user);
 
-        if (!string.IsNullOrEmpty(user.ApiKey))
+        if (plainApiKey is not null)
         {
             try
             {
-                sessionManager.SetApiKey(user.ApiKey);
+                sessionManager.SetApiKey(plainApiKey);
                 AccountStatus = await apiManager.GetStatus();
             }
             catch (Exception ex)
@@ -117,11 +119,12 @@ public class IndexModel(
         catch
         {
             ErrorMessage = "Profile_ApiKeyInvalid";
-            sessionManager.SetApiKey(user.ApiKey ?? "");
+            var existingKey = apiKeyProtector.UnprotectOrNull(user.ApiKey) ?? "";
+            sessionManager.SetApiKey(existingKey);
             return Page();
         }
 
-        user.ApiKey = ApiKeyInput;
+        user.ApiKey = apiKeyProtector.Protect(ApiKeyInput);
         var result = await userManager.UpdateAsync(user);
 
         if (result.Succeeded)
@@ -147,7 +150,8 @@ public class IndexModel(
         }
 
         CurrentEmail = user.Email;
-        ApiKeyInput = user.ApiKey;
+        var plainApiKey = apiKeyProtector.UnprotectOrNull(user.ApiKey);
+        ApiKeyInput = plainApiKey;
 
         user.DisplayName = DisplayNameInput;
         var result = await userManager.UpdateAsync(user);
@@ -157,11 +161,11 @@ public class IndexModel(
         else
             ErrorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
 
-        if (!string.IsNullOrEmpty(user.ApiKey))
+        if (plainApiKey is not null)
         {
             try
             {
-                sessionManager.SetApiKey(user.ApiKey);
+                sessionManager.SetApiKey(plainApiKey);
                 AccountStatus = await apiManager.GetStatus();
             }
             catch (Exception ex) { logger.LogWarning(ex, "Failed to load API status"); }
@@ -180,7 +184,8 @@ public class IndexModel(
         }
 
         CurrentEmail = user.Email;
-        ApiKeyInput = user.ApiKey;
+        var plainApiKey = apiKeyProtector.UnprotectOrNull(user.ApiKey);
+        ApiKeyInput = plainApiKey;
         DisplayNameInput = user.DisplayName;
         UserSubscriptionStatus = user.SubscriptionStatus;
         UserStripeCustomerId = user.StripeCustomerId;
@@ -189,11 +194,11 @@ public class IndexModel(
         {
             if (BillingProfile is not null)
                 BillingProfile.IsTaxIdReadOnly = user.SubscriptionStatus is "active" or "trialing";
-            if (!string.IsNullOrEmpty(user.ApiKey))
+            if (plainApiKey is not null)
             {
                 try
                 {
-                    sessionManager.SetApiKey(user.ApiKey);
+                    sessionManager.SetApiKey(plainApiKey);
                     AccountStatus = await apiManager.GetStatus();
                 }
                 catch (Exception ex) { logger.LogWarning(ex, "Failed to load API status"); }
@@ -233,11 +238,11 @@ public class IndexModel(
 
         PopulateBillingProfile(user);
 
-        if (!string.IsNullOrEmpty(user.ApiKey))
+        if (plainApiKey is not null)
         {
             try
             {
-                sessionManager.SetApiKey(user.ApiKey);
+                sessionManager.SetApiKey(plainApiKey);
                 AccountStatus = await apiManager.GetStatus();
             }
             catch (Exception ex) { logger.LogWarning(ex, "Failed to load API status"); }

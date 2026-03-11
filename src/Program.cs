@@ -3,6 +3,9 @@ using Desk;
 using Desk.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);
+builder.Logging.AddFilter("Microsoft.AspNetCore.DataProtection.KeyManagement", LogLevel.Error);
 builder.Logging.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
 
 builder.Configuration.AddYamlFile("desk.yml", optional: true, reloadOnChange: false);
@@ -118,9 +122,18 @@ builder.Services.AddScoped<ApiManager>();
 
 builder.Services.AddScoped<StripeService>();
 builder.Services.AddScoped<EmailService>();
+builder.Services.AddSingleton<ApiKeyProtector>();
 
-builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "data", "keys")));
+builder.Services.AddDataProtection();
+builder.Services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(sp =>
+    new ConfigureOptions<KeyManagementOptions>(options =>
+    {
+        if (!sp.GetRequiredService<DeskConfig>().IsStandalone)
+        {
+            options.XmlRepository = new EntityFrameworkCoreXmlRepository<DeskDbContext>(
+                sp, sp.GetRequiredService<ILoggerFactory>());
+        }
+    }));
 
 var app = builder.Build();
 
@@ -194,6 +207,76 @@ if (!app.Services.GetRequiredService<DeskConfig>().IsStandalone)
 
     if (!string.IsNullOrEmpty(cmd.CommandText))
         await cmd.ExecuteNonQueryAsync();
+
+    // Create DataProtectionKeys table if it doesn't exist
+    using var dpCmd = conn.CreateCommand();
+    if (config.Database.Provider is "pgsql")
+    {
+        dpCmd.CommandText = """
+            CREATE TABLE IF NOT EXISTS "DataProtectionKeys" (
+                "Id" SERIAL PRIMARY KEY,
+                "FriendlyName" TEXT,
+                "Xml" TEXT
+            );
+            """;
+    }
+    else
+    {
+        dpCmd.CommandText = """
+            CREATE TABLE IF NOT EXISTS DataProtectionKeys (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                FriendlyName TEXT,
+                Xml TEXT
+            );
+            """;
+    }
+    await dpCmd.ExecuteNonQueryAsync();
+
+    // Encrypt plaintext API keys
+    var protector = scope.ServiceProvider.GetRequiredService<ApiKeyProtector>();
+    using var readCmd = conn.CreateCommand();
+    readCmd.CommandText = config.Database.Provider is "pgsql"
+        ? """SELECT "Id", "ApiKey" FROM "AspNetUsers" WHERE "ApiKey" IS NOT NULL"""
+        : "SELECT Id, ApiKey FROM AspNetUsers WHERE ApiKey IS NOT NULL";
+
+    var toEncrypt = new List<(string id, string key)>();
+    using (var reader = await readCmd.ExecuteReaderAsync())
+    {
+        while (await reader.ReadAsync())
+        {
+            var id = reader.GetString(0);
+            var key = reader.GetString(1);
+            if (!protector.IsEncrypted(key))
+                toEncrypt.Add((id, key));
+        }
+    }
+
+    if (toEncrypt.Count > 0)
+    {
+        using var tx = await conn.BeginTransactionAsync();
+        foreach (var (id, key) in toEncrypt)
+        {
+            using var updateCmd = conn.CreateCommand();
+            updateCmd.Transaction = (System.Data.Common.DbTransaction)tx;
+            updateCmd.CommandText = config.Database.Provider is "pgsql"
+                ? """UPDATE "AspNetUsers" SET "ApiKey" = @key WHERE "Id" = @id"""
+                : "UPDATE AspNetUsers SET ApiKey = @key WHERE Id = @id";
+
+            var pKey = updateCmd.CreateParameter();
+            pKey.ParameterName = "@key";
+            pKey.Value = protector.Protect(key);
+            updateCmd.Parameters.Add(pKey);
+
+            var pId = updateCmd.CreateParameter();
+            pId.ParameterName = "@id";
+            pId.Value = id;
+            updateCmd.Parameters.Add(pId);
+
+            await updateCmd.ExecuteNonQueryAsync();
+        }
+        await tx.CommitAsync();
+        Console.WriteLine($"info: Encrypted {toEncrypt.Count} plaintext API key(s).");
+    }
 }
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
