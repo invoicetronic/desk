@@ -26,7 +26,7 @@ public class ApiClient
         _logger = logger;
     }
 
-    public static string ExtractErrorMessage(string errorBody)
+    public static string ExtractErrorMessage(string errorBody, System.Net.HttpStatusCode? statusCode = null)
     {
         try
         {
@@ -37,13 +37,14 @@ public class ApiClient
 
             if (errorResponse?.ProblemDetails?.Title is not null)
                 return errorResponse.ProblemDetails.Title;
-
-            return "Errore nella richiesta API.";
         }
         catch
         {
-            return "Errore nella richiesta API.";
+            // Fall through to status code fallback
         }
+
+        var code = statusCode is not null ? $" ({(int)statusCode} {statusCode})" : "";
+        return $"Errore nella richiesta API{code}.";
     }
 
     private void SetAuth(string? apiKey = null)
@@ -73,7 +74,7 @@ public class ApiClient
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
                 _logger?.LogError("API Error ({StatusCode}): {ErrorBody}", response.StatusCode, errorBody);
-                throw new HttpRequestException(ExtractErrorMessage(errorBody), null, response.StatusCode);
+                throw new HttpRequestException(ExtractErrorMessage(errorBody, response.StatusCode), null, response.StatusCode);
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -137,7 +138,7 @@ public class ApiClient
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
                 _logger?.LogError("API Error ({StatusCode}): {ErrorBody}", response.StatusCode, errorBody);
-                throw new HttpRequestException(ExtractErrorMessage(errorBody), null, response.StatusCode);
+                throw new HttpRequestException(ExtractErrorMessage(errorBody, response.StatusCode), null, response.StatusCode);
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -175,7 +176,7 @@ public class ApiClient
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
                 _logger?.LogError("API Error ({StatusCode}): {ErrorBody}", response.StatusCode, errorBody);
-                throw new HttpRequestException(ExtractErrorMessage(errorBody), null, response.StatusCode);
+                throw new HttpRequestException(ExtractErrorMessage(errorBody, response.StatusCode), null, response.StatusCode);
             }
 
             return await response.Content.ReadAsByteArrayAsync();
