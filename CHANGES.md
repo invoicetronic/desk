@@ -4,7 +4,6 @@
 
 - fix: upgrade docker/build-push-action to v7 for Node.js 24 compatibility.
 - fix: show actual API error messages instead of generic 'error' in grids and upload page.
-- fix: wrong env var prefix in IMPLEMENTATION.md (`App__` → `Desk__`).
 
 ## v1.3.0 (2026-03-11)
 
