@@ -136,7 +136,7 @@ builder.Services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(sp =>
 
 var app = builder.Build();
 
-await DatabaseInitializer.InitializeAsync(app.Services, config);
+await DatabaseInitializer.InitializeAsync(app.Services, app.Services.GetRequiredService<DeskConfig>());
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
