@@ -77,6 +77,11 @@
     gap: var(--space-1);
 }
 
+.desk-grid-error {
+    color: var(--color-danger, #c0392b);
+    font-weight: 500;
+}
+
 /* ── Auth layout (Login / Register) ── */
 .desk-auth-layout {
     display: flex;

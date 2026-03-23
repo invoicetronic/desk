@@ -2,6 +2,11 @@
  * Invoicetronic Desk — AG Grid shared helpers
  */
 
+/** Escapes HTML special characters. */
+function escapeHtml(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 /** Converts camelCase to snake_case for API sort params. */
 function toSnakeCase(str) {
     return str.replace(/[A-Z]/g, letter => '_' + letter.toLowerCase());
@@ -76,14 +81,24 @@ function createDatasource(handlerUrl, extraParamsFn) {
 
             fetch(url)
                 .then(response => {
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    if (!response.ok) {
+                        return response.json()
+                            .catch(() => ({ error: `HTTP ${response.status}` }))
+                            .then(body => { throw { status: response.status, message: body.error || `HTTP ${response.status}` }; });
+                    }
                     return response.json();
                 })
                 .then(result => {
                     params.successCallback(result.data || [], result.totalCount || 0);
                 })
-                .catch(() => {
-                    params.failCallback();
+                .catch(err => {
+                    const msg = (err && err.message) ? err.message : 'Error';
+                    params.successCallback([], 0);
+                    if (params.api) {
+                        params.api.setGridOption('overlayNoRowsTemplate',
+                            '<span class="desk-grid-error">' + escapeHtml(msg) + '</span>');
+                        params.api.showNoRowsOverlay();
+                    }
                 });
         }
     };
