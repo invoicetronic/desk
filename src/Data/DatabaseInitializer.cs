@@ -21,7 +21,9 @@ public static class DatabaseInitializer
 
         await AddMissingColumnsAsync(conn, config);
         await CreateDataProtectionTableAsync(conn, config);
-        await EncryptPlaintextApiKeysAsync(conn, config, scope.ServiceProvider);
+
+        await conn.CloseAsync();
+        await EncryptPlaintextApiKeysAsync(db, config, scope.ServiceProvider);
     }
 
     private static void EnsureSqliteDirectory(DeskDbContext db, DeskConfig config)
@@ -114,9 +116,12 @@ public static class DatabaseInitializer
     }
 
     private static async Task EncryptPlaintextApiKeysAsync(
-        System.Data.Common.DbConnection conn, DeskConfig config, IServiceProvider services)
+        DeskDbContext db, DeskConfig config, IServiceProvider services)
     {
         var protector = services.GetRequiredService<ApiKeyProtector>();
+
+        var conn = db.Database.GetDbConnection();
+        await conn.OpenAsync();
 
         await using var readCmd = conn.CreateCommand();
         readCmd.CommandText = config.Database.Provider is "pgsql"
@@ -138,8 +143,16 @@ public static class DatabaseInitializer
         if (toEncrypt.Count == 0)
             return;
 
+        // Close raw connection so DataProtection can write its keys via EF Core
+        await conn.CloseAsync();
+
+        // Encrypt all keys (may trigger DataProtection key creation on first call)
+        var encrypted = toEncrypt.Select(x => (x.id, encrypted: protector.Protect(x.key))).ToList();
+
+        // Reopen connection for updates
+        await conn.OpenAsync();
         await using var tx = await conn.BeginTransactionAsync();
-        foreach (var (id, key) in toEncrypt)
+        foreach (var (id, key) in encrypted)
         {
             await using var updateCmd = conn.CreateCommand();
             updateCmd.Transaction = (System.Data.Common.DbTransaction)tx;
@@ -149,7 +162,7 @@ public static class DatabaseInitializer
 
             var pKey = updateCmd.CreateParameter();
             pKey.ParameterName = "@key";
-            pKey.Value = protector.Protect(key);
+            pKey.Value = key;
             updateCmd.Parameters.Add(pKey);
 
             var pId = updateCmd.CreateParameter();

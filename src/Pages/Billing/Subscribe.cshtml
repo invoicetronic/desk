@@ -66,11 +66,11 @@
                 </button>
             </form>
 
-            <p class="text-sm text-muted" style="text-align: center; margin-top: var(--space-4);">
-                <form method="post" asp-area="Identity" asp-page="/Account/Logout" style="display: inline;">
-                    <button type="submit" style="background: none; border: none; color: var(--color-brand-accent); cursor: pointer; padding: 0; font: inherit; text-decoration: underline;">@L["Auth_SwitchAccount"]</button>
-                </form>
-            </p>
+            <form method="post" asp-area="Identity" asp-page="/Account/Logout" class="text-sm text-muted" style="text-align: center; margin-top: var(--space-4);">
+                <button type="submit" style="background: none; border: none; padding: 0; font: inherit; font-size: inherit; color: var(--brand-accent); cursor: pointer; transition: color var(--duration-fast) var(--ease-out);"
+                        onmouseover="this.style.color='var(--brand-primary)'"
+                        onmouseout="this.style.color='var(--brand-accent)'">@L["Auth_SwitchAccount"]</button>
+            </form>
         </div>
     </div>
 </body>
