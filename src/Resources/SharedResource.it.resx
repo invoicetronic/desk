@@ -40,6 +40,7 @@
   <data name="Auth_LoginTitle"><value>Accedi al tuo account</value></data>
   <data name="Auth_RegisterTitle"><value>Crea un nuovo account</value></data>
   <data name="Auth_InvalidLogin"><value>Email o password non validi.</value></data>
+  <data name="Auth_InvalidLoginHint"><value>Nota: gli account Desk sono indipendenti da quelli della Developer Dashboard. Se non hai ancora un account Desk, puoi crearne uno.</value></data>
   <data name="Auth_ForgotPasswordTitle"><value>Password dimenticata</value></data>
   <data name="Auth_ForgotPasswordHint"><value>Inserisci il tuo indirizzo email e ti invieremo un link per reimpostare la password.</value></data>
   <data name="Auth_SendResetLink"><value>Invia link di reset</value></data>
