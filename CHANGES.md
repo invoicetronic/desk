@@ -2,11 +2,13 @@
 
 ## In Development
 
+## v1.4.0 (2026-03-25)
+
+- new: show hint on login failure explaining that Desk accounts are separate from Dashboard accounts.
+- new: add "switch account" logout link on subscription page.
 - fix: upgrade docker/build-push-action to v7 for Node.js 24 compatibility.
 - fix: show actual API error messages with status code instead of generic 'error' in grids and upload page.
 - fix: flaky test due to DatabaseInitializer using build-time config instead of DI config.
-- new: show hint on login failure explaining that Desk accounts are separate from Dashboard accounts.
-- new: add "switch account" logout link on subscription page.
 - fix: SQLite "database is locked" crash at startup when DataProtection key creation conflicts with open raw connection during API key encryption.
 
 ## v1.3.0 (2026-03-11)
