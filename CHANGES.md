@@ -2,6 +2,8 @@
 
 ## In Development
 
+## v1.4.1 (2026-03-30)
+
 - new: header User-Agent sulle richieste API (`Invoicetronic-Desk/<versione>`).
 
 ## v1.4.0 (2026-03-25)
