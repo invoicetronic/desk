@@ -2,6 +2,8 @@
 
 ## In Development
 
+- new: header User-Agent sulle richieste API (`Invoicetronic-Desk/<versione>`).
+
 ## v1.4.0 (2026-03-25)
 
 - new: show hint on login failure explaining that Desk accounts are separate from Dashboard accounts.

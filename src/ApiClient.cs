@@ -23,6 +23,8 @@ public class ApiClient
         _sessionManager = sessionManager;
         _httpClient = httpClient;
         _httpClient.BaseAddress = new Uri(config.ApiUrl.TrimEnd('/') + '/');
+        var version = typeof(ApiClient).Assembly.GetName().Version;
+        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"Invoicetronic-Desk/{version!.Major}.{version.Minor}.{version.Build}");
         _logger = logger;
     }
 
