@@ -9,6 +9,7 @@ public class SessionManager(IHttpContextAccessor httpContextAccessor, DeskConfig
     private const string SelectedCompanyIdKey = "SelectedCompanyId";
     private const string SelectedCompanyCookieKey = "SelectedCompanyId";
     private const string CompaniesKey = "Companies";
+    private const string HasActiveSeatKey = "HasActiveSeat";
 
     private HttpContext? HttpContext => httpContextAccessor.HttpContext;
 
@@ -80,5 +81,21 @@ public class SessionManager(IHttpContextAccessor httpContextAccessor, DeskConfig
     {
         HttpContext?.Session.Remove(CompaniesKey);
         HttpContext?.Session.Remove(SelectedCompanyIdKey);
+    }
+
+    public bool? GetHasActiveSeat()
+    {
+        var value = HttpContext?.Session.GetString(HasActiveSeatKey);
+        return value is not null ? bool.Parse(value) : null;
+    }
+
+    public void SetHasActiveSeat(bool hasActiveSeat)
+    {
+        HttpContext?.Session.SetString(HasActiveSeatKey, hasActiveSeat.ToString());
+    }
+
+    public void ClearHasActiveSeat()
+    {
+        HttpContext?.Session.Remove(HasActiveSeatKey);
     }
 }

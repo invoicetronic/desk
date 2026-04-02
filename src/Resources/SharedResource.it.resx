@@ -252,6 +252,11 @@
   <data name="Billing_Status_canceled"><value>Annullato</value></data>
   <data name="Billing_Status_none"><value>Nessuno</value></data>
 
+  <!-- No Seat -->
+  <data name="NoSeat_Title"><value>Accesso Desk non attivo</value></data>
+  <data name="NoSeat_Message"><value>Questa chiave API non ha un accesso Desk attivo. Contatta il tuo fornitore per abilitare l'accesso Desk, oppure utilizza una chiave API diversa.</value></data>
+  <data name="NoSeat_ChangeKey"><value>Cambia chiave API</value></data>
+
   <!-- Error -->
   <data name="Error_Title"><value>Errore</value></data>
   <data name="Error_Generic"><value>Si è verificato un errore durante l'elaborazione della richiesta.</value></data>

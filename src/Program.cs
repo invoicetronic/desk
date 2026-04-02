@@ -119,7 +119,6 @@ builder.Services.AddScoped<SessionManager>();
 builder.Services.AddHttpClient<ApiClient>();
 builder.Services.AddScoped<ApiManager>();
 
-builder.Services.AddScoped<StripeService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddSingleton<ApiKeyProtector>();
 
@@ -196,9 +195,6 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
-
-if (app.Services.GetRequiredService<DeskConfig>().IsBillingEnabled)
-    app.MapStripeWebhook();
 
 app.Run();
 

@@ -54,7 +54,7 @@ public class MultiUserStartupTests : IClassFixture<MultiUserStartupTests.MultiUs
     }
 
     [Fact]
-    public async Task Register_Succeeds_WithoutBilling()
+    public async Task Register_Succeeds()
     {
         // GET the register page to obtain antiforgery token
         var getResponse = await _client.GetAsync("/Identity/Account/Register");

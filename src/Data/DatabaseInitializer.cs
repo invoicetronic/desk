@@ -19,7 +19,6 @@ public static class DatabaseInitializer
         var conn = db.Database.GetDbConnection();
         await conn.OpenAsync();
 
-        await AddMissingColumnsAsync(conn, config);
         await CreateDataProtectionTableAsync(conn, config);
 
         await conn.CloseAsync();
@@ -41,55 +40,6 @@ public static class DatabaseInitializer
             var dir = Path.GetDirectoryName(Path.GetFullPath(builder.DataSource));
             if (dir is not null) Directory.CreateDirectory(dir);
         }
-    }
-
-    private static async Task AddMissingColumnsAsync(
-        System.Data.Common.DbConnection conn, DeskConfig config)
-    {
-        string[] extraColumns =
-        [
-            "StripeCustomerId", "SubscriptionStatus",
-            "CompanyName", "TaxId", "Address", "City", "State", "ZipCode",
-            "Country", "PecMail", "CodiceDestinatario"
-        ];
-
-        await using var cmd = conn.CreateCommand();
-
-        if (config.Database.Provider is "pgsql")
-        {
-            var checks = string.Join("\n", extraColumns.Select(c =>
-                $"""
-                            IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='AspNetUsers' AND column_name='{c}') THEN
-                                ALTER TABLE "AspNetUsers" ADD COLUMN "{c}" TEXT;
-                            END IF;
-                """));
-            cmd.CommandText = $"""
-                DO $$
-                BEGIN
-                {checks}
-                END $$;
-                """;
-        }
-        else
-        {
-            cmd.CommandText = "PRAGMA table_info(AspNetUsers)";
-            var columns = new HashSet<string>();
-            using (var reader = await cmd.ExecuteReaderAsync())
-            {
-                while (await reader.ReadAsync())
-                    columns.Add(reader.GetString(1));
-            }
-
-            var alterStatements = extraColumns
-                .Where(c => !columns.Contains(c))
-                .Select(c => $"ALTER TABLE AspNetUsers ADD COLUMN {c} TEXT")
-                .ToList();
-
-            cmd.CommandText = string.Join("; ", alterStatements);
-        }
-
-        if (!string.IsNullOrEmpty(cmd.CommandText))
-            await cmd.ExecuteNonQueryAsync();
     }
 
     private static async Task CreateDataProtectionTableAsync(
