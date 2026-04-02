@@ -2,6 +2,8 @@
 
 ## In Development
 
+- fix: pass customer TaxId as a proper Stripe Tax ID instead of metadata; clean up metadata to only keep desk_user_id.
+
 ## v1.4.1 (2026-03-30)
 
 - new: header User-Agent sulle richieste API (`Invoicetronic-Desk/<versione>`).

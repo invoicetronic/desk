@@ -69,10 +69,7 @@ public class StripeService
                 Address = address,
                 Metadata = new Dictionary<string, string>
                 {
-                    ["desk_user_id"] = user.Id,
-                    ["tax_id"] = user.TaxId ?? "",
-                    ["pec_mail"] = user.PecMail ?? "",
-                    ["codice_destinatario"] = user.CodiceDestinatario ?? ""
+                    ["desk_user_id"] = user.Id
                 }
             };
 
@@ -89,12 +86,21 @@ public class StripeService
                 Address = address,
                 Metadata = new Dictionary<string, string>
                 {
-                    ["desk_user_id"] = user.Id,
-                    ["tax_id"] = user.TaxId ?? "",
-                    ["pec_mail"] = user.PecMail ?? "",
-                    ["codice_destinatario"] = user.CodiceDestinatario ?? ""
+                    ["desk_user_id"] = user.Id
                 }
             };
+
+            if (!string.IsNullOrEmpty(user.TaxId))
+            {
+                createOptions.TaxIdData =
+                [
+                    new CustomerTaxIdDataOptions
+                    {
+                        Type = "eu_vat",
+                        Value = user.TaxId
+                    }
+                ];
+            }
 
             var service = new CustomerService();
             return await service.CreateAsync(createOptions);
