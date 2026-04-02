@@ -11,16 +11,10 @@ namespace Desk.Areas.Identity.Pages.Account;
 public class RegisterModel(
     UserManager<DeskUser> userManager,
     SignInManager<DeskUser> signInManager,
-    EmailService emailService,
-    DeskConfig config) : PageModel
+    EmailService emailService) : PageModel
 {
     [BindProperty]
     public InputModel Input { get; set; } = new();
-
-    [BindProperty]
-    public BillingProfileModel? BillingProfile { get; set; }
-
-    public bool IsBillingEnabled => config.IsBillingEnabled;
 
     public string? ReturnUrl { get; set; }
     public string? ErrorMessage { get; set; }
@@ -48,20 +42,11 @@ public class RegisterModel(
     public void OnGet(string? returnUrl = null)
     {
         ReturnUrl = returnUrl ?? Url.Content("~/");
-        if (IsBillingEnabled)
-            BillingProfile = new();
     }
 
     public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
     {
         returnUrl ??= Url.Content("~/");
-
-        if (!IsBillingEnabled && BillingProfile is not null)
-        {
-            var billingKeys = typeof(BillingProfileModel).GetProperties().Select(p => p.Name).ToHashSet();
-            foreach (var key in ModelState.Keys.Where(billingKeys.Contains).ToList())
-                ModelState.Remove(key);
-        }
 
         if (!ModelState.IsValid) return Page();
 
@@ -71,20 +56,6 @@ public class RegisterModel(
             Email = Input.Email,
             DisplayName = Input.DisplayName
         };
-
-        if (IsBillingEnabled && BillingProfile is not null)
-        {
-            user.CompanyName = BillingProfile.CompanyName;
-            user.TaxId = BillingProfile.TaxId;
-            user.Address = BillingProfile.Address;
-            user.City = BillingProfile.City;
-            user.State = BillingProfile.State;
-            user.ZipCode = BillingProfile.ZipCode;
-            user.Country = BillingProfile.Country;
-            user.PecMail = BillingProfile.PecMail;
-            user.CodiceDestinatario = BillingProfile.CodiceDestinatario;
-            user.PhoneNumber = BillingProfile.PhoneNumber;
-        }
 
         var result = await userManager.CreateAsync(user, Input.Password);
 
