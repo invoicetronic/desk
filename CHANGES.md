@@ -2,6 +2,11 @@
 
 ## In Development
 
+- breaking: rimosso billing/Stripe da Desk; l'accesso è ora gestito tramite seat API.
+- new: controllo seat via API; redirect a pagina di errore se la chiave non ha un seat attivo.
+- chore: rimossa registrazione semplificata (campi fiscali, profilo billing).
+- chore: rimosse risorse .resx orfane relative a billing e profilo fiscale.
+
 ## v1.4.1 (2026-03-30)
 
 - new: header User-Agent sulle richieste API (`Invoicetronic-Desk/<versione>`).

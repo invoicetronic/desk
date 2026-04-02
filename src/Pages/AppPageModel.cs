@@ -59,8 +59,11 @@ public abstract class AppPageModel(
                     hasActiveSeat = status?.HasActiveSeat ?? false;
                     SessionManager.SetHasActiveSeat(hasActiveSeat.Value);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>()
+                        .CreateLogger<AppPageModel>();
+                    logger.LogWarning(ex, "Failed to check Desk seat status via API");
                     hasActiveSeat = false;
                 }
             }
