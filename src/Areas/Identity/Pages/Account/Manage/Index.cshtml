@@ -43,7 +43,7 @@
             <button type="submit" class="btn-brand btn-brand-primary">@L["Profile_SaveApiKey"]</button>
         </form>
 
-        @if (Model.AccountStatus is not null)
+        @if (Model.AccountStatus is not null && !Model.AccountStatus.IsSubKey)
         {
             <div style="margin-top: var(--space-6); padding-top: var(--space-5); border-top: 1px solid var(--color-border);">
                 <h3 style="font-size: var(--text-sm); margin-bottom: var(--space-4);">@L["Profile_AccountStatus"]</h3>

@@ -14,7 +14,7 @@
 
 <!-- Summary Cards -->
 <div class="desk-dashboard-grid">
-    @if (Model.AccountStatus is not null)
+    @if (Model.AccountStatus is not null && !Model.AccountStatus.IsSubKey)
     {
         <div class="desk-card">
             <div class="desk-card-header">
