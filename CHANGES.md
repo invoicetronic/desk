@@ -2,10 +2,12 @@
 
 ## In Development
 
-- breaking: rimosso billing/Stripe da Desk; l'accesso è ora gestito tramite seat API.
+- breaking: rimosso billing/Stripe da Desk; l'accesso cloud è ora gestito tramite seat API/Dashboard.
 - new: controllo seat via API; redirect a pagina di errore se la chiave non ha un seat attivo.
-- chore: rimossa registrazione semplificata (campi fiscali, profilo billing).
+- new: nascosti contatori operazioni/firme per utenti con chiave secondaria.
+- chore: semplificata registrazione e profilo (rimossi campi fiscali e billing).
 - chore: rimosse risorse .resx orfane relative a billing e profilo fiscale.
+- chore: nessun impatto su installazioni self-hosted (standalone o multi-utente).
 
 ## v1.4.1 (2026-03-30)
 
