@@ -18,11 +18,8 @@ public abstract class AppPageModel(
     protected SessionManager SessionManager { get; } = sessionManager;
     public DeskConfig Config { get; } = config;
 
-    public const int PreviewDays = 15;
-
     public List<Company> Companies { get; private set; } = [];
     public int? SelectedCompanyId => SessionManager.GetSelectedCompanyId();
-    public int? PreviewDaysLeft { get; private set; }
 
     public override async Task OnPageHandlerExecutionAsync(
         PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
@@ -50,28 +47,31 @@ public abstract class AppPageModel(
             return;
         }
 
-        // Subscription guard: require active subscription or preview period when billing is enabled
-        if (Config.IsBillingEnabled)
+        // Seat guard: check if API key has an active Desk seat (hosted mode only)
+        if (!Config.IsStandalone && apiKey is not null)
         {
-            var um = context.HttpContext.RequestServices.GetRequiredService<UserManager<DeskUser>>();
-            var user = await um.GetUserAsync(context.HttpContext.User);
-
-            if (user?.SubscriptionStatus is "active" or "trialing")
+            var hasActiveSeat = SessionManager.GetHasActiveSeat();
+            if (hasActiveSeat is null)
             {
-                // Paid user, no banner
+                try
+                {
+                    var status = await ApiManager.GetStatus();
+                    hasActiveSeat = status?.HasActiveSeat ?? false;
+                    SessionManager.SetHasActiveSeat(hasActiveSeat.Value);
+                }
+                catch (Exception ex)
+                {
+                    var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>()
+                        .CreateLogger<AppPageModel>();
+                    logger.LogWarning(ex, "Failed to check Desk seat status via API");
+                    hasActiveSeat = false;
+                }
             }
-            else
+
+            if (!hasActiveSeat.Value)
             {
-                var daysLeft = PreviewDays - (int)(DateTime.UtcNow - user!.CreatedAt).TotalDays;
-                if (daysLeft > 0)
-                {
-                    PreviewDaysLeft = daysLeft;
-                }
-                else
-                {
-                    context.Result = new RedirectToPageResult("/Billing/Subscribe");
-                    return;
-                }
+                context.Result = new RedirectToPageResult("/NoSeat");
+                return;
             }
         }
 

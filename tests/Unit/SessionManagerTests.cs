@@ -74,4 +74,40 @@ public class SessionManagerTests
 
         Assert.Null(manager.GetSelectedCompanyId());
     }
+
+    [Fact]
+    public void GetHasActiveSeat_ReturnsNull_WhenNotSet()
+    {
+        var manager = CreateManager();
+
+        Assert.Null(manager.GetHasActiveSeat());
+    }
+
+    [Fact]
+    public void SetAndGetHasActiveSeat_RoundTrips_True()
+    {
+        var manager = CreateManager();
+        manager.SetHasActiveSeat(true);
+
+        Assert.True(manager.GetHasActiveSeat());
+    }
+
+    [Fact]
+    public void SetAndGetHasActiveSeat_RoundTrips_False()
+    {
+        var manager = CreateManager();
+        manager.SetHasActiveSeat(false);
+
+        Assert.False(manager.GetHasActiveSeat());
+    }
+
+    [Fact]
+    public void ClearHasActiveSeat_RemovesValue()
+    {
+        var manager = CreateManager();
+        manager.SetHasActiveSeat(true);
+        manager.ClearHasActiveSeat();
+
+        Assert.Null(manager.GetHasActiveSeat());
+    }
 }

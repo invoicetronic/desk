@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Desk.Tests.Helpers;
 
-public class IntegrationApiHandler : HttpMessageHandler
+public class NoSeatApiHandler : HttpMessageHandler
 {
     protected override Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request, CancellationToken cancellationToken)
@@ -12,7 +12,7 @@ public class IntegrationApiHandler : HttpMessageHandler
 
         var (json, totalCount) = path switch
         {
-            "status" => ("""{"operation_left":0,"signature_left":0,"has_active_seat":true}""", 0),
+            "status" => ("""{"operation_left":0,"signature_left":0,"has_active_seat":false}""", 0),
             _ => ("[]", 0)
         };
 

@@ -21,33 +21,6 @@ public class EmailService(DeskConfig config, ILogger<EmailService> logger)
             });
     }
 
-    public async Task SendSubscriptionWelcomeAsync(string userEmail)
-    {
-        await SendTemplateEmailAsync(
-            userEmail,
-            "Invoicetronic Desk — Abbonamento attivo / Subscription active",
-            "SubscriptionWelcome",
-            new Dictionary<string, string> { ["{{UserEmail}}"] = userEmail });
-    }
-
-    public async Task SendSubscriptionAdminNotifyAsync(string userEmail, string eventType, string status)
-    {
-        if (string.IsNullOrEmpty(_smtp.NotifyEmail))
-            return;
-
-        await SendTemplateEmailAsync(
-            _smtp.NotifyEmail,
-            $"Invoicetronic Desk — {eventType}",
-            "SubscriptionNotifyAdmin",
-            new Dictionary<string, string>
-            {
-                ["{{UserEmail}}"] = userEmail,
-                ["{{EventType}}"] = eventType,
-                ["{{SubscriptionStatus}}"] = status,
-                ["{{EventDate}}"] = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss UTC")
-            });
-    }
-
     public virtual async Task SendRegistrationAdminNotifyAsync(string userEmail, string displayName)
     {
         if (string.IsNullOrEmpty(_smtp.NotifyEmail))
@@ -63,24 +36,6 @@ public class EmailService(DeskConfig config, ILogger<EmailService> logger)
                 ["{{DisplayName}}"] = displayName,
                 ["{{EventDate}}"] = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss UTC")
             });
-    }
-
-    public async Task SendSubscriptionCanceledAsync(string userEmail)
-    {
-        await SendTemplateEmailAsync(
-            userEmail,
-            "Invoicetronic Desk — Abbonamento annullato / Subscription canceled",
-            "SubscriptionCanceled",
-            new Dictionary<string, string> { ["{{UserEmail}}"] = userEmail });
-    }
-
-    public async Task SendPaymentFailedAsync(string userEmail)
-    {
-        await SendTemplateEmailAsync(
-            userEmail,
-            "Invoicetronic Desk — Pagamento non riuscito / Payment failed",
-            "SubscriptionPaymentFailed",
-            new Dictionary<string, string> { ["{{UserEmail}}"] = userEmail });
     }
 
     private async Task SendTemplateEmailAsync(string to, string subject, string templateName, Dictionary<string, string> replacements)
