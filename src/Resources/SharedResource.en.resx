@@ -57,12 +57,13 @@
   <!-- Profile -->
   <data name="Profile_Title"><value>Profile</value></data>
   <data name="Profile_ApiKey"><value>API Key</value></data>
-  <data name="Profile_ApiKeyHint"><value>Enter your Invoicetronic API key. You can get it from the &lt;a href="https://dashboard.invoicetronic.com" target="_blank"&gt;developer dashboard&lt;/a&gt;.</value></data>
+  <data name="Profile_ApiKeyHint"><value>Enter an Invoicetronic API key with an active Desk seat. If you don't have one yet, enable Desk from the &lt;a href="https://dashboard.invoicetronic.com/SubKeys" target="_blank"&gt;Keys section in the Dashboard&lt;/a&gt; — your primary API key includes a 15-day free trial.</value></data>
   <data name="Profile_SaveApiKey"><value>Save API Key</value></data>
   <data name="Profile_ApiKeyValid"><value>Valid API key. Operations left: {0}, Signatures left: {1}.</value></data>
   <data name="Profile_ApiKeyInvalid"><value>Invalid API key or API unreachable.</value></data>
+  <data name="Profile_ApiKeyNoSeat"><value>This API key is valid but does not have an active Desk seat. Enable Desk from the &lt;a href="https://dashboard.invoicetronic.com/SubKeys" target="_blank"&gt;Keys section in the Dashboard&lt;/a&gt; — your primary API key includes a 15-day free trial.</value></data>
   <data name="Profile_ApiKeySaved"><value>API key saved successfully.</value></data>
-  <data name="Profile_ApiKeyRequired"><value>To use the application, please configure your API key first.</value></data>
+  <data name="Profile_ApiKeyRequired"><value>Welcome to Desk! To get started, enter an Invoicetronic API key with an active Desk seat.</value></data>
   <data name="Profile_PersonalInfo"><value>Personal information</value></data>
   <data name="Profile_SaveProfile"><value>Save profile</value></data>
   <data name="Profile_ProfileSaved"><value>Profile updated successfully.</value></data>
@@ -213,8 +214,10 @@
   <data name="Footer_PoweredBy"><value>Powered by Invoicetronic</value></data>
 
   <!-- No Seat -->
-  <data name="NoSeat_Title"><value>No active Desk access</value></data>
-  <data name="NoSeat_Message"><value>This API key does not have an active Desk seat. Please contact your provider to enable Desk access, or use a different API key.</value></data>
+  <data name="NoSeat_Title"><value>No active Desk seat</value></data>
+  <data name="NoSeat_Message"><value>This API key does not have an active Desk seat. Please contact your provider to enable Desk, or use a different API key.</value></data>
+  <data name="NoSeat_MessageHosted"><value>This API key does not have an active Desk seat. Go to the Dashboard to enable it — your primary API key includes a 15-day free trial.</value></data>
+  <data name="NoSeat_GoToDashboard"><value>Go to Dashboard</value></data>
   <data name="NoSeat_ChangeKey"><value>Change API key</value></data>
 
   <!-- Error -->
