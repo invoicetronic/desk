@@ -2,6 +2,8 @@
 
 ## In Development
 
+## v1.5.0 (2026-04-07)
+
 - breaking: rimosso billing/Stripe da Desk; l'accesso cloud è ora gestito tramite seat API/Dashboard.
 - new: controllo seat via API; redirect a pagina di errore se la chiave non ha un seat attivo.
 - new: nascosti contatori operazioni/firme per utenti con chiave secondaria.
