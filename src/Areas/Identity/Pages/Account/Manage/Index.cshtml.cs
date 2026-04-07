@@ -94,6 +94,15 @@ public class IndexModel(
             return Page();
         }
 
+        // Block save if the key is valid but has no active Desk seat (hosted mode only)
+        if (!Config.IsStandalone && AccountStatus is { HasActiveSeat: false })
+        {
+            ErrorMessage = "Profile_ApiKeyNoSeat";
+            var existingKey = apiKeyProtector.UnprotectOrNull(user.ApiKey) ?? "";
+            sessionManager.SetApiKey(existingKey);
+            return Page();
+        }
+
         user.ApiKey = apiKeyProtector.Protect(ApiKeyInput);
         var result = await userManager.UpdateAsync(user);
 

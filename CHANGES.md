@@ -8,6 +8,9 @@
 - chore: semplificata registrazione e profilo (rimossi campi fiscali e billing).
 - chore: rimosse risorse .resx orfane relative a billing e profilo fiscale.
 - chore: nessun impatto su installazioni self-hosted (standalone o multi-utente).
+- fix: copy del profilo e della pagina NoSeat ora chiarisce che serve una API key con postazione Desk attiva; in modalità hosted la pagina NoSeat propone direttamente "Vai alla Dashboard".
+- fix: salvataggio API key nel profilo ora rifiuta una key valida ma senza postazione Desk (in modalità hosted), con messaggio dedicato e link alla sezione Chiavi della Dashboard.
+- fix: link alla Dashboard puntano direttamente alla sezione Chiavi (`/SubKeys`) per accorciare il flusso di abilitazione Desk.
 
 ## v1.4.1 (2026-03-30)
 
