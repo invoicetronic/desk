@@ -82,7 +82,7 @@ public class ProfileTests
     {
         var (model, handler, userManagerMock) = CreateModel();
         handler.WithResponse(HttpStatusCode.OK,
-            """{"operation_left": 100, "signature_left": 50}""");
+            """{"operation_left": 100, "signature_left": 50, "has_active_seat": true}""");
 
         var user = new DeskUser { Id = "1", Email = "test@test.com" };
         userManagerMock.Setup(m => m.GetUserAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>()))
@@ -95,6 +95,24 @@ public class ProfileTests
 
         userManagerMock.Verify(m => m.UpdateAsync(
             It.Is<DeskUser>(u => u.ApiKey != null && u.ApiKey.StartsWith("ENC:"))), Times.Once);
+    }
+
+    [Fact]
+    public async Task SaveApiKey_ReturnsError_WhenKeyHasNoActiveSeat()
+    {
+        var (model, handler, userManagerMock) = CreateModel();
+        handler.WithResponse(HttpStatusCode.OK,
+            """{"operation_left": 100, "signature_left": 50, "has_active_seat": false}""");
+
+        var user = new DeskUser { Id = "1", Email = "test@test.com" };
+        userManagerMock.Setup(m => m.GetUserAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>()))
+            .ReturnsAsync(user);
+
+        model.ApiKeyInput = "itk_live_no_seat";
+        _ = await model.OnPostSaveApiKeyAsync();
+
+        Assert.Equal("Profile_ApiKeyNoSeat", model.ErrorMessage);
+        userManagerMock.Verify(m => m.UpdateAsync(It.IsAny<DeskUser>()), Times.Never);
     }
 
     [Fact]
@@ -158,7 +176,7 @@ public class ProfileTests
         var config = new DeskConfig { ApiUrl = "https://api.test.com" };
         var handler = new MockHttpMessageHandler()
             .WithResponse(HttpStatusCode.OK,
-                """{"operation_left": 100, "signature_left": 50}""");
+                """{"operation_left": 100, "signature_left": 50, "has_active_seat": true}""");
         var httpClient = new HttpClient(handler);
         var httpContext = new DefaultHttpContext { Session = new TestSession() };
         var accessor = new HttpContextAccessor { HttpContext = httpContext };

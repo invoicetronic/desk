@@ -2,6 +2,18 @@
 
 ## In Development
 
+## v1.5.0 (2026-04-07)
+
+- breaking: rimosso billing/Stripe da Desk; l'accesso cloud è ora gestito tramite seat API/Dashboard.
+- new: controllo seat via API; redirect a pagina di errore se la chiave non ha un seat attivo.
+- new: nascosti contatori operazioni/firme per utenti con chiave secondaria.
+- chore: semplificata registrazione e profilo (rimossi campi fiscali e billing).
+- chore: rimosse risorse .resx orfane relative a billing e profilo fiscale.
+- chore: nessun impatto su installazioni self-hosted (standalone o multi-utente).
+- fix: copy del profilo e della pagina NoSeat ora chiarisce che serve una API key con postazione Desk attiva; in modalità hosted la pagina NoSeat propone direttamente "Vai alla Dashboard".
+- fix: salvataggio API key nel profilo ora rifiuta una key valida ma senza postazione Desk (in modalità hosted), con messaggio dedicato e link alla sezione Chiavi della Dashboard.
+- fix: link alla Dashboard puntano direttamente alla sezione Chiavi (`/SubKeys`) per accorciare il flusso di abilitazione Desk.
+
 ## v1.4.2 (2026-04-02)
 
 - fix: pass customer TaxId as a proper Stripe Tax ID instead of metadata; clean up metadata to only keep desk_user_id.
