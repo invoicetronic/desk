@@ -2,6 +2,8 @@
 
 ## In Development
 
+- chore: removed orphaned billing files left over from the v1.5.0 billing removal (`BillingProfileModel.cs`, `Countries.cs`, and the four `Subscription*.html` mail templates). No functional change — these files were no longer referenced anywhere in the codebase.
+
 ## v1.5.1 (2026-04-08)
 
 - new: User-Agent header now reports the deployment mode (`standalone`, `self-hosted`, `hosted`) so the API can distinguish official hosted Desk traffic from self-hosted instances. The hosted deployment opts in via the `DESK_HOSTED=true` environment variable.
