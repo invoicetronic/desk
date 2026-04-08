@@ -17,6 +17,9 @@ public class DeskConfig
     public SmtpConfig Smtp { get; set; } = new();
 
     public bool IsStandalone => !string.IsNullOrEmpty(ApiKey);
+
+    public bool IsHosted =>
+        string.Equals(Environment.GetEnvironmentVariable("DESK_HOSTED"), "true", StringComparison.OrdinalIgnoreCase);
 }
 
 public class DatabaseConfig

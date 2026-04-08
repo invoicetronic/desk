@@ -119,4 +119,79 @@ public class ApiClientTests
         Assert.NotNull(result);
         Assert.Equal(expected, result);
     }
+
+    private static HttpClient BuildClientForUserAgent(DeskConfig config)
+    {
+        var handler = new MockHttpMessageHandler().WithResponse(HttpStatusCode.OK, "{}");
+        var httpClient = new HttpClient(handler);
+        var sessionConfig = new DeskConfig { ApiKey = "test-key" };
+        var httpContext = new DefaultHttpContext { Session = new TestSession() };
+        var accessor = new HttpContextAccessor { HttpContext = httpContext };
+        var sessionManager = new SessionManager(accessor, sessionConfig);
+        _ = new ApiClient(config, sessionManager, httpClient);
+        return httpClient;
+    }
+
+    [Fact]
+    public void UserAgent_StandaloneMode_HasStandaloneToken()
+    {
+        var original = Environment.GetEnvironmentVariable("DESK_HOSTED");
+        try
+        {
+            Environment.SetEnvironmentVariable("DESK_HOSTED", null);
+            var config = new DeskConfig { ApiUrl = "https://api.test.com", ApiKey = "key" };
+
+            var httpClient = BuildClientForUserAgent(config);
+
+            var ua = httpClient.DefaultRequestHeaders.UserAgent.ToString();
+            Assert.StartsWith("Invoicetronic-Desk/", ua);
+            Assert.Contains("(standalone)", ua);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("DESK_HOSTED", original);
+        }
+    }
+
+    [Fact]
+    public void UserAgent_HostedMode_HasHostedToken()
+    {
+        var original = Environment.GetEnvironmentVariable("DESK_HOSTED");
+        try
+        {
+            Environment.SetEnvironmentVariable("DESK_HOSTED", "true");
+            var config = new DeskConfig { ApiUrl = "https://api.test.com" };
+
+            var httpClient = BuildClientForUserAgent(config);
+
+            var ua = httpClient.DefaultRequestHeaders.UserAgent.ToString();
+            Assert.StartsWith("Invoicetronic-Desk/", ua);
+            Assert.Contains("(hosted)", ua);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("DESK_HOSTED", original);
+        }
+    }
+
+    [Fact]
+    public void UserAgent_SelfHostedMode_HasSelfHostedToken()
+    {
+        var original = Environment.GetEnvironmentVariable("DESK_HOSTED");
+        try
+        {
+            Environment.SetEnvironmentVariable("DESK_HOSTED", null);
+            var config = new DeskConfig { ApiUrl = "https://api.test.com" };
+
+            var httpClient = BuildClientForUserAgent(config);
+
+            var ua = httpClient.DefaultRequestHeaders.UserAgent.ToString();
+            Assert.StartsWith("Invoicetronic-Desk/", ua);
+            Assert.Contains("(self-hosted)", ua);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("DESK_HOSTED", original);
+        }
+    }
 }
