@@ -2,6 +2,8 @@
 
 ## In Development
 
+## v1.5.1 (2026-04-08)
+
 - new: User-Agent header now reports the deployment mode (`standalone`, `self-hosted`, `hosted`) so the API can distinguish official hosted Desk traffic from self-hosted instances. The hosted deployment opts in via the `DESK_HOSTED=true` environment variable.
 
 ## v1.5.0 (2026-04-07)
