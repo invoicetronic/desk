@@ -51,7 +51,11 @@ services:
       - "8080:8080"
     volumes:
       - ./desk.yml:/app/desk.yml
-      - ./logs:/app/logs    # daily rolling file logs (see Logging section)
+      - type: bind
+        source: ./logs        # daily rolling file logs (see Logging section)
+        target: /app/logs
+        bind:
+          create_host_path: true
 ```
 
 ```yaml
@@ -90,8 +94,16 @@ services:
       - "8080:8080"
     volumes:
       - ./desk.yml:/app/desk.yml    # optional
-      - ./data:/app/data            # persist user database
-      - ./logs:/app/logs            # daily rolling file logs (see Logging section)
+      - type: bind
+        source: ./data              # persist user database
+        target: /app/data
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./logs              # daily rolling file logs (see Logging section)
+        target: /app/logs
+        bind:
+          create_host_path: true
 ```
 
 ```bash
