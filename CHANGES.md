@@ -2,6 +2,8 @@
 
 ## In Development
 
+## v1.5.2 (2026-04-09)
+
 - fix: post-registration redirect now lands on the profile page with the welcome banner, so new users immediately see that an API key with an active Desk seat is required to start using Desk.
 - fix: localize the "API key is required" inline error in the profile page (was a hard-coded English string).
 - new: log API key save rejections (empty input, invalid/unreachable, no active seat) at Information level with the user id/email so onboarding drop-offs can be diagnosed from the logs.
