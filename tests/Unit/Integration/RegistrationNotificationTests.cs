@@ -53,7 +53,9 @@ public class RegistrationNotificationTests : IClassFixture<RegistrationNotificat
         var response = await _client.SendAsync(request);
 
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-        Assert.Contains("/Identity/Account/Manage", response.Headers.Location?.OriginalString ?? "");
+        var location = response.Headers.Location?.OriginalString ?? "";
+        Assert.Contains("/Identity/Account/Manage", location);
+        Assert.Contains("apiKeyRequired=true", location);
 
         var spy = _factory.EmailSpy;
         Assert.True(spy.RegistrationNotifyCalled, "SendRegistrationAdminNotifyAsync should have been called");

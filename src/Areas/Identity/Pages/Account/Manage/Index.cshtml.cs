@@ -76,7 +76,9 @@ public class IndexModel(
 
         if (string.IsNullOrWhiteSpace(ApiKeyInput))
         {
-            ErrorMessage = "API key is required.";
+            logger.LogInformation("API key save rejected for user {UserId} ({Email}): empty input",
+                user.Id, user.Email);
+            ErrorMessage = "Profile_ApiKeyMissing";
             return Page();
         }
 
@@ -86,8 +88,10 @@ public class IndexModel(
             sessionManager.SetApiKey(ApiKeyInput);
             AccountStatus = await apiManager.GetStatus();
         }
-        catch
+        catch (Exception ex)
         {
+            logger.LogInformation(ex, "API key save rejected for user {UserId} ({Email}): validation failed (invalid key or API unreachable)",
+                user.Id, user.Email);
             ErrorMessage = "Profile_ApiKeyInvalid";
             var existingKey = apiKeyProtector.UnprotectOrNull(user.ApiKey) ?? "";
             sessionManager.SetApiKey(existingKey);
@@ -97,6 +101,8 @@ public class IndexModel(
         // Block save if the key is valid but has no active Desk seat (hosted mode only)
         if (!Config.IsStandalone && AccountStatus is { HasActiveSeat: false })
         {
+            logger.LogInformation("API key save rejected for user {UserId} ({Email}): valid key but no active Desk seat",
+                user.Id, user.Email);
             ErrorMessage = "Profile_ApiKeyNoSeat";
             var existingKey = apiKeyProtector.UnprotectOrNull(user.ApiKey) ?? "";
             sessionManager.SetApiKey(existingKey);

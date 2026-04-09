@@ -98,6 +98,22 @@ public class ProfileTests
     }
 
     [Fact]
+    public async Task SaveApiKey_ReturnsLocalizedError_WhenInputIsEmpty()
+    {
+        var (model, _, userManagerMock) = CreateModel();
+
+        var user = new DeskUser { Id = "1", Email = "test@test.com" };
+        userManagerMock.Setup(m => m.GetUserAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>()))
+            .ReturnsAsync(user);
+
+        model.ApiKeyInput = "   ";
+        _ = await model.OnPostSaveApiKeyAsync();
+
+        Assert.Equal("Profile_ApiKeyMissing", model.ErrorMessage);
+        userManagerMock.Verify(m => m.UpdateAsync(It.IsAny<DeskUser>()), Times.Never);
+    }
+
+    [Fact]
     public async Task SaveApiKey_ReturnsError_WhenKeyHasNoActiveSeat()
     {
         var (model, handler, userManagerMock) = CreateModel();

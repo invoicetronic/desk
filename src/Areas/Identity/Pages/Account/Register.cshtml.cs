@@ -63,7 +63,7 @@ public class RegisterModel(
         {
             _ = emailService.SendRegistrationAdminNotifyAsync(user.Email!, user.DisplayName ?? "");
             await signInManager.SignInAsync(user, isPersistent: false);
-            return LocalRedirect("/Identity/Account/Manage");
+            return LocalRedirect("/Identity/Account/Manage?apiKeyRequired=true");
         }
 
         foreach (var error in result.Errors)
