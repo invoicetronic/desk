@@ -40,3 +40,9 @@ desk:
 
   # Localization — if omitted, the browser's Accept-Language header is used (default: it)
   locale: it                   # it | en
+
+  # Logging — daily rolling file logs. If omitted, the defaults below are used.
+  # logging:
+  #   directory: logs            # bind-mount to persist on host (./logs:/app/logs)
+  #   retained_files: 30         # daily files kept before rotation
+  #   min_level: Information     # Verbose | Debug | Information | Warning | Error | Fatal
