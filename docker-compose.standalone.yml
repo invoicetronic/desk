@@ -6,11 +6,5 @@ services:
       - "8080:8080"
     volumes:
       - ./desk.yml:/app/desk.yml
+      - ./logs:/app/logs       # daily rolling log files (mkdir before first `up`)
       - ./custom:/app/custom
-      # ./logs is app-managed: use long-syntax with create_host_path so
-      # docker compose creates it on first up if missing.
-      - type: bind
-        source: ./logs
-        target: /app/logs       # daily rolling log files
-        bind:
-          create_host_path: true

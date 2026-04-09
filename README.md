@@ -51,12 +51,10 @@ services:
       - "8080:8080"
     volumes:
       - ./desk.yml:/app/desk.yml
-      - type: bind
-        source: ./logs        # daily rolling file logs (see Logging section)
-        target: /app/logs
-        bind:
-          create_host_path: true
+      - ./logs:/app/logs    # daily rolling file logs (see Logging section)
 ```
+
+> **Important:** create the `./logs` directory on the host **before** the first `docker compose up` (e.g. `mkdir logs`). Docker Compose validates bind mount sources at startup and refuses to create the container if the host path is missing.
 
 ```yaml
 # desk.yml
@@ -94,17 +92,11 @@ services:
       - "8080:8080"
     volumes:
       - ./desk.yml:/app/desk.yml    # optional
-      - type: bind
-        source: ./data              # persist user database
-        target: /app/data
-        bind:
-          create_host_path: true
-      - type: bind
-        source: ./logs              # daily rolling file logs (see Logging section)
-        target: /app/logs
-        bind:
-          create_host_path: true
+      - ./data:/app/data            # persist user database
+      - ./logs:/app/logs            # daily rolling file logs (see Logging section)
 ```
+
+> **Important:** create the `./data` and `./logs` directories on the host **before** the first `docker compose up` (e.g. `mkdir data logs`). Docker Compose validates bind mount sources at startup and refuses to create the container if the host path is missing.
 
 ```bash
 docker compose up -d

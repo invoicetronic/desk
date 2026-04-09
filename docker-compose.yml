@@ -6,16 +6,6 @@ services:
       - "8080:8080"
     volumes:
       - ./desk.yml:/app/desk.yml
+      - ./data:/app/data       # SQLite DB persisted on host (mkdir before first `up`)
+      - ./logs:/app/logs       # daily rolling log files (mkdir before first `up`)
       - ./custom:/app/custom
-      # ./data and ./logs are app-managed: use long-syntax with create_host_path
-      # so docker compose creates them on first up if missing.
-      - type: bind
-        source: ./data
-        target: /app/data       # SQLite DB persisted on host (data/desk.db)
-        bind:
-          create_host_path: true
-      - type: bind
-        source: ./logs
-        target: /app/logs       # daily rolling log files
-        bind:
-          create_host_path: true
