@@ -197,6 +197,12 @@ desk:
 
   # Language — if omitted, auto-detected from browser
   # locale: it    # it | en
+
+  # Logging — daily rolling file logs (see Logging section below)
+  # logging:
+  #   directory: logs            # bind-mount ./logs:/app/logs to persist on host
+  #   retained_files: 30         # daily files kept before rotation
+  #   min_level: Information     # Verbose | Debug | Information | Warning | Error | Fatal
 ```
 
 Environment variables override YAML values using the `Desk__` prefix (e.g., `Desk__database__connection_string`).
