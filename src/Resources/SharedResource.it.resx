@@ -64,6 +64,7 @@
   <data name="Profile_ApiKeyNoSeat"><value>Questa API key è valida ma non ha una postazione Desk attiva. Abilita Desk dalla &lt;a href="https://dashboard.invoicetronic.com/SubKeys" target="_blank"&gt;sezione Chiavi della Dashboard&lt;/a&gt; — la chiave API principale include 15 giorni di prova gratuita.</value></data>
   <data name="Profile_ApiKeySaved"><value>API key salvata con successo.</value></data>
   <data name="Profile_ApiKeyRequired"><value>Benvenuto in Desk! Per iniziare, inserisci una API key Invoicetronic con postazione Desk attiva.</value></data>
+  <data name="Profile_ApiKeyMissing"><value>L'API key è obbligatoria.</value></data>
   <data name="Profile_PersonalInfo"><value>Informazioni personali</value></data>
   <data name="Profile_SaveProfile"><value>Salva profilo</value></data>
   <data name="Profile_ProfileSaved"><value>Profilo aggiornato con successo.</value></data>
