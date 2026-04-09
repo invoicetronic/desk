@@ -15,6 +15,7 @@ public class DeskConfig
     public string? Locale { get; set; }
 
     public SmtpConfig Smtp { get; set; } = new();
+    public LoggingConfig Logging { get; set; } = new();
 
     public bool IsStandalone => !string.IsNullOrEmpty(ApiKey);
 
@@ -49,6 +50,17 @@ public class SmtpConfig
     public bool IsConfigured =>
         !string.IsNullOrEmpty(Host) &&
         !string.IsNullOrEmpty(SenderEmail);
+}
+
+public class LoggingConfig
+{
+    public string? Directory { get; set; } = "logs";
+
+    [ConfigurationKeyName("retained_files")]
+    public int RetainedFiles { get; set; } = 30;
+
+    [ConfigurationKeyName("min_level")]
+    public string MinLevel { get; set; } = "Information";
 }
 
 public class BrandingConfig

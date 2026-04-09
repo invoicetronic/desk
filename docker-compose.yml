@@ -7,4 +7,5 @@ services:
     volumes:
       - ./desk.yml:/app/desk.yml
       - ./data:/app/data       # SQLite DB persisted on host (data/desk.db)
+      - ./logs:/app/logs       # daily rolling log files
       - ./custom:/app/custom

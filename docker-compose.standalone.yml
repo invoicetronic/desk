@@ -6,4 +6,5 @@ services:
       - "8080:8080"
     volumes:
       - ./desk.yml:/app/desk.yml
+      - ./logs:/app/logs       # daily rolling log files
       - ./custom:/app/custom

@@ -51,6 +51,7 @@ services:
       - "8080:8080"
     volumes:
       - ./desk.yml:/app/desk.yml
+      - ./logs:/app/logs    # daily rolling file logs (see Logging section)
 ```
 
 ```yaml
@@ -90,6 +91,7 @@ services:
     volumes:
       - ./desk.yml:/app/desk.yml    # optional
       - ./data:/app/data            # persist user database
+      - ./logs:/app/logs            # daily rolling file logs (see Logging section)
 ```
 
 ```bash
@@ -346,6 +348,26 @@ Desk has no billing logic — it's a pure operational frontend. Authorization is
 | Database | SQLite (default) / PostgreSQL |
 | Config | YAML (`desk.yml`) |
 | Container | Docker multi-platform (amd64/arm64) |
+
+## Logging
+
+In production, Desk writes daily rolling log files under `logs/` and keeps the last 30 days. The Docker compose files bind-mount `./logs:/app/logs` by default, so on the host you can:
+
+```bash
+tail -f logs/$(date +%Y%m%d).log
+```
+
+To change the path, retention or verbosity, add a `logging:` section to `desk.yml`:
+
+```yaml
+desk:
+  logging:
+    directory: logs            # path relative to the working directory
+    retained_files: 30         # daily files kept before rotation
+    min_level: Information     # Verbose | Debug | Information | Warning | Error | Fatal
+```
+
+All keys are optional. Errors and warnings are always echoed to `docker logs` as well, so you can spot problems at a glance with `docker logs <container>`.
 
 ## Health check
 
