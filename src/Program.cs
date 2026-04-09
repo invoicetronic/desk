@@ -223,9 +223,9 @@ finally
 static Logger BuildLogger(IHostEnvironment env, DeskConfig config)
 {
     const string consoleTemplate =
-        "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}";
+        "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
     const string fileTemplate =
-        "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}";
+        "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
     var minLevel = Enum.TryParse<LogEventLevel>(config.Logging.MinLevel, ignoreCase: true, out var parsed)
         ? parsed
