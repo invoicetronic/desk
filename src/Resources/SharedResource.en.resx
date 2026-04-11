@@ -57,13 +57,13 @@
   <!-- Profile -->
   <data name="Profile_Title"><value>Profile</value></data>
   <data name="Profile_ApiKey"><value>API Key</value></data>
-  <data name="Profile_ApiKeyHint"><value>Enter an Invoicetronic API key with an active Desk seat. If you don't have one yet, enable Desk from the &lt;a href="https://dashboard.invoicetronic.com/SubKeys" target="_blank"&gt;Keys section in the Dashboard&lt;/a&gt; — your primary API key includes a 15-day free trial.</value></data>
+  <data name="Profile_ApiKeyHint"><value>Enter an Invoicetronic API key. Sandbox (test) keys always work without an active Desk seat — use one to try Desk with no commitment and no time limit. Live (production) keys require an active Desk seat, which you can enable from the &lt;a href="https://dashboard.invoicetronic.com/SubKeys" target="_blank"&gt;Keys section in the Dashboard&lt;/a&gt;.</value></data>
   <data name="Profile_SaveApiKey"><value>Save API Key</value></data>
   <data name="Profile_ApiKeyValid"><value>Valid API key. Operations left: {0}, Signatures left: {1}.</value></data>
   <data name="Profile_ApiKeyInvalid"><value>Invalid API key or API unreachable.</value></data>
-  <data name="Profile_ApiKeyNoSeat"><value>This API key is valid but does not have an active Desk seat. Enable Desk from the &lt;a href="https://dashboard.invoicetronic.com/SubKeys" target="_blank"&gt;Keys section in the Dashboard&lt;/a&gt; — your primary API key includes a 15-day free trial.</value></data>
+  <data name="Profile_ApiKeyNoSeat"><value>This live API key is valid but does not have an active Desk seat. Enable Desk from the &lt;a href="https://dashboard.invoicetronic.com/SubKeys" target="_blank"&gt;Keys section in the Dashboard&lt;/a&gt;. Alternatively, you can use a sandbox (test) key to try Desk without a seat.</value></data>
   <data name="Profile_ApiKeySaved"><value>API key saved successfully.</value></data>
-  <data name="Profile_ApiKeyRequired"><value>Welcome to Desk! To get started, enter an Invoicetronic API key with an active Desk seat.</value></data>
+  <data name="Profile_ApiKeyRequired"><value>Welcome to Desk! To get started, enter an Invoicetronic API key. A sandbox (test) key is enough to try Desk with no commitment; to use it in production you need a live key with an active Desk seat.</value></data>
   <data name="Profile_ApiKeyMissing"><value>API key is required.</value></data>
   <data name="Profile_PersonalInfo"><value>Personal information</value></data>
   <data name="Profile_SaveProfile"><value>Save profile</value></data>
@@ -217,7 +217,7 @@
   <!-- No Seat -->
   <data name="NoSeat_Title"><value>No active Desk seat</value></data>
   <data name="NoSeat_Message"><value>This API key does not have an active Desk seat. Please contact your provider to enable Desk, or use a different API key.</value></data>
-  <data name="NoSeat_MessageHosted"><value>This API key does not have an active Desk seat. Go to the Dashboard to enable it — your primary API key includes a 15-day free trial.</value></data>
+  <data name="NoSeat_MessageHosted"><value>This live API key does not have an active Desk seat. Go to the Dashboard to enable it. Alternatively, you can use a sandbox (test) key to try Desk without a seat.</value></data>
   <data name="NoSeat_GoToDashboard"><value>Go to Dashboard</value></data>
   <data name="NoSeat_ChangeKey"><value>Change API key</value></data>
 

@@ -47,8 +47,9 @@ public abstract class AppPageModel(
             return;
         }
 
-        // Seat guard: check if API key has an active Desk seat (hosted mode only)
-        if (!Config.IsStandalone && apiKey is not null)
+        // Seat guard: check if API key has an active Desk seat (hosted mode only).
+        // Sandbox keys (_test_) are exempt — only live keys require a seat.
+        if (!Config.IsStandalone && apiKey is not null && !ApiKeyProtector.IsSandbox(apiKey))
         {
             var hasActiveSeat = SessionManager.GetHasActiveSeat();
             if (hasActiveSeat is null)

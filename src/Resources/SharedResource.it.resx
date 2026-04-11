@@ -57,13 +57,13 @@
   <!-- Profile -->
   <data name="Profile_Title"><value>Profilo</value></data>
   <data name="Profile_ApiKey"><value>API Key</value></data>
-  <data name="Profile_ApiKeyHint"><value>Inserisci una API key Invoicetronic con postazione Desk attiva. Se non ne hai ancora una, abilita Desk dalla &lt;a href="https://dashboard.invoicetronic.com/SubKeys" target="_blank"&gt;sezione Chiavi della Dashboard&lt;/a&gt; — la chiave API principale include 15 giorni di prova gratuita.</value></data>
+  <data name="Profile_ApiKeyHint"><value>Inserisci una API key Invoicetronic. Le chiavi sandbox (test) funzionano sempre, senza bisogno di una postazione Desk: usale per provare Desk senza impegno e senza scadenza. Le chiavi live (produzione) richiedono invece una postazione Desk attiva, che puoi abilitare dalla &lt;a href="https://dashboard.invoicetronic.com/SubKeys" target="_blank"&gt;sezione Chiavi della Dashboard&lt;/a&gt;.</value></data>
   <data name="Profile_SaveApiKey"><value>Salva API Key</value></data>
   <data name="Profile_ApiKeyValid"><value>API key valida. Operazioni rimaste: {0}, Firme rimaste: {1}.</value></data>
   <data name="Profile_ApiKeyInvalid"><value>API key non valida o API non raggiungibile.</value></data>
-  <data name="Profile_ApiKeyNoSeat"><value>Questa API key è valida ma non ha una postazione Desk attiva. Abilita Desk dalla &lt;a href="https://dashboard.invoicetronic.com/SubKeys" target="_blank"&gt;sezione Chiavi della Dashboard&lt;/a&gt; — la chiave API principale include 15 giorni di prova gratuita.</value></data>
+  <data name="Profile_ApiKeyNoSeat"><value>Questa API key live è valida ma non ha una postazione Desk attiva. Abilita Desk dalla &lt;a href="https://dashboard.invoicetronic.com/SubKeys" target="_blank"&gt;sezione Chiavi della Dashboard&lt;/a&gt;. In alternativa puoi usare una chiave sandbox (test) per provare Desk senza una postazione.</value></data>
   <data name="Profile_ApiKeySaved"><value>API key salvata con successo.</value></data>
-  <data name="Profile_ApiKeyRequired"><value>Benvenuto in Desk! Per iniziare, inserisci una API key Invoicetronic con postazione Desk attiva.</value></data>
+  <data name="Profile_ApiKeyRequired"><value>Benvenuto in Desk! Per iniziare, inserisci una API key Invoicetronic. Una chiave sandbox (test) è sufficiente per provare Desk senza impegno; per usarlo in produzione serve una chiave live con postazione Desk attiva.</value></data>
   <data name="Profile_ApiKeyMissing"><value>L'API key è obbligatoria.</value></data>
   <data name="Profile_PersonalInfo"><value>Informazioni personali</value></data>
   <data name="Profile_SaveProfile"><value>Salva profilo</value></data>
@@ -217,7 +217,7 @@
   <!-- No Seat -->
   <data name="NoSeat_Title"><value>Postazione Desk non attiva</value></data>
   <data name="NoSeat_Message"><value>Questa chiave API non ha una postazione Desk attiva. Contatta il tuo fornitore per abilitare Desk, oppure utilizza una chiave API diversa.</value></data>
-  <data name="NoSeat_MessageHosted"><value>Questa chiave API non ha una postazione Desk attiva. Vai alla Dashboard per abilitarla — la chiave API principale include 15 giorni di prova gratuita.</value></data>
+  <data name="NoSeat_MessageHosted"><value>Questa chiave API live non ha una postazione Desk attiva. Vai alla Dashboard per abilitarla. In alternativa puoi usare una chiave sandbox (test) per provare Desk senza una postazione.</value></data>
   <data name="NoSeat_GoToDashboard"><value>Vai alla Dashboard</value></data>
   <data name="NoSeat_ChangeKey"><value>Cambia chiave API</value></data>
 

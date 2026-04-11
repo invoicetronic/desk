@@ -114,8 +114,10 @@ public class ProfileTests
     }
 
     [Fact]
-    public async Task SaveApiKey_ReturnsError_WhenKeyHasNoActiveSeat()
+    public async Task SaveApiKey_ReturnsError_WhenLiveKeyHasNoActiveSeat()
     {
+        // Live keys (containing "_live_") still require an active Desk seat —
+        // this is the counterpart to SaveApiKey_AcceptsSandboxKey_EvenWithoutActiveSeat.
         var (model, handler, userManagerMock) = CreateModel();
         handler.WithResponse(HttpStatusCode.OK,
             """{"operation_left": 100, "signature_left": 50, "has_active_seat": false}""");
@@ -129,6 +131,30 @@ public class ProfileTests
 
         Assert.Equal("Profile_ApiKeyNoSeat", model.ErrorMessage);
         userManagerMock.Verify(m => m.UpdateAsync(It.IsAny<DeskUser>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task SaveApiKey_AcceptsSandboxKey_EvenWithoutActiveSeat()
+    {
+        // Sandbox keys (containing "_test_") must not require a Desk seat —
+        // only live keys do. The API responds with has_active_seat=false but
+        // the save should still succeed because the key is sandbox.
+        var (model, handler, userManagerMock) = CreateModel();
+        handler.WithResponse(HttpStatusCode.OK,
+            """{"operation_left": 100, "signature_left": 50, "has_active_seat": false}""");
+
+        var user = new DeskUser { Id = "1", Email = "test@test.com" };
+        userManagerMock.Setup(m => m.GetUserAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>()))
+            .ReturnsAsync(user);
+        userManagerMock.Setup(m => m.UpdateAsync(It.IsAny<DeskUser>()))
+            .ReturnsAsync(IdentityResult.Success);
+
+        model.ApiKeyInput = "itk_test_sandbox_key";
+        _ = await model.OnPostSaveApiKeyAsync();
+
+        Assert.Null(model.ErrorMessage);
+        userManagerMock.Verify(m => m.UpdateAsync(
+            It.Is<DeskUser>(u => u.ApiKey != null && u.ApiKey.StartsWith("ENC:"))), Times.Once);
     }
 
     [Fact]

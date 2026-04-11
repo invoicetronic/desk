@@ -266,9 +266,6 @@ select.desk-input {
     padding: var(--space-3) var(--space-4);
     border-radius: var(--radius-md);
     font-size: var(--text-sm);
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-3);
 }
 .desk-alert-success { background: var(--color-success-bg); color: var(--color-success); border-left: 3px solid var(--color-success); }
 .desk-alert-danger  { background: var(--color-danger-bg);  color: var(--color-danger);  border-left: 3px solid var(--color-danger);  }

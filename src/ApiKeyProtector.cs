@@ -32,4 +32,12 @@ public class ApiKeyProtector
     }
 
     public bool IsEncrypted(string value) => value.StartsWith(Prefix);
+
+    /// <summary>
+    /// True if the key is a sandbox/test key. Mirrors the API convention
+    /// (see Invoicetronic.Authorization.BasicAuthSchemeHandler) where any
+    /// key whose body contains <c>_test_</c> is treated as sandbox.
+    /// </summary>
+    public static bool IsSandbox(string? apiKey) =>
+        apiKey is not null && apiKey.Contains("_test_", StringComparison.Ordinal);
 }
