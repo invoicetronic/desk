@@ -2,9 +2,11 @@
 
 ## In Development
 
+## v1.6.0 (2026-04-12)
+
 - new: sandbox API keys (containing `_test_`) no longer require an active Desk seat in hosted mode. Only live keys (`_live_`) are gated by the seat check, both at runtime (`AppPageModel`) and at profile save time. This lowers the barrier to evaluate Desk: users can fully test the integration with a sandbox key and only subscribe when switching to live.
 - new: profile API key hint, welcome banner, "no active seat" error and `NoSeat` page now explicitly mention that sandbox (test) keys always work without a seat — only live (production) keys require an active Desk seat.
-- chore: removed all references to the "15-day free trial" from the profile/`NoSeat` copy. With sandbox keys now free and unrestricted, the trial is logically redundant. Trial removal in Dashboard/Stripe will follow in a separate change.
+- chore: removed all references to the "15-day free trial" from the profile/`NoSeat` copy. With sandbox keys now free and unrestricted, the trial is logically redundant.
 - fix: `.desk-alert` no longer uses `display: flex`, which was inserting visible `gap` whitespace before and after inline elements (e.g. `<a>` links inside the "no active seat" warning). Alerts now use plain block layout — no alert in the codebase had an icon, so the flex container had no purpose.
 
 ## v1.5.2 (2026-04-09)
