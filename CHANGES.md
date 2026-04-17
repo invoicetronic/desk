@@ -2,6 +2,8 @@
 
 ## In Development
 
+- new: `ApiClient` now recognises HTTP 429 from the API and surfaces a dedicated "too many requests" message, honouring the `Retry-After` header (delta-seconds or HTTP-date) when present. Other non-2xx responses keep the existing generic handling.
+
 ## v1.6.0 (2026-04-12)
 
 - new: sandbox API keys (containing `_test_`) no longer require an active Desk seat in hosted mode. Only live keys (`_live_`) are gated by the seat check, both at runtime (`AppPageModel`) and at profile save time. This lowers the barrier to evaluate Desk: users can fully test the integration with a sandbox key and only subscribe when switching to live.

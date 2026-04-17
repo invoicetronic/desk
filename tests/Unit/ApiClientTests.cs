@@ -108,6 +108,35 @@ public class ApiClientTests
     }
 
     [Fact]
+    public async Task Get_TooManyRequests_WithRetryAfter_SurfacesRetrySeconds()
+    {
+        var (client, handler) = CreateClient();
+        handler.WithResponse(HttpStatusCode.TooManyRequests, "")
+               .WithHeader("Retry-After", "30");
+
+        var ex = await Assert.ThrowsAsync<HttpRequestException>(
+            () => client.Get<object>("receive"));
+
+        Assert.Equal(HttpStatusCode.TooManyRequests, ex.StatusCode);
+        Assert.Contains("30 secondi", ex.Message);
+        Assert.Contains("Troppe richieste", ex.Message);
+    }
+
+    [Fact]
+    public async Task Get_TooManyRequests_WithoutRetryAfter_FallsBackToGenericMessage()
+    {
+        var (client, handler) = CreateClient();
+        handler.WithResponse(HttpStatusCode.TooManyRequests, "");
+
+        var ex = await Assert.ThrowsAsync<HttpRequestException>(
+            () => client.Get<object>("receive"));
+
+        Assert.Equal(HttpStatusCode.TooManyRequests, ex.StatusCode);
+        Assert.Contains("Troppe richieste", ex.Message);
+        Assert.Contains("qualche istante", ex.Message);
+    }
+
+    [Fact]
     public async Task GetBytes_ReturnsByteArray_ForBinaryResponse()
     {
         var (client, handler) = CreateClient();

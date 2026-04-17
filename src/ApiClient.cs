@@ -50,6 +50,24 @@ public class ApiClient
         return $"Errore nella richiesta API{code}.";
     }
 
+    private static string BuildErrorMessage(HttpResponseMessage response, string errorBody)
+    {
+        if (response.StatusCode != System.Net.HttpStatusCode.TooManyRequests)
+            return ExtractErrorMessage(errorBody, response.StatusCode);
+
+        var retryAfter = response.Headers.RetryAfter;
+        int? seconds = retryAfter switch
+        {
+            { Delta: { } d } => (int)Math.Ceiling(d.TotalSeconds),
+            { Date: { } date } => (int)Math.Max(1, Math.Ceiling((date - DateTimeOffset.UtcNow).TotalSeconds)),
+            _ => null
+        };
+
+        return seconds is > 0
+            ? $"Troppe richieste all'API. Riprova tra {seconds} secondi."
+            : "Troppe richieste all'API. Riprova tra qualche istante.";
+    }
+
     private void SetAuth(string? apiKey = null)
     {
         var key = apiKey ?? _sessionManager.GetApiKey();
@@ -77,7 +95,7 @@ public class ApiClient
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
                 _logger?.LogError("API Error ({StatusCode}): {ErrorBody}", response.StatusCode, errorBody);
-                throw new HttpRequestException(ExtractErrorMessage(errorBody, response.StatusCode), null, response.StatusCode);
+                throw new HttpRequestException(BuildErrorMessage(response, errorBody), null, response.StatusCode);
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -141,7 +159,7 @@ public class ApiClient
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
                 _logger?.LogError("API Error ({StatusCode}): {ErrorBody}", response.StatusCode, errorBody);
-                throw new HttpRequestException(ExtractErrorMessage(errorBody, response.StatusCode), null, response.StatusCode);
+                throw new HttpRequestException(BuildErrorMessage(response, errorBody), null, response.StatusCode);
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -179,7 +197,7 @@ public class ApiClient
             {
                 var errorBody = await response.Content.ReadAsStringAsync();
                 _logger?.LogError("API Error ({StatusCode}): {ErrorBody}", response.StatusCode, errorBody);
-                throw new HttpRequestException(ExtractErrorMessage(errorBody, response.StatusCode), null, response.StatusCode);
+                throw new HttpRequestException(BuildErrorMessage(response, errorBody), null, response.StatusCode);
             }
 
             return await response.Content.ReadAsByteArrayAsync();
