@@ -2,6 +2,8 @@
 
 ## In Development
 
+## v1.6.1 (2026-04-17)
+
 - new: `ApiClient` now recognises HTTP 429 from the API and surfaces a dedicated "too many requests" message, honouring the `Retry-After` header (delta-seconds or HTTP-date) when present. Other non-2xx responses keep the existing generic handling.
 
 ## v1.6.0 (2026-04-12)
