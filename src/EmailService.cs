@@ -61,9 +61,9 @@ public class EmailService(DeskConfig config, ILogger<EmailService> logger)
             var socketOptions = _smtp.Port == 465
                 ? SecureSocketOptions.SslOnConnect
                 : SecureSocketOptions.StartTls;
-            await client.ConnectAsync(_smtp.Host, _smtp.Port, socketOptions);
+            await client.ConnectAsync(_smtp.Host!, _smtp.Port, socketOptions);
 
-            if (!string.IsNullOrEmpty(_smtp.Username))
+            if (!string.IsNullOrEmpty(_smtp.Username) && !string.IsNullOrEmpty(_smtp.Password))
                 await client.AuthenticateAsync(_smtp.Username, _smtp.Password);
 
             await client.SendAsync(message);

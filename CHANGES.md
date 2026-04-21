@@ -3,6 +3,7 @@
 ## In Development
 
 - perf: the Sent invoices grid now reads the SDI state from the new `Send.latest_state` inline field (API v1.12), collapsing the former 1+N update requests into a single `/send` call per page. Requires API ≥ 1.12.
+- chore: `MailKit` bumped to `4.16.0` to neutralise GHSA-9j88-vvj5-vhgr (STARTTLS response injection / SASL downgrade, medium severity, affects `< 4.16.0`). `System.Security.Cryptography.Xml` pinned to `10.0.6` in the test projects to neutralise GHSA-37gx-xxp4-5rgx/CVE-2026-33116 and GHSA-w3x6-4m5h-cxqf/CVE-2026-26171 (both DoS, high severity, affect `< 10.0.6`); the main project prunes the package via .NET 10 framework package pruning, so no pin is needed there. `EmailService` gates SMTP authentication on both username and password being non-empty (correctness improvement surfaced by MailKit's tighter nullable annotations).
 
 ## v1.6.1 (2026-04-17)
 
