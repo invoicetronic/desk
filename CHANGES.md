@@ -2,6 +2,8 @@
 
 ## In Development
 
+- perf: the Sent invoices grid now reads the SDI state from the new `Send.latest_state` inline field (API v1.12), collapsing the former 1+N update requests into a single `/send` call per page. Requires API ≥ 1.12.
+
 ## v1.6.1 (2026-04-17)
 
 - new: `ApiClient` now recognises HTTP 429 from the API and surfaces a dedicated "too many requests" message, honouring the `Retry-After` header (delta-seconds or HTTP-date) when present. Other non-2xx responses keep the existing generic handling.

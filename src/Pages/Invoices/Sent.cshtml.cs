@@ -28,42 +28,8 @@ public class SentModel(ApiManager apiManager, SessionManager sessionManager, Des
 
             var extraQuery = filters.Count > 0 ? string.Join("&", filters) : null;
 
-            // Fetch invoices and a first batch of recent updates in parallel
-            var updateFilters = new List<string>();
-            if (CompanyFilter is not null)
-                updateFilters.Add(CompanyFilter);
-            var updateQuery = updateFilters.Count > 0 ? string.Join("&", updateFilters) : null;
+            var (invoices, totalCount) = await ApiManager.List<Send>(page, pageSize, sort, extraQuery);
 
-            var invoicesTask = ApiManager.List<Send>(page, pageSize, sort, extraQuery);
-            var updatesTask = ApiManager.List<Update>(1, pageSize, "-last_update", updateQuery);
-            await Task.WhenAll(invoicesTask, updatesTask);
-
-            var (invoices, totalCount) = await invoicesTask;
-            var (updates, _) = await updatesTask;
-
-            // Build map from initial batch
-            var stateMap = new Dictionary<int, string>();
-            if (updates is not null)
-            {
-                foreach (var u in updates)
-                    stateMap.TryAdd(u.SendId, u.State.ToString());
-            }
-
-            // For any displayed invoices still missing a state, fetch their updates directly
-            var missing = invoices?.Where(i => !stateMap.ContainsKey(i.Id)).ToList() ?? [];
-            if (missing.Count > 0)
-            {
-                var tasks = missing.Select(inv =>
-                    ApiManager.List<Update>(1, 1, "-last_update", $"send_id={inv.Id}"));
-                var results = await Task.WhenAll(tasks);
-                foreach (var (result, _) in results)
-                {
-                    if (result is [var u, ..])
-                        stateMap.TryAdd(u.SendId, u.State.ToString());
-                }
-            }
-
-            // Enrich invoices with state
             var enriched = invoices?.Select(inv => new
             {
                 inv.Id,
@@ -80,7 +46,7 @@ public class SentModel(ApiManager apiManager, SessionManager sessionManager, Des
                 inv.LastUpdate,
                 inv.DateSent,
                 inv.Documents,
-                State = stateMap.GetValueOrDefault(inv.Id, "")
+                State = inv.LatestState?.ToString() ?? ""
             }).ToList();
 
             return new JsonResult(new { data = enriched, totalCount });

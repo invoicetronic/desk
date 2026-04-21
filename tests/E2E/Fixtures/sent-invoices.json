@@ -6,6 +6,7 @@
     "identifier": "IT01234567890_00001", "file_name": "IT01234567890_00001.xml",
     "format": "FPA12", "payload": "",
     "last_update": "2025-06-02T12:00:00Z", "date_sent": "2025-06-01T10:30:00Z",
+    "latest_state": "Consegnato",
     "documents": [{"number": "FV-2025/001", "date": "2025-06-01T00:00:00Z"}]
   },
   {
@@ -15,6 +16,7 @@
     "identifier": "IT01234567890_00002", "file_name": "IT01234567890_00002.xml",
     "format": "FPA12", "payload": "",
     "last_update": "2025-06-10T09:00:00Z", "date_sent": "2025-06-10T08:30:00Z",
+    "latest_state": "Scartato",
     "documents": [{"number": "FV-2025/002", "date": "2025-06-10T00:00:00Z"}]
   },
   {
@@ -24,6 +26,7 @@
     "identifier": "IT09876543210_00001", "file_name": "IT09876543210_00001.xml",
     "format": "FPR12", "payload": "",
     "last_update": "2025-07-01T15:00:00Z", "date_sent": "2025-07-01T14:30:00Z",
+    "latest_state": "Inviato",
     "documents": [{"number": "FV-2025/100", "date": "2025-07-01T00:00:00Z"}, {"number": "FV-2025/101", "date": "2025-07-01T00:00:00Z"}]
   }
 ]

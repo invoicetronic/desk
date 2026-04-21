@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json;
 using Desk.Models;
 using Desk.Pages.Invoices;
 using Desk.Tests.Helpers;
@@ -110,17 +111,20 @@ public class SentTests
     }
 
     [Fact]
-    public async Task OnGetListAsync_ReturnsJsonResult()
+    public async Task OnGetListAsync_ProjectsLatestStateFromSendResponse()
     {
         var (model, handler) = CreateModel();
         handler.WithResponse(HttpStatusCode.OK,
-                """[{"id":1,"identifier":"IT01","file_name":"test.xml","committente":"IT01234567890","nome_committente":"Buyer Srl","prestatore":"Seller","format":"FPA12","date_sent":"2025-01-01"}]""")
-            .WithHeader("Invoicetronic-Total-Count", "1");
+                """[{"id":1,"identifier":"IT01","file_name":"a.xml","committente":"IT01","nome_committente":"Buyer One","prestatore":"Seller","format":"FPA12","latest_state":"Consegnato"},{"id":2,"identifier":"IT02","file_name":"b.xml","committente":"IT02","nome_committente":"Buyer Two","prestatore":"Seller","format":"FPA12"}]""")
+            .WithHeader("Invoicetronic-Total-Count", "2");
 
         var result = await model.OnGetListAsync(1, 50, null);
 
         var jsonResult = Assert.IsType<JsonResult>(result);
-        Assert.NotNull(jsonResult.Value);
+        using var doc = JsonDocument.Parse(JsonSerializer.Serialize(jsonResult.Value));
+        var data = doc.RootElement.GetProperty("data");
+        Assert.Equal("Consegnato", data[0].GetProperty("State").GetString());
+        Assert.Equal("", data[1].GetProperty("State").GetString());
     }
 
     [Fact]
