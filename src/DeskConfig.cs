@@ -19,7 +19,12 @@ public class DeskConfig
 
     public bool IsStandalone => !string.IsNullOrEmpty(ApiKey);
 
-    public bool IsHosted =>
+    /// <summary>
+    /// True only for the official hosted deployment (desk.invoicetronic.com), which opts in via
+    /// the DESK_HOSTED environment variable. Self-hosted instances are always false and are never
+    /// subject to the Desk seat requirement.
+    /// </summary>
+    public bool IsHosted { get; set; } =
         string.Equals(Environment.GetEnvironmentVariable("DESK_HOSTED"), "true", StringComparison.OrdinalIgnoreCase);
 }
 

@@ -65,6 +65,42 @@ public class SeatCheckTests : IDisposable
     }
 
     [Fact]
+    public async Task SelfHosted_LiveKeyWithoutSeat_IsAcceptedAndGrantsAccess()
+    {
+        // Self-hosted instances (DESK_HOSTED unset/false) are free: a valid live key must work
+        // even when the API reports has_active_seat=false.
+        await using var factory = new SeatCheckFactory(withActiveSeat: false, isHosted: false);
+        var client = factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+
+        await RegisterAndGetCookies(client);
+        var saveResponse = await SaveApiKey(client, "itk_live_no_seat");
+        Assert.DoesNotContain("Profile_ApiKeyNoSeat", await saveResponse.Content.ReadAsStringAsync());
+
+        var response = await client.GetAsync("/");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Hosted_LiveKeyWithoutSeat_IsRejectedOnSave()
+    {
+        // Counterpart to the self-hosted case: on the hosted deployment a live key without a seat
+        // must still be refused.
+        await using var factory = new SeatCheckFactory(withActiveSeat: false, isHosted: true);
+        var client = factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+
+        await RegisterAndGetCookies(client);
+        var saveResponse = await SaveApiKey(client, "itk_live_no_seat");
+
+        // The key is not persisted and the seat guard sends the user to the NoSeat page
+        var response = await client.GetAsync("/");
+
+        Assert.Equal(HttpStatusCode.OK, saveResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Equal("/NoSeat", response.Headers.Location?.OriginalString);
+    }
+
+    [Fact]
     public async Task NoSeatPage_IsAccessible_WithAuth()
     {
         await using var factory = new SeatCheckFactory(withActiveSeat: true);
@@ -96,16 +132,33 @@ public class SeatCheckTests : IDisposable
         Assert.Contains("/Identity/Account/Login", response.Headers.Location?.OriginalString ?? "");
     }
 
-    private static async Task<List<string>> RegisterAndGetCookies(HttpClient client)
+    private static async Task<HttpResponseMessage> SaveApiKey(HttpClient client, string apiKey)
     {
-        var getResponse = await client.GetAsync("/Identity/Account/Register");
-        var html = await getResponse.Content.ReadAsStringAsync();
+        var getResponse = await client.GetAsync("/Identity/Account/Manage");
+        var token = ExtractAntiforgeryToken(await getResponse.Content.ReadAsStringAsync());
 
+        var form = new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["ApiKeyInput"] = apiKey,
+            ["__RequestVerificationToken"] = token
+        });
+
+        return await client.PostAsync("/Identity/Account/Manage?handler=SaveApiKey", form);
+    }
+
+    private static string ExtractAntiforgeryToken(string html)
+    {
         const string marker = "name=\"__RequestVerificationToken\" type=\"hidden\" value=\"";
         var start = html.IndexOf(marker, StringComparison.Ordinal);
         start += marker.Length;
         var end = html.IndexOf('"', start);
-        var token = html[start..end];
+        return html[start..end];
+    }
+
+    private static async Task<List<string>> RegisterAndGetCookies(HttpClient client)
+    {
+        var getResponse = await client.GetAsync("/Identity/Account/Register");
+        var token = ExtractAntiforgeryToken(await getResponse.Content.ReadAsStringAsync());
 
         var form = new FormUrlEncodedContent(new Dictionary<string, string>
         {
@@ -138,7 +191,7 @@ public class SeatCheckTests : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private class SeatCheckFactory(bool withActiveSeat) : WebApplicationFactory<Program>
+    private class SeatCheckFactory(bool withActiveSeat, bool isHosted = true) : WebApplicationFactory<Program>
     {
         private readonly string _dbPath = Path.Combine(Path.GetTempPath(), $"desk_seat_test_{Guid.NewGuid()}.db");
 
@@ -150,6 +203,7 @@ public class SeatCheckTests : IDisposable
                 services.AddSingleton(new DeskConfig
                 {
                     ApiUrl = "https://api.invoicetronic.com",
+                    IsHosted = isHosted,
                     Database = new DatabaseConfig
                     {
                         Provider = "sqlite",

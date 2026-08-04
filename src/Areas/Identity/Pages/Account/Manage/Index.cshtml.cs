@@ -98,9 +98,10 @@ public class IndexModel(
             return Page();
         }
 
-        // Block save if the key is valid but has no active Desk seat (hosted mode only).
+        // Block save if the key is valid but has no active Desk seat. Hosted deployment only —
+        // self-hosted instances are free and never require a seat.
         // Sandbox keys (_test_) are exempt — only live keys require a seat.
-        if (!Config.IsStandalone && AccountStatus is { HasActiveSeat: false } && !ApiKeyProtector.IsSandbox(ApiKeyInput))
+        if (Config.IsHosted && AccountStatus is { HasActiveSeat: false } && !ApiKeyProtector.IsSandbox(ApiKeyInput))
         {
             logger.LogInformation("API key save rejected for user {UserId} ({Email}): valid key but no active Desk seat",
                 user.Id, user.Email);

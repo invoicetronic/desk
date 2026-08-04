@@ -27,8 +27,8 @@
                 <img src="@(Model.Config.Branding.LogoDarkUrl ?? Url.Content("~/images/logo-green.svg"))" alt="Logo" />
             </div>
             <h1 class="desk-auth-title" style="font-size: var(--text-xl);">@L["NoSeat_Title"]</h1>
-            <p class="text-muted" style="text-align: center; margin-bottom: var(--space-6);">@L[Model.Config.IsStandalone ? "NoSeat_Message" : "NoSeat_MessageHosted"]</p>
-            @if (!Model.Config.IsStandalone)
+            <p class="text-muted" style="text-align: center; margin-bottom: var(--space-6);">@L[Model.Config.IsHosted ? "NoSeat_MessageHosted" : "NoSeat_Message"]</p>
+            @if (Model.Config.IsHosted)
             {
                 <a href="https://dashboard.invoicetronic.com/SubKeys" target="_blank" rel="noopener" class="btn-brand btn-brand-primary" style="width: 100%; justify-content: center;">@L["NoSeat_GoToDashboard"]</a>
                 <a href="/Identity/Account/Manage" class="btn-brand btn-brand-outline" style="width: 100%; justify-content: center; margin-top: var(--space-4);">@L["NoSeat_ChangeKey"]</a>

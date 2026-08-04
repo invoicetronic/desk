@@ -32,9 +32,9 @@ public class ProfileTests
 
     private static (Desk.Areas.Identity.Pages.Account.Manage.IndexModel model,
         MockHttpMessageHandler handler,
-        Mock<UserManager<DeskUser>> userManagerMock) CreateModel()
+        Mock<UserManager<DeskUser>> userManagerMock) CreateModel(bool isHosted = false)
     {
-        var config = new DeskConfig { ApiUrl = "https://api.test.com" };
+        var config = new DeskConfig { ApiUrl = "https://api.test.com", IsHosted = isHosted };
         var handler = new MockHttpMessageHandler()
             .WithResponse(HttpStatusCode.OK, "{}");
         var httpClient = new HttpClient(handler);
@@ -116,9 +116,9 @@ public class ProfileTests
     [Fact]
     public async Task SaveApiKey_ReturnsError_WhenLiveKeyHasNoActiveSeat()
     {
-        // Live keys (containing "_live_") still require an active Desk seat —
-        // this is the counterpart to SaveApiKey_AcceptsSandboxKey_EvenWithoutActiveSeat.
-        var (model, handler, userManagerMock) = CreateModel();
+        // On the hosted deployment, live keys (containing "_live_") still require an active Desk
+        // seat — this is the counterpart to SaveApiKey_AcceptsSandboxKey_EvenWithoutActiveSeat.
+        var (model, handler, userManagerMock) = CreateModel(isHosted: true);
         handler.WithResponse(HttpStatusCode.OK,
             """{"operation_left": 100, "signature_left": 50, "has_active_seat": false}""");
 
@@ -139,7 +139,7 @@ public class ProfileTests
         // Sandbox keys (containing "_test_") must not require a Desk seat —
         // only live keys do. The API responds with has_active_seat=false but
         // the save should still succeed because the key is sandbox.
-        var (model, handler, userManagerMock) = CreateModel();
+        var (model, handler, userManagerMock) = CreateModel(isHosted: true);
         handler.WithResponse(HttpStatusCode.OK,
             """{"operation_left": 100, "signature_left": 50, "has_active_seat": false}""");
 
@@ -150,6 +150,29 @@ public class ProfileTests
             .ReturnsAsync(IdentityResult.Success);
 
         model.ApiKeyInput = "itk_test_sandbox_key";
+        _ = await model.OnPostSaveApiKeyAsync();
+
+        Assert.Null(model.ErrorMessage);
+        userManagerMock.Verify(m => m.UpdateAsync(
+            It.Is<DeskUser>(u => u.ApiKey != null && u.ApiKey.StartsWith("ENC:"))), Times.Once);
+    }
+
+    [Fact]
+    public async Task SaveApiKey_AcceptsLiveKeyWithoutSeat_WhenSelfHosted()
+    {
+        // Self-hosted Desk is free: the seat requirement applies to the hosted deployment only,
+        // so a valid live key must be accepted even with has_active_seat=false.
+        var (model, handler, userManagerMock) = CreateModel(isHosted: false);
+        handler.WithResponse(HttpStatusCode.OK,
+            """{"operation_left": 100, "signature_left": 50, "has_active_seat": false}""");
+
+        var user = new DeskUser { Id = "1", Email = "test@test.com" };
+        userManagerMock.Setup(m => m.GetUserAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>()))
+            .ReturnsAsync(user);
+        userManagerMock.Setup(m => m.UpdateAsync(It.IsAny<DeskUser>()))
+            .ReturnsAsync(IdentityResult.Success);
+
+        model.ApiKeyInput = "itk_live_no_seat";
         _ = await model.OnPostSaveApiKeyAsync();
 
         Assert.Null(model.ErrorMessage);
