@@ -135,7 +135,10 @@ else if (invoice is not null)
                                             <strong>@err.Code</strong>: @err.Description
                                             @if (!string.IsNullOrEmpty(err.Hint))
                                             {
-                                                <br/><em>@err.Hint</em>
+                                                @* <text> keeps the two sibling elements inside one
+                                                   markup block: older Razor parsers read the void
+                                                   <br/> as the whole block and then treat <em> as C#. *@
+                                                <text><br/><em>@err.Hint</em></text>
                                             }
                                         </div>
                                     }

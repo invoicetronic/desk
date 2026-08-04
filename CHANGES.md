@@ -2,6 +2,8 @@
 
 ## In Development
 
+- chore: the SDI error hint in `Invoices/Detail.cshtml` is wrapped in a Razor `<text>` block. The two sibling elements (`<br/>` followed by `<em>`) sitting directly inside an `@if` were rejected by the Razor parser shipped with older SDKs, which read the void `<br/>` as the entire markup block and then parsed `<em>` as C# — the failure that broke the v1.6.3 release build before the SDK was pinned. `<text>` emits no markup, so the rendered HTML is unchanged.
+
 ## v1.6.3 (2026-08-04)
 
 - fix: self-hosted instances no longer require an active Desk seat for live API keys. The seat guard in `AppPageModel` and the profile save check were both keyed on `!IsStandalone`, so every multi-user deployment — including self-hosted ones with `DESK_HOSTED` unset — was treated as the hosted deployment and sent to the `NoSeat` page. Both now check `IsHosted`, matching the documented pricing (self-hosted Desk is free, no seat required). The `NoSeat` page picks its copy and its "Go to Dashboard" button on the same flag. `DeskConfig.IsHosted` is now a settable property (still defaulting to the `DESK_HOSTED` environment variable) so the deployment mode can be exercised in tests.
