@@ -17,6 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      # Pin the SDK exactly as tests.yml does. Without this the publish step runs on whatever
+      # SDK the runner image ships, which is not the toolchain the tests validated.
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
 
