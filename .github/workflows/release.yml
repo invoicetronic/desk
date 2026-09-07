@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+env:
+  IMAGE_NAME: invoicetronic/desk
+
 jobs:
   tests:
     uses: ./.github/workflows/tests.yml
@@ -36,6 +39,18 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # L'immagine va anche sul registry privato, da cui la tira lo stack di
+      # produzione. Prima veniva presa da Docker Hub: era l'unica delle sei
+      # immagini dello stack a passare di li', e il pull si e' appeso otto volte
+      # in cinque mesi, l'ultima bloccando il deploy automatico per tredici
+      # giorni. Docker Hub resta comunque la distribuzione pubblica di desk.
+      - name: Login to private registry
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY_URL }}
+          username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v7
         with:
@@ -43,8 +58,10 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            invoicetronic/desk:${{ github.ref_name }}
-            invoicetronic/desk:latest
+            ${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ secrets.DOCKER_REGISTRY_URL }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+            ${{ secrets.DOCKER_REGISTRY_URL }}/${{ env.IMAGE_NAME }}:latest
 
       - name: Publish native binaries
         run: |
