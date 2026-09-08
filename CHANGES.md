@@ -2,6 +2,8 @@
 
 ## In Development
 
+## v1.6.4 (2026-09-08)
+
 - fix: a rejected API key save no longer strands the user on the "Desk seat not active" page. When a user with no key yet saved a live key without an active seat (or an invalid one), the profile page restored the *previous* key into the session as an empty string; `AppPageModel` then read that empty value as "a key is set", skipped the redirect to the profile and called `/status` with no credentials, getting a 401 and sending the user to `/NoSeat` on every page for the rest of the session — even after the seat had been purchased. The profile page now clears the session key when there is no previous one, `SessionManager` treats an empty key as no key at all (new `ClearApiKey`), and the guards in `AppPageModel` check for empty as well as null.
 - chore: the SDI error hint in `Invoices/Detail.cshtml` is wrapped in a Razor `<text>` block. The two sibling elements (`<br/>` followed by `<em>`) sitting directly inside an `@if` were rejected by the Razor parser shipped with older SDKs, which read the void `<br/>` as the entire markup block and then parsed `<em>` as C# — the failure that broke the v1.6.3 release build before the SDK was pinned. `<text>` emits no markup, so the rendered HTML is unchanged.
 
