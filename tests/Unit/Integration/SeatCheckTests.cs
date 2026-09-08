@@ -92,12 +92,13 @@ public class SeatCheckTests : IDisposable
         await RegisterAndGetCookies(client);
         var saveResponse = await SaveApiKey(client, "itk_live_no_seat");
 
-        // The key is not persisted and the seat guard sends the user to the NoSeat page
+        // The key is not persisted, so the user is sent back to the profile page to
+        // enter a valid one — not to /NoSeat, which would hide the real problem.
         var response = await client.GetAsync("/");
 
         Assert.Equal(HttpStatusCode.OK, saveResponse.StatusCode);
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-        Assert.Equal("/NoSeat", response.Headers.Location?.OriginalString);
+        Assert.StartsWith("/Identity/Account/Manage", response.Headers.Location?.OriginalString);
     }
 
     [Fact]

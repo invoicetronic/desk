@@ -40,6 +40,26 @@ public class SessionManagerTests
     }
 
     [Fact]
+    public void GetApiKey_ReturnsNull_WhenKeyIsEmpty()
+    {
+        var manager = CreateManager();
+        manager.SetApiKey("");
+
+        Assert.Null(manager.GetApiKey());
+    }
+
+    [Fact]
+    public void ClearApiKey_RemovesKeyFromSession()
+    {
+        var manager = CreateManager();
+        manager.SetApiKey("session-key");
+
+        manager.ClearApiKey();
+
+        Assert.Null(manager.GetApiKey());
+    }
+
+    [Fact]
     public void SetAndGetSelectedCompanyId_RoundTrips()
     {
         var manager = CreateManager();

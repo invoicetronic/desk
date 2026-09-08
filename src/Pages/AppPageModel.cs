@@ -27,7 +27,7 @@ public abstract class AppPageModel(
         var apiKey = SessionManager.GetApiKey();
 
         // Session expired but user still authenticated → reload API key from DB
-        if (apiKey is null && !Config.IsStandalone)
+        if (string.IsNullOrEmpty(apiKey) && !Config.IsStandalone)
         {
             var um = context.HttpContext.RequestServices.GetRequiredService<UserManager<DeskUser>>();
             var user = await um.GetUserAsync(context.HttpContext.User);
@@ -41,7 +41,7 @@ public abstract class AppPageModel(
         }
 
         // No API key → redirect to profile page (multi-user) or show error
-        if (apiKey is null && !Config.IsStandalone)
+        if (string.IsNullOrEmpty(apiKey) && !Config.IsStandalone)
         {
             context.Result = new RedirectToPageResult("/Account/Manage/Index", new { area = "Identity", apiKeyRequired = true });
             return;
@@ -50,7 +50,7 @@ public abstract class AppPageModel(
         // Seat guard: check if API key has an active Desk seat. Hosted deployment only —
         // self-hosted instances are free and never require a seat.
         // Sandbox keys (_test_) are exempt — only live keys require a seat.
-        if (Config.IsHosted && apiKey is not null && !ApiKeyProtector.IsSandbox(apiKey))
+        if (Config.IsHosted && !string.IsNullOrEmpty(apiKey) && !ApiKeyProtector.IsSandbox(apiKey))
         {
             var hasActiveSeat = SessionManager.GetHasActiveSeat();
             if (hasActiveSeat is null)
@@ -77,7 +77,7 @@ public abstract class AppPageModel(
             }
         }
 
-        if (apiKey is not null)
+        if (!string.IsNullOrEmpty(apiKey))
         {
             var cached = SessionManager.GetCompanies();
             if (cached is not null)

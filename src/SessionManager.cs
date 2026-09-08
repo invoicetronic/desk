@@ -15,15 +15,30 @@ public class SessionManager(IHttpContextAccessor httpContextAccessor, DeskConfig
 
     public string? GetApiKey()
     {
-        if (config.IsStandalone)
-            return config.ApiKey;
+        // An empty value is treated as "no key" everywhere: callers rely on null to
+        // send the user back to the profile page (or to fail loudly in standalone
+        // mode) instead of calling the API without credentials.
+        var key = config.IsStandalone
+            ? config.ApiKey
+            : HttpContext?.Session.GetString(ApiKeySessionKey);
 
-        return HttpContext?.Session.GetString(ApiKeySessionKey);
+        return string.IsNullOrEmpty(key) ? null : key;
     }
 
-    public void SetApiKey(string apiKey)
+    public void SetApiKey(string? apiKey)
     {
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            ClearApiKey();
+            return;
+        }
+
         HttpContext?.Session.SetString(ApiKeySessionKey, apiKey);
+    }
+
+    public void ClearApiKey()
+    {
+        HttpContext?.Session.Remove(ApiKeySessionKey);
     }
 
     public int? GetSelectedCompanyId()

@@ -93,8 +93,10 @@ public class IndexModel(
             logger.LogInformation(ex, "API key save rejected for user {UserId} ({Email}): validation failed (invalid key or API unreachable)",
                 user.Id, user.Email);
             ErrorMessage = "Profile_ApiKeyInvalid";
-            var existingKey = apiKeyProtector.UnprotectOrNull(user.ApiKey) ?? "";
-            sessionManager.SetApiKey(existingKey);
+            // Restore the previously saved key, if any. Never fall back to an empty
+            // string: that would look like "a key is set" to the seat guard, which
+            // would then call the API unauthenticated and strand the user on /NoSeat.
+            sessionManager.SetApiKey(apiKeyProtector.UnprotectOrNull(user.ApiKey));
             return Page();
         }
 
@@ -106,8 +108,8 @@ public class IndexModel(
             logger.LogInformation("API key save rejected for user {UserId} ({Email}): valid key but no active Desk seat",
                 user.Id, user.Email);
             ErrorMessage = "Profile_ApiKeyNoSeat";
-            var existingKey = apiKeyProtector.UnprotectOrNull(user.ApiKey) ?? "";
-            sessionManager.SetApiKey(existingKey);
+            // Restore the previously saved key, if any (see above).
+            sessionManager.SetApiKey(apiKeyProtector.UnprotectOrNull(user.ApiKey));
             return Page();
         }
 
