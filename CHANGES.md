@@ -2,6 +2,8 @@
 
 ## In Development
 
+- new: the company form has a "Public administration" checkbox. Only public administrations receive FPA12 invoices and can accept or reject them (outcomes); in the Sandbox a company marked as public administration receives FPA12 test invoices. The flag is always sent on save, so unchecking it clears it. Requires the API with the `public_administration` company field.
+
 ## v1.6.4 (2026-09-08)
 
 - fix: a rejected API key save no longer strands the user on the "Desk seat not active" page. When a user with no key yet saved a live key without an active seat (or an invalid one), the profile page restored the *previous* key into the session as an empty string; `AppPageModel` then read that empty value as "a key is set", skipped the redirect to the profile and called `/status` with no credentials, getting a 401 and sending the user to `/NoSeat` on every page for the rest of the session — even after the seat had been purchased. The profile page now clears the session key when there is no previous one, `SessionManager` treats an empty key as no key at all (new `ClearApiKey`), and the guards in `AppPageModel` check for empty as well as null.

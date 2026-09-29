@@ -132,6 +132,8 @@
   <data name="Companies_DeleteForceConfirm"><value>Questa azienda ha {0} fatture inviate e {1} ricevute collegate. Eliminandola perderai tutte le fatture associate. Vuoi procedere comunque?</value></data>
   <data name="Companies_Saved"><value>Azienda salvata con successo.</value></data>
   <data name="Companies_Deleted"><value>Azienda eliminata con successo.</value></data>
+  <data name="Companies_PublicAdministration"><value>Pubblica amministrazione</value></data>
+  <data name="Companies_PublicAdministrationHint"><value>Solo le pubbliche amministrazioni ricevono fatture FPA12 e possono accettarle o rifiutarle. In sandbox l'azienda riceve fatture FPA12 di prova.</value></data>
 
   <!-- Validation -->
   <data name="Validation_Required"><value>Questo campo è obbligatorio.</value></data>

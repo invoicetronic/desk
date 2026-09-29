@@ -48,6 +48,13 @@
                 <label class="desk-label" for="companyFiscalCode">@L["Companies_FiscalCode"]</label>
                 <input type="text" id="companyFiscalCode" class="desk-input" required />
             </div>
+            <div class="desk-form-group">
+                <label class="desk-check">
+                    <input type="checkbox" id="companyPublicAdministration" />
+                    <span>@L["Companies_PublicAdministration"]</span>
+                </label>
+                <p class="desk-check-hint">@L["Companies_PublicAdministrationHint"]</p>
+            </div>
             <div class="desk-modal-actions">
                 <button type="button" class="btn-brand btn-brand-secondary" onclick="closeModal()">@L["Common_Cancel"]</button>
                 <button type="button" class="btn-brand btn-brand-primary" onclick="saveCompany()">@L["Common_Save"]</button>
@@ -149,6 +156,7 @@
             document.getElementById('companyName').value = '';
             document.getElementById('companyVat').value = '';
             document.getElementById('companyFiscalCode').value = '';
+            document.getElementById('companyPublicAdministration').checked = false;
             document.getElementById('companyModal').classList.add('open');
         }
 
@@ -160,6 +168,7 @@
             document.getElementById('companyName').value = data.name || '';
             document.getElementById('companyVat').value = data.vat || '';
             document.getElementById('companyFiscalCode').value = data.fiscalCode || '';
+            document.getElementById('companyPublicAdministration').checked = data.publicAdministration === true;
             document.getElementById('companyModal').classList.add('open');
         }
 
@@ -188,7 +197,9 @@
                 'CompanyInput.Version': parseInt(document.getElementById('companyVersion').value),
                 'CompanyInput.Name': document.getElementById('companyName').value,
                 'CompanyInput.Vat': document.getElementById('companyVat').value,
-                'CompanyInput.FiscalCode': document.getElementById('companyFiscalCode').value
+                'CompanyInput.FiscalCode': document.getElementById('companyFiscalCode').value,
+                'CompanyInput.PublicAdministration':
+                    document.getElementById('companyPublicAdministration').checked ? 'true' : 'false'
             };
 
             try {
@@ -260,4 +271,24 @@
         }
     </script>
     @Html.AntiForgeryToken()
+    <style>
+        .desk-check {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            color: var(--color-text);
+            cursor: pointer;
+        }
+        .desk-check input[type="checkbox"] {
+            accent-color: var(--brand-accent);
+            width: 16px;
+            height: 16px;
+        }
+        .desk-check-hint {
+            margin: var(--space-1) 0 0;
+            font-size: var(--text-xs);
+            color: var(--color-text-muted);
+        }
+    </style>
 }

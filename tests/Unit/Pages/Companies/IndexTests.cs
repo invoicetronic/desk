@@ -137,6 +137,24 @@ public class IndexTests
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
     }
 
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task OnPostUpdateAsync_SendsPublicAdministration(bool publicAdministration)
+    {
+        // The API reads a missing flag as "unchanged": the desk always sends it, so unchecking the box clears it
+        var (model, handler) = CreateModel();
+        handler.WithResponse(HttpStatusCode.OK,
+            """{"id": 1, "name": "Comune", "vat": "IT999", "fiscal_code": "FC9"}""");
+
+        model.CompanyInput = new Company
+            { Id = 1, Name = "Comune", Vat = "IT999", FiscalCode = "FC9", PublicAdministration = publicAdministration };
+        _ = await model.OnPostUpdateAsync();
+
+        Assert.Contains($"\"public_administration\":{(publicAdministration ? "true" : "false")}",
+            handler.LastRequestContent);
+    }
+
     [Fact]
     public async Task OnPostDeleteAsync_CallsApiManagerDelete()
     {
