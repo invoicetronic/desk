@@ -72,6 +72,7 @@ public class CompaniesTests(E2EFixture fixture)
         await Assertions.Expect(page.Locator("#companyName")).ToHaveValueAsync("");
         await Assertions.Expect(page.Locator("#companyVat")).ToHaveValueAsync("");
         await Assertions.Expect(page.Locator("#companyFiscalCode")).ToHaveValueAsync("");
+        await Assertions.Expect(page.Locator("#companyPublicAdministration")).Not.ToBeCheckedAsync();
     }
 
     [Fact]
@@ -218,5 +219,24 @@ public class CompaniesTests(E2EFixture fixture)
         var modal = page.Locator("#companyModal");
         await Assertions.Expect(modal).ToHaveClassAsync(new Regex("\\bopen\\b"));
         await Assertions.Expect(page.Locator("#companyName")).Not.ToHaveValueAsync("");
+    }
+
+    [Theory]
+    [InlineData("Acme S.r.l.", false)]
+    [InlineData("Tech Solutions S.p.A.", true)]
+    public async Task Companies_EditModalShowsPublicAdministration(string company, bool publicAdministration)
+    {
+        var page = await fixture.CreatePageAsync();
+        await page.GotoAsync($"{fixture.ServerAddress}/Companies");
+
+        var row = page.Locator(".ag-row", new() { HasText = company });
+        await Assertions.Expect(row).ToBeVisibleAsync();
+        await row.Locator(".btn-icon").First.ClickAsync();
+
+        var checkbox = page.Locator("#companyPublicAdministration");
+        if (publicAdministration)
+            await Assertions.Expect(checkbox).ToBeCheckedAsync();
+        else
+            await Assertions.Expect(checkbox).Not.ToBeCheckedAsync();
     }
 }
