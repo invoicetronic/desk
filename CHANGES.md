@@ -2,6 +2,7 @@
 
 ## In Development
 
+- fix: API error messages are read from standard problem details first (`detail` at the top level), falling back to the legacy `problem_details` wrapper. The API is moving its 400 responses to the standard shape, and 403 and 422 responses already used it: Desk showed the generic "Errore nella richiesta API" for those instead of the API's message.
 - chore: `Microsoft.Playwright` bumped from `1.50.0` to `1.63.0` in the E2E tests. GitHub moves `ubuntu-latest` to Ubuntu 26.04 between October and November 2026, and only Playwright 1.61+ knows that release: with 1.50 `playwright install --with-deps` would have no package list for it, failing the E2E job and with it the release and docker-test workflows that depend on it.
 
 ## v1.6.4 (2026-09-08)

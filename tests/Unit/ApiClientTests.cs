@@ -108,6 +108,23 @@ public class ApiClientTests
     }
 
     [Fact]
+    public void ExtractErrorMessage_ParsesTopLevelProblemDetails()
+    {
+        var errorBody = """
+        {
+            "type": "https://tools.ietf.org/html/rfc4918#section-11.2",
+            "title": "Unprocessable Entity",
+            "status": 422,
+            "detail": "One or more validation errors occurred"
+        }
+        """;
+
+        var message = ApiClient.ExtractErrorMessage(errorBody);
+
+        Assert.Equal("One or more validation errors occurred", message);
+    }
+
+    [Fact]
     public async Task Get_TooManyRequests_WithRetryAfter_SurfacesRetrySeconds()
     {
         var (client, handler) = CreateClient();

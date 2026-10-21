@@ -33,10 +33,20 @@ public class ApiClient
     {
         try
         {
+            // Standard problem details first; the problem_details wrapper is the legacy shape of the
+            // API's 400 responses, still served during the transition.
+            var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(errorBody, JsonOptions);
+
+            if (problemDetails?.Detail is not null)
+                return problemDetails.Detail;
+
             var errorResponse = JsonSerializer.Deserialize<ApiErrorResponse>(errorBody, JsonOptions);
 
             if (errorResponse?.ProblemDetails?.Detail is not null)
                 return errorResponse.ProblemDetails.Detail;
+
+            if (problemDetails?.Title is not null)
+                return problemDetails.Title;
 
             if (errorResponse?.ProblemDetails?.Title is not null)
                 return errorResponse.ProblemDetails.Title;
