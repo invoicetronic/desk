@@ -42,11 +42,13 @@
             </div>
             <div class="desk-form-group">
                 <label class="desk-label" for="companyVat">@L["Companies_Vat"]</label>
-                <input type="text" id="companyVat" class="desk-input" required placeholder="IT01234567891" />
+                <input type="text" id="companyVat" class="desk-input" placeholder="IT01234567891" />
+                <small class="text-sm text-muted">@L["Companies_VatHint"]</small>
             </div>
             <div class="desk-form-group">
                 <label class="desk-label" for="companyFiscalCode">@L["Companies_FiscalCode"]</label>
-                <input type="text" id="companyFiscalCode" class="desk-input" required />
+                <input type="text" id="companyFiscalCode" class="desk-input" />
+                <small class="text-sm text-muted">@L["Companies_FiscalCodeHint"]</small>
             </div>
             <div class="desk-modal-actions">
                 <button type="button" class="btn-brand btn-brand-secondary" onclick="closeModal()">@L["Common_Cancel"]</button>

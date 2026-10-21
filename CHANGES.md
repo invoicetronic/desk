@@ -2,6 +2,7 @@
 
 ## In Development
 
+- fix: in the company form, VAT number and fiscal code are no longer both required. The API now accepts companies with only a fiscal code (non-profit entities such as associations and parishes) and derives the fiscal code from the VAT number when it is missing: the form follows suit, with a hint under each field. `Company.Vat` is nullable, so an empty field is sent as no VAT rather than an empty string.
 - fix: API error messages are read from standard problem details first (`detail` at the top level), falling back to the legacy `problem_details` wrapper. The API is moving its 400 responses to the standard shape, and 403 and 422 responses already used it: Desk showed the generic "Errore nella richiesta API" for those instead of the API's message.
 - chore: `Microsoft.Playwright` bumped from `1.50.0` to `1.63.0` in the E2E tests. GitHub moves `ubuntu-latest` to Ubuntu 26.04 between October and November 2026, and only Playwright 1.61+ knows that release: with 1.50 `playwright install --with-deps` would have no package list for it, failing the E2E job and with it the release and docker-test workflows that depend on it.
 

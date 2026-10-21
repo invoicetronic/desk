@@ -123,6 +123,8 @@
   <data name="Companies_Name"><value>Nome</value></data>
   <data name="Companies_Vat"><value>Partita IVA</value></data>
   <data name="Companies_FiscalCode"><value>Codice fiscale</value></data>
+  <data name="Companies_VatHint"><value>Facoltativa per gli enti che hanno solo il codice fiscale, come associazioni e parrocchie.</value></data>
+  <data name="Companies_FiscalCodeHint"><value>Se lo lasci vuoto, viene ricavato dalla partita IVA.</value></data>
   <data name="Companies_Created"><value>Data creazione</value></data>
   <data name="Companies_Actions"><value>Azioni</value></data>
   <data name="Companies_SearchPlaceholder"><value>Cerca per nome, P.IVA, codice fiscale...</value></data>

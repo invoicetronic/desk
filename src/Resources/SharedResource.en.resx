@@ -123,6 +123,8 @@
   <data name="Companies_Name"><value>Name</value></data>
   <data name="Companies_Vat"><value>VAT number</value></data>
   <data name="Companies_FiscalCode"><value>Fiscal code</value></data>
+  <data name="Companies_VatHint"><value>Optional for entities that only have a fiscal code, such as associations and parishes.</value></data>
+  <data name="Companies_FiscalCodeHint"><value>If left empty, it is derived from the VAT number.</value></data>
   <data name="Companies_Created"><value>Created</value></data>
   <data name="Companies_Actions"><value>Actions</value></data>
   <data name="Companies_SearchPlaceholder"><value>Search by name, VAT, fiscal code...</value></data>

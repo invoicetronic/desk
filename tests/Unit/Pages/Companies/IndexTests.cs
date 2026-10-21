@@ -109,6 +109,23 @@ public class IndexTests
     }
 
     [Fact]
+    public async Task OnPostAddAsync_WithFiscalCodeOnly_SendsNoVat()
+    {
+        // Non-profit entities (associations, parishes) only have a fiscal code: the API accepts a
+        // company without vat, so Desk must not send an empty string in its place.
+        var (model, handler) = CreateModel();
+        handler.WithResponse(HttpStatusCode.OK,
+            """{"id": 1, "name": "Parrocchia", "vat": null, "fiscal_code": "93012345678"}""");
+
+        model.CompanyInput = new Company { Name = "Parrocchia", FiscalCode = "93012345678" };
+        var result = await model.OnPostAddAsync();
+
+        Assert.IsType<JsonResult>(result);
+        Assert.Contains("93012345678", handler.LastRequestContent!);
+        Assert.DoesNotContain("\"vat\":\"", handler.LastRequestContent!);
+    }
+
+    [Fact]
     public async Task OnPostAddAsync_ReturnsError_On403()
     {
         var (model, handler) = CreateModel();
