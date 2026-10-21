@@ -2,6 +2,8 @@
 
 ## In Development
 
+## v1.6.5 (2026-10-21)
+
 - chore: vulnerable dependencies updated, as flagged by NU1903. `Microsoft.EntityFrameworkCore.Sqlite`, `Microsoft.AspNetCore.Identity.EntityFrameworkCore` and `Microsoft.AspNetCore.DataProtection.EntityFrameworkCore` bumped to `10.0.13`, which brings `SQLitePCLRaw.lib.e_sqlite3` `2.1.13` (GHSA-2m69-gcr7-jv3q). `System.Security.Cryptography.Pkcs` is pinned to `10.0.13` in the main project, overriding the `10.0.0` that MailKit/MimeKit bring even in their latest release (GHSA-846f-f764-76mx, GHSA-2fmv-rv2c-59x7). The test projects' `System.Security.Cryptography.Xml` pin moves from `10.0.7` to `10.0.13` (GHSA-cvvh-rhrc-wg4q and seven more high severity advisories).
 - fix: in the company form, VAT number and fiscal code are no longer both required. The API now accepts companies with only a fiscal code (non-profit entities such as associations and parishes) and derives the fiscal code from the VAT number when it is missing: the form follows suit, with a hint under each field. `Company.Vat` is nullable, so an empty field is sent as no VAT rather than an empty string.
 - fix: API error messages are read from standard problem details first (`detail` at the top level), falling back to the legacy `problem_details` wrapper. The API is moving its 400 responses to the standard shape, and 403 and 422 responses already used it: Desk showed the generic "Errore nella richiesta API" for those instead of the API's message.
