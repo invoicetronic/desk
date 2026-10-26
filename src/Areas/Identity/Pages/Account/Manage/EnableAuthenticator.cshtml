@@ -1,0 +1,54 @@
+@page
+@model Desk.Areas.Identity.Pages.Account.Manage.EnableAuthenticatorModel
+@{
+    ViewData["Title"] = L["Mfa_EnableTitle"].Value;
+}
+
+<div class="desk-page-header">
+    <h1 class="desk-page-title">@L["Mfa_EnableTitle"]</h1>
+    <a asp-page="./TwoFactor" class="btn-brand btn-brand-secondary">@L["Mfa_Cancel"]</a>
+</div>
+
+@if (Model.ErrorMessage is not null)
+{
+    <div class="desk-alert desk-alert-danger" style="margin-bottom: var(--space-6);">
+        @L[Model.ErrorMessage]
+    </div>
+}
+
+<div class="desk-card" style="max-width: 640px;">
+    <ol class="text-sm" style="display: grid; gap: var(--space-5); margin: 0; padding-left: var(--space-5);">
+        <li>
+            <p>@L["Mfa_Step1"]</p>
+        </li>
+        <li>
+            <p style="margin-bottom: var(--space-3);">@L["Mfa_Step2"]</p>
+            <div id="qrCode" data-uri="@Model.AuthenticatorUri"
+                 style="background: #fff; padding: var(--space-3); display: inline-block; border-radius: var(--radius-md, 6px);"></div>
+            <p class="text-muted" style="margin-top: var(--space-3);">@L["Mfa_ManualKey"]</p>
+            <code id="sharedKey" style="font-size: var(--text-base);">@Model.SharedKey</code>
+        </li>
+        <li>
+            <p style="margin-bottom: var(--space-3);">@L["Mfa_Step3"]</p>
+            <form method="post" novalidate>
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="Input.Code">@L["Mfa_Code"]</label>
+                    <input asp-for="Input.Code" class="desk-input" type="text" inputmode="numeric"
+                           autocomplete="one-time-code" maxlength="7" style="max-width: 200px;" />
+                    <span asp-validation-for="Input.Code" class="text-danger text-xs"></span>
+                </div>
+                <button type="submit" class="btn-brand btn-brand-primary">@L["Mfa_Verify"]</button>
+            </form>
+        </li>
+    </ol>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"
+            integrity="sha384-3zSEDfvllQohrq0PHL1fOXJuC/jSOO34H46t6UQfobFOmxE5BpjjaIJY5F2/bMnU"
+            crossorigin="anonymous"></script>
+    <script>
+        const qr = document.getElementById('qrCode');
+        new QRCode(qr, { text: qr.dataset.uri, width: 180, height: 180 });
+    </script>
+}

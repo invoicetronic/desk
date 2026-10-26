@@ -1,0 +1,74 @@
+@page
+@model Desk.Areas.Identity.Pages.Account.LoginWith2faModel
+@inject DeskConfig Config
+@{
+    ViewData["Title"] = L["Mfa_LoginTitle"].Value;
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="@Config.Locale">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="icon" type="image/png" href="@(Config.Branding.FaviconUrl ?? Url.Content("~/images/favicon.png"))" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Zain:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/theme-default.css" />
+    <link rel="stylesheet" href="~/css/components.css" />
+    <link rel="stylesheet" href="~/css/layout.css" />
+    @if (Config.Branding.PrimaryColor is not null || Config.Branding.AccentColor is not null)
+    {
+        <style>
+            :root {
+                @if (Config.Branding.PrimaryColor is not null) { @: --brand-primary: @Config.Branding.PrimaryColor;
+                }
+                @if (Config.Branding.AccentColor is not null) { @: --brand-accent: @Config.Branding.AccentColor;
+                }
+            }
+        </style>
+    }
+    <link rel="stylesheet" href="~/custom/theme.css" onerror="this.remove()" />
+</head>
+<body>
+    <div class="desk-auth-layout">
+        <div class="desk-card desk-auth-card">
+            <div class="desk-auth-logo">
+                <img src="@(Config.Branding.LogoDarkUrl ?? Url.Content("~/images/logo-green.svg"))" alt="Logo" />
+            </div>
+            <h1 class="desk-auth-title" style="font-size: var(--text-xl);">@L["Mfa_LoginTitle"]</h1>
+            <p class="text-sm text-muted" style="text-align: center; margin-bottom: var(--space-5);">@L["Mfa_LoginHint"]</p>
+
+            @if (Model.ErrorMessage is not null)
+            {
+                <div class="desk-alert desk-alert-danger" style="margin-bottom: var(--space-5);">
+                    @L[Model.ErrorMessage]
+                </div>
+            }
+
+            <form method="post" asp-route-returnUrl="@Model.ReturnUrl" asp-route-rememberMe="@Model.RememberMe" novalidate>
+                <div class="desk-form-group">
+                    <label class="desk-label" asp-for="Input.TwoFactorCode">@L["Mfa_Code"]</label>
+                    <input asp-for="Input.TwoFactorCode" class="desk-input" type="text" inputmode="numeric"
+                           autocomplete="one-time-code" maxlength="7" autofocus />
+                    <span asp-validation-for="Input.TwoFactorCode" class="text-danger text-xs"></span>
+                </div>
+                <div class="desk-form-group" style="display: flex; align-items: center; gap: var(--space-2);">
+                    <input asp-for="Input.RememberMachine" type="checkbox" />
+                    <label asp-for="Input.RememberMachine" class="text-sm">@L["Mfa_RememberMachine"]</label>
+                </div>
+                <button type="submit" class="btn-brand btn-brand-primary" style="width: 100%; justify-content: center;">
+                    @L["Mfa_Verify"]
+                </button>
+            </form>
+
+            <p class="text-sm text-muted" style="text-align: center; margin-top: var(--space-4);">
+                @L["Mfa_NoDevice"]
+                <a asp-page="./LoginWithRecoveryCode" asp-route-returnUrl="@Model.ReturnUrl">@L["Mfa_UseRecoveryCode"]</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

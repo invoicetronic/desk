@@ -1,0 +1,69 @@
+@page
+@model Desk.Areas.Identity.Pages.Account.Manage.TwoFactorModel
+@{
+    ViewData["Title"] = L["Mfa_Title"].Value;
+}
+
+<div class="desk-page-header">
+    <h1 class="desk-page-title">@L["Mfa_Title"]</h1>
+    <a href="/Identity/Account/Manage" class="btn-brand btn-brand-secondary">@L["Mfa_BackToProfile"]</a>
+</div>
+
+@if (Model.SuccessMessage is not null)
+{
+    <div class="desk-alert desk-alert-success" style="margin-bottom: var(--space-6);">
+        @L[Model.SuccessMessage]
+    </div>
+}
+
+@if (Model.RecoveryCodes is { Length: > 0 })
+{
+    <div class="desk-card" style="margin-bottom: var(--space-6);">
+        <h2 style="font-size: var(--text-lg); margin-bottom: var(--space-3);">@L["Mfa_RecoveryCodesTitle"]</h2>
+        <div class="desk-alert desk-alert-warning" style="margin-bottom: var(--space-5);">
+            @L["Mfa_RecoveryCodesWarning"]
+        </div>
+        <div id="recoveryCodes" style="display: grid; grid-template-columns: repeat(2, max-content); gap: var(--space-2) var(--space-8); font-family: monospace; font-size: var(--text-base);">
+            @foreach (var code in Model.RecoveryCodes)
+            {
+                <span>@code</span>
+            }
+        </div>
+    </div>
+}
+
+<div class="desk-card">
+    @if (Model.IsEnabled)
+    {
+        <h2 style="font-size: var(--text-lg); margin-bottom: var(--space-3);">@L["Mfa_StatusEnabled"]</h2>
+        <p class="text-muted text-sm" style="margin-bottom: var(--space-5);">@L["Mfa_RecoveryCodesLeft", Model.RecoveryCodesLeft]</p>
+
+        @if (Model.RecoveryCodesLeft <= 3)
+        {
+            <div class="desk-alert desk-alert-warning" style="margin-bottom: var(--space-5);">
+                @L["Mfa_RecoveryCodesLow"]
+            </div>
+        }
+
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-3);">
+            <form method="post" asp-page-handler="GenerateRecoveryCodes">
+                <button type="submit" class="btn-brand btn-brand-secondary">@L["Mfa_GenerateRecoveryCodes"]</button>
+            </form>
+            @if (Model.IsMachineRemembered)
+            {
+                <form method="post" asp-page-handler="ForgetBrowser">
+                    <button type="submit" class="btn-brand btn-brand-secondary">@L["Mfa_ForgetBrowser"]</button>
+                </form>
+            }
+            <form method="post" asp-page-handler="Disable">
+                <button type="submit" class="btn-brand btn-brand-danger">@L["Mfa_Disable"]</button>
+            </form>
+        </div>
+    }
+    else
+    {
+        <h2 style="font-size: var(--text-lg); margin-bottom: var(--space-3);">@L["Mfa_StatusDisabled"]</h2>
+        <p class="text-muted text-sm" style="margin-bottom: var(--space-5);">@L["Mfa_Intro"]</p>
+        <a asp-page="./EnableAuthenticator" class="btn-brand btn-brand-primary">@L["Mfa_Enable"]</a>
+    }
+</div>

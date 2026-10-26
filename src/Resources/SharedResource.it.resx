@@ -223,6 +223,46 @@
   <data name="NoSeat_GoToDashboard"><value>Vai alla Dashboard</value></data>
   <data name="NoSeat_ChangeKey"><value>Cambia chiave API</value></data>
 
+  <!-- Two-factor authentication -->
+  <data name="Mfa_Title"><value>Autenticazione a due fattori</value></data>
+  <data name="Mfa_StatusEnabled"><value>L'autenticazione a due fattori è attiva: all'accesso, oltre alla password, viene chiesto il codice dell'app di autenticazione.</value></data>
+  <data name="Mfa_StatusDisabled"><value>L'autenticazione a due fattori non è attiva: per accedere basta la password.</value></data>
+  <data name="Mfa_Intro"><value>Con l'autenticazione a due fattori, per accedere serve anche un codice generato da un'app sul telefono, come Google Authenticator, Microsoft Authenticator o 1Password. Chi conosce la tua password non può entrare senza il telefono.</value></data>
+  <data name="Mfa_Enable"><value>Attiva l'autenticazione a due fattori</value></data>
+  <data name="Mfa_Manage"><value>Gestisci</value></data>
+  <data name="Mfa_Disable"><value>Disattiva</value></data>
+  <data name="Mfa_Enabled"><value>Autenticazione a due fattori attivata.</value></data>
+  <data name="Mfa_Disabled"><value>Autenticazione a due fattori disattivata.</value></data>
+  <data name="Mfa_BackToProfile"><value>Torna al profilo</value></data>
+  <data name="Mfa_Cancel"><value>Annulla</value></data>
+  <data name="Mfa_EnableTitle"><value>Attiva l'autenticazione a due fattori</value></data>
+  <data name="Mfa_Step1"><value>Installa sul telefono un'app di autenticazione, per esempio Google Authenticator, Microsoft Authenticator o 1Password.</value></data>
+  <data name="Mfa_Step2"><value>Inquadra il codice QR con l'app.</value></data>
+  <data name="Mfa_ManualKey"><value>Se non puoi inquadrarlo, inserisci nell'app questa chiave:</value></data>
+  <data name="Mfa_Step3"><value>Inserisci il codice a 6 cifre mostrato dall'app.</value></data>
+  <data name="Mfa_Code"><value>Codice di verifica</value></data>
+  <data name="Mfa_Verify"><value>Verifica</value></data>
+  <data name="Mfa_CodeLength"><value>Il codice deve essere di 6 cifre.</value></data>
+  <data name="Mfa_InvalidCode"><value>Codice non valido. Controlla che l'ora del telefono sia corretta e riprova.</value></data>
+  <data name="Mfa_LockedOut"><value>Troppi tentativi non riusciti: l'account è bloccato per qualche minuto. Riprova più tardi.</value></data>
+  <data name="Mfa_LoginTitle"><value>Verifica in due passaggi</value></data>
+  <data name="Mfa_LoginHint"><value>Inserisci il codice mostrato dalla tua app di autenticazione.</value></data>
+  <data name="Mfa_RememberMachine"><value>Non chiedere più il codice su questo browser</value></data>
+  <data name="Mfa_NoDevice"><value>Non hai il telefono con te?</value></data>
+  <data name="Mfa_UseRecoveryCode"><value>Usa un codice di recupero</value></data>
+  <data name="Mfa_RecoveryLoginTitle"><value>Accesso con codice di recupero</value></data>
+  <data name="Mfa_RecoveryLoginHint"><value>Inserisci uno dei codici di recupero salvati quando hai attivato l'autenticazione a due fattori. Ogni codice si può usare una sola volta.</value></data>
+  <data name="Mfa_RecoveryCode"><value>Codice di recupero</value></data>
+  <data name="Mfa_InvalidRecoveryCode"><value>Codice di recupero non valido.</value></data>
+  <data name="Mfa_BackToLogin"><value>Torna all'accesso</value></data>
+  <data name="Mfa_RecoveryCodesTitle"><value>Codici di recupero</value></data>
+  <data name="Mfa_RecoveryCodesWarning"><value>Salva questi codici in un posto sicuro: non verranno più mostrati. Se perdi il telefono, sono l'unico modo per accedere. Ogni codice si può usare una sola volta.</value></data>
+  <data name="Mfa_RecoveryCodesLeft"><value>Codici di recupero rimasti: {0}.</value></data>
+  <data name="Mfa_RecoveryCodesLow"><value>Ti restano pochi codici di recupero: generane di nuovi.</value></data>
+  <data name="Mfa_GenerateRecoveryCodes"><value>Genera nuovi codici di recupero</value></data>
+  <data name="Mfa_ForgetBrowser"><value>Chiedi di nuovo il codice su questo browser</value></data>
+  <data name="Mfa_BrowserForgotten"><value>Al prossimo accesso da questo browser verrà chiesto di nuovo il codice.</value></data>
+
   <!-- Error -->
   <data name="Error_Title"><value>Errore</value></data>
   <data name="Error_Generic"><value>Si è verificato un errore durante l'elaborazione della richiesta.</value></data>

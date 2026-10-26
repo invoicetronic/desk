@@ -19,6 +19,7 @@ Desk is a ready-to-use frontend for the [Invoicetronic API](https://invoicetroni
 - **Company management** — CRUD for companies linked to your API key
 - **Dashboard** — recent invoices overview and counters
 - **Two auth modes** — multi-user (Identity + login) or standalone (single API key, no login)
+- **Two-factor authentication** — optional, per user, with any TOTP authenticator app and one-time recovery codes
 - **White-label** — custom app name, footer, CSS variables, logo
 - **Localization** — Italian (default) and English
 - **Docker ready** — multi-platform (amd64/arm64), health check endpoint
@@ -230,6 +231,17 @@ Environment variables override YAML values using the `Desk__` prefix (e.g., `Des
 | **Use case** | Internal network, VPN, single tenant | SaaS, multi-tenant, public-facing |
 
 > **Warning**: in standalone mode anyone who can reach the host has full access. Use only in trusted networks.
+
+### Two-factor authentication
+
+In multi-user mode, each user can turn on two-factor authentication from their profile (**Profile → Two-factor authentication**). Signing in then requires, besides the password, a 6-digit code from an authenticator app such as Google Authenticator, Microsoft Authenticator or 1Password: the setup page shows a QR code, plus the key to type in by hand.
+
+- When the feature is turned on, Desk shows 10 recovery codes, once. Each one signs in a single time when the phone is not at hand; new ones can be generated from the same page.
+- At the code prompt the user can tick "Don't ask for a code again on this browser".
+- After 5 wrong codes the account is locked for 5 minutes.
+- Turning the feature off also discards the authenticator key, so turning it on again requires scanning a new QR code.
+
+No configuration is needed. The authenticator app shows the code under the `app_name` set in the [theming](#theming) section.
 
 ### Password reset (SMTP)
 

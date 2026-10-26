@@ -1,7 +1,10 @@
 @page
 @model Desk.Areas.Identity.Pages.Account.Manage.IndexModel
+@inject UserManager<DeskUser> UserManager
 @{
     ViewData["Title"] = L["Profile_Title"].Value;
+    var currentUser = await UserManager.GetUserAsync(User);
+    var twoFactorEnabled = currentUser is not null && await UserManager.GetTwoFactorEnabledAsync(currentUser);
 }
 
 <div class="desk-page-header">
@@ -77,6 +80,17 @@
             </div>
             <button type="submit" class="btn-brand btn-brand-primary">@L["Profile_SaveProfile"]</button>
         </form>
+    </div>
+
+    <!-- Security Section -->
+    <div class="desk-card">
+        <h2 style="font-size: var(--text-lg); margin-bottom: var(--space-5);">@L["Mfa_Title"]</h2>
+        <p class="text-muted text-sm" style="margin-bottom: var(--space-5);">
+            @(twoFactorEnabled ? L["Mfa_StatusEnabled"] : L["Mfa_StatusDisabled"])
+        </p>
+        <a href="/Identity/Account/Manage/TwoFactor" class="btn-brand @(twoFactorEnabled ? "btn-brand-secondary" : "btn-brand-primary")">
+            @(twoFactorEnabled ? L["Mfa_Manage"] : L["Mfa_Enable"])
+        </a>
     </div>
 </div>
 

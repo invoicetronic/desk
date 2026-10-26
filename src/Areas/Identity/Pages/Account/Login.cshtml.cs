@@ -58,7 +58,10 @@ public class LoginModel(
             return LocalRedirect(returnUrl);
         }
 
-        ErrorMessage = "Auth_InvalidLogin";
+        if (result.RequiresTwoFactor)
+            return RedirectToPage("./LoginWith2fa", new { returnUrl, rememberMe = Input.RememberMe });
+
+        ErrorMessage = result.IsLockedOut ? "Mfa_LockedOut" : "Auth_InvalidLogin";
         return Page();
     }
 }

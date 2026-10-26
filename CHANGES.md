@@ -2,6 +2,8 @@
 
 ## In Development
 
+- new: optional two-factor authentication in multi-user mode. From **Profile → Two-factor authentication** each user can link an authenticator app (QR code or manual key, any TOTP app) and gets 10 one-time recovery codes, shown once. Signing in then asks for the 6-digit code after the password, with a "don't ask again on this browser" option and a recovery code fallback; 5 wrong codes lock the account for 5 minutes, and the login page now says so instead of "invalid email or password". Turning the feature off also resets the authenticator key, so a lost or compromised device stays useless. Built on ASP.NET Core Identity's authenticator token provider, which was already registered: the schema does not change. The QR code is drawn by `qrcodejs` from jsDelivr, loaded with Subresource Integrity on the setup page only.
+
 ## v1.6.5 (2026-10-21)
 
 - chore: vulnerable dependencies updated, as flagged by NU1903. `Microsoft.EntityFrameworkCore.Sqlite`, `Microsoft.AspNetCore.Identity.EntityFrameworkCore` and `Microsoft.AspNetCore.DataProtection.EntityFrameworkCore` bumped to `10.0.13`, which brings `SQLitePCLRaw.lib.e_sqlite3` `2.1.13` (GHSA-2m69-gcr7-jv3q). `System.Security.Cryptography.Pkcs` is pinned to `10.0.13` in the main project, overriding the `10.0.0` that MailKit/MimeKit bring even in their latest release (GHSA-846f-f764-76mx, GHSA-2fmv-rv2c-59x7). The test projects' `System.Security.Cryptography.Xml` pin moves from `10.0.7` to `10.0.13` (GHSA-cvvh-rhrc-wg4q and seven more high severity advisories).
