@@ -2,6 +2,8 @@
 
 ## In Development
 
+## v1.7.0 (2026-10-26)
+
 - new: optional two-factor authentication in multi-user mode. From **Profile → Two-factor authentication** each user can link an authenticator app (QR code or manual key, any TOTP app) and gets 10 one-time recovery codes, shown once. Signing in then asks for the 6-digit code after the password, with a "don't ask again on this browser" option and a recovery code fallback; 5 wrong codes lock the account for 5 minutes, and the login page now says so instead of "invalid email or password". Turning the feature off also resets the authenticator key, so a lost or compromised device stays useless. Built on ASP.NET Core Identity's authenticator token provider, which was already registered: the schema does not change. The QR code is drawn by `qrcodejs` from jsDelivr, loaded with Subresource Integrity on the setup page only.
 
 ## v1.6.5 (2026-10-21)
