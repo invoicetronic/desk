@@ -2,6 +2,8 @@
 
 ## In Development
 
+## v1.7.1 (2026-11-23)
+
 - fix: invoice download honours the payload `encoding` returned by the API. Base64 payloads are decoded to the original file bytes, so a signed `.p7m` invoice now downloads as the signed file instead of its Base64 text, and is served as `application/pkcs7-mime`. The same applies to received XML invoices in an encoding other than UTF-8 (ISO-8859-1, windows-1252), which the API delivers in Base64.
 
 ## v1.7.0 (2026-10-26)
