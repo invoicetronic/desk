@@ -10,6 +10,7 @@ public abstract class Invoice : BaseModel
     public string FileName { get; set; } = null!;
     public string Format { get; set; } = null!;
     public string Payload { get; set; } = null!;
+    public PayloadEncoding Encoding { get; set; }
     public DateTime? LastUpdate { get; set; }
     public DateTime? DateSent { get; set; }
     public List<DocumentData>? Documents { get; set; }

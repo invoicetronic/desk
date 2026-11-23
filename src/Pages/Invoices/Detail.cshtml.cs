@@ -26,8 +26,14 @@ public class DetailModel(ApiManager apiManager, SessionManager sessionManager, D
             if (invoice is null)
                 return NotFound();
 
-            var bytes = System.Text.Encoding.UTF8.GetBytes(invoice.Payload);
-            return File(bytes, "application/xml", invoice.FileName);
+            // Base64 payloads (signed .p7m, XML in an encoding other than UTF-8) carry the original file bytes.
+            var bytes = invoice.Encoding == PayloadEncoding.Base64
+                ? Convert.FromBase64String(invoice.Payload)
+                : System.Text.Encoding.UTF8.GetBytes(invoice.Payload);
+            var contentType = invoice.FileName.EndsWith(".p7m", StringComparison.OrdinalIgnoreCase)
+                ? "application/pkcs7-mime"
+                : "application/xml";
+            return File(bytes, contentType, invoice.FileName);
         }
         catch (HttpRequestException ex)
         {

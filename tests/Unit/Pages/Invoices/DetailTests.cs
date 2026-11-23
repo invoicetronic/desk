@@ -110,4 +110,51 @@ public class DetailTests
         Assert.IsType<PageResult>(result);
         Assert.Null(model.Updates);
     }
+
+    [Fact]
+    public async Task OnGetDownloadAsync_ReturnsXmlText_WhenEncodingXml()
+    {
+        var (model, handler) = CreateModel();
+        handler.WithResponse(HttpStatusCode.OK,
+            """{"id":2,"file_name":"IT01234567890_00001.xml","committente":"Buyer","prestatore":"Seller","format":"FPR12","payload":"<a>Caffè</a>","encoding":"Xml"}""");
+
+        var result = await model.OnGetDownloadAsync("receive", 2);
+
+        var file = Assert.IsType<FileContentResult>(result);
+        Assert.Equal("application/xml", file.ContentType);
+        Assert.Equal(System.Text.Encoding.UTF8.GetBytes("<a>Caffè</a>"), file.FileContents);
+    }
+
+    [Fact]
+    public async Task OnGetDownloadAsync_DecodesBase64_ForXmlInOtherEncoding()
+    {
+        System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+        var original = System.Text.Encoding.GetEncoding("windows-1252")
+            .GetBytes("""<?xml version="1.0" encoding="windows-1252"?><a>Caffè</a>""");
+        var (model, handler) = CreateModel();
+        handler.WithResponse(HttpStatusCode.OK,
+            $$"""{"id":2,"file_name":"IT01234567890_00001.xml","committente":"Buyer","prestatore":"Seller","format":"FPR12","payload":"{{Convert.ToBase64String(original)}}","encoding":"Base64"}""");
+
+        var result = await model.OnGetDownloadAsync("receive", 2);
+
+        var file = Assert.IsType<FileContentResult>(result);
+        Assert.Equal("application/xml", file.ContentType);
+        Assert.Equal(original, file.FileContents);
+    }
+
+    [Fact]
+    public async Task OnGetDownloadAsync_DecodesBase64_ForSignedFile()
+    {
+        byte[] original = [0x30, 0x82, 0x01, 0x02, 0xFF];
+        var (model, handler) = CreateModel();
+        handler.WithResponse(HttpStatusCode.OK,
+            $$"""{"id":2,"file_name":"IT01234567890_00001.xml.p7m","committente":"Buyer","prestatore":"Seller","format":"FPR12","payload":"{{Convert.ToBase64String(original)}}","encoding":"Base64"}""");
+
+        var result = await model.OnGetDownloadAsync("receive", 2);
+
+        var file = Assert.IsType<FileContentResult>(result);
+        Assert.Equal("application/pkcs7-mime", file.ContentType);
+        Assert.Equal("IT01234567890_00001.xml.p7m", file.FileDownloadName);
+        Assert.Equal(original, file.FileContents);
+    }
 }
